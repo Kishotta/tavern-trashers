@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Controllers\MonstersController.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Monsters\TavernTrashers.Modules.Monsters.Infrastructure\TavernTrashers.Modules.Monsters.Infrastructure.fsproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Commands\CreateMonsterCommand.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\TavernTrashers.Common.Application\TavernTrashers.Common.Application.fsproj" />
+    <ProjectReference Include="..\TavernTrashers.Modules.Monsters.Domain\TavernTrashers.Modules.Monsters.Domain.fsproj" />
+  </ItemGroup>
+
+</Project>

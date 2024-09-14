@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\TavernTrashers.Common.Infrastructure\TavernTrashers.Common.Infrastructure.fsproj" />
+    <ProjectReference Include="..\TavernTrashers.Modules.Monsters.Application\TavernTrashers.Modules.Monsters.Application.fsproj" />
+    <ProjectReference Include="..\TavernTrashers.Modules.Monsters.Domain\TavernTrashers.Modules.Monsters.Domain.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Monsters.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+  </ItemGroup>
+
+</Project>
