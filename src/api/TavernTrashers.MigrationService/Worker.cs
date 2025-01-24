@@ -14,7 +14,7 @@ public class Worker(
     public const string ActivitySourceName = "Migrations";
     private static readonly ActivitySource ActivitySource = new(ActivitySourceName);
 
-    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         using var activity = ActivitySource.StartActivity("Migrating database", ActivityKind.Client);
 
@@ -27,8 +27,8 @@ public class Worker(
             
             foreach (var dbContext in dbContexts)
             {
-                await EnsureDatabaseAsync(dbContext, cancellationToken);
-                await RunMigrationAsync(dbContext, cancellationToken);
+                await EnsureDatabaseAsync(dbContext, stoppingToken);
+                await RunMigrationAsync(dbContext, stoppingToken);
             }
         }
         catch (Exception ex)
@@ -61,10 +61,7 @@ public class Worker(
         var strategy = dbContext.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
         {
-            // Run migration in a transaction to avoid partial migration if it fails.
-            // await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
             await dbContext.Database.MigrateAsync(cancellationToken);
-            // await transaction.CommitAsync(cancellationToken);
         });
     }
 }

@@ -1,9 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>dotnet-TavernTrashers.MigrationService-af007fee-e026-4075-8592-6a030e4ed702</UserSecretsId>
     </PropertyGroup>
 

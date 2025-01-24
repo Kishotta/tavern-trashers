@@ -14,4 +14,4 @@ builder.Services.AddOpenTelemetry()
 
 var host = builder.Build();
 
-host.Run();
+await host.RunAsync();

@@ -11,9 +11,9 @@ var migrations = builder.AddProject<Projects.TavernTrashers_MigrationService>("m
    .WithReference(database)
    .WaitFor(database);
 
-var api = builder.AddProject<Projects.TavernTrashers_Api>("api")
+builder.AddProject<Projects.TavernTrashers_Api>("api")
    .WithReference(database)
    .WaitFor(database)
    .WaitForCompletion(migrations);
 
-builder.Build().Run();
+await builder.Build().RunAsync();

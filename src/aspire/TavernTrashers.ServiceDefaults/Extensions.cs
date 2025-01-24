@@ -34,11 +34,13 @@ public static class Extensions
 			http.AddServiceDiscovery();
 		});
 
+#pragma warning disable S125
 		// Uncomment the following to restrict the allowed schemes for service discovery.
 		// builder.Services.Configure<ServiceDiscoveryOptions>(options =>
 		// {
 		//     options.AllowedSchemes = ["https"];
 		// });
+#pragma warning restore S125
 
 		return builder;
 	}
@@ -82,13 +84,15 @@ public static class Extensions
 		{
 			builder.Services.AddOpenTelemetry().UseOtlpExporter();
 		}
-
+		
+#pragma warning disable S125
 		// Uncomment the following lines to enable the Azure Monitor exporter (requires the Azure.Monitor.OpenTelemetry.AspNetCore package)
 		//if (!string.IsNullOrEmpty(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
 		//{
 		//    builder.Services.AddOpenTelemetry()
 		//       .UseAzureMonitor();
 		//}
+#pragma warning restore S125
 	}
 
 	private static void AddDefaultHealthChecks<TBuilder>(this TBuilder builder)

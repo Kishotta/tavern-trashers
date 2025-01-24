@@ -34,4 +34,4 @@ app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
 
-app.Run();
+await app.RunAsync();
