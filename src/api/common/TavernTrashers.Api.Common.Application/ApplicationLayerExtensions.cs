@@ -1,0 +1,32 @@
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
+using TavernTrashers.Api.Common.Application.Behaviors;
+using TavernTrashers.Api.Common.Application.Modules;
+
+namespace TavernTrashers.Api.Common.Application;
+
+public static class ApplicationLayerExtensions
+{
+	public static IServiceCollection ConfigureApplicationLayer(
+		this IServiceCollection services, 
+		IEnumerable<IApplicationModule> modules)
+	{
+		// All MediatR handlers must be registered at the same time
+		var moduleApplicationAssemblies = modules
+		   .Select(module => module.ApplicationAssembly)
+		   .ToArray();
+		
+		services.AddMediatR(config =>
+		{
+			config.RegisterServicesFromAssemblies(moduleApplicationAssemblies);
+
+			config.AddOpenBehavior(typeof(ExceptionHandlingPipelineBehavior<,>));
+			config.AddOpenBehavior(typeof(RequestLoggingPipelineBehavior<,>));
+			config.AddOpenBehavior(typeof(ValidationPipelineBehavior<,>));
+		});
+
+		services.AddValidatorsFromAssemblies(moduleApplicationAssemblies, includeInternalTypes: true);
+
+		return services;
+	}
+}
