@@ -1,9 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using TavernTrashers.Api.Common.Infrastructure.Database;
 using TavernTrashers.Api.Modules.Campaigns.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
 
-namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure;
+namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
 
 public class CampaignsDbContext(DbContextOptions<CampaignsDbContext> options)
 	: DbContext(options), IUnitOfWork
@@ -16,5 +15,7 @@ public class CampaignsDbContext(DbContextOptions<CampaignsDbContext> options)
 
 		modelBuilder.ApplyConfigurationsFromAssembly(Common.Infrastructure.AssemblyReference.Assembly);
 		modelBuilder.ApplyConfigurationsFromAssembly(AssemblyReference.Assembly);
+		
+		base.OnModelCreating(modelBuilder);
 	}
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using OpenTelemetry.Trace;
 using TavernTrashers.Api.Modules.Campaigns.Infrastructure;
+using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
 
 namespace TavernTrashers.MigrationService;
 
