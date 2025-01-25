@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TavernTrashers.Api.Common.Domain.Results;
+using TavernTrashers.Api.Common.Domain.Results.Extensions;
 using TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
 using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
 

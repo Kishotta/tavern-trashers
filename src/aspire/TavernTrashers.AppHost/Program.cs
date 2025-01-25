@@ -11,9 +11,14 @@ var migrations = builder.AddProject<Projects.TavernTrashers_MigrationService>("m
    .WithReference(database)
    .WaitFor(database);
 
+var cache = builder.AddRedis("cache")
+   .WithRedisInsight()
+   .WithDataVolume();
+
 builder.AddProject<Projects.TavernTrashers_Api>("api")
    .WithReference(database)
    .WaitFor(database)
-   .WaitForCompletion(migrations);
+   .WaitForCompletion(migrations)
+   .WithReference(cache);
 
 await builder.Build().RunAsync();

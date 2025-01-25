@@ -1,7 +1,9 @@
+using TavernTrashers.Api.Common.Domain.Auditing;
 using TavernTrashers.Api.Common.Domain.Entities;
 
 namespace TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
 
+[Auditable]
 public class Campaign : Entity<CampaignId>
 {
 	public string Name { get; private set; } = string.Empty;

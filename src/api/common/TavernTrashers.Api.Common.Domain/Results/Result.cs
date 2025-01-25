@@ -50,14 +50,3 @@ public class Result<TValue>(TValue? value, bool isSuccess, Error error) : Result
 	public static Result<TValue> ValidationFailure(Error error) =>
 		new(default, false, error);
 }
-
-public static class ToResultExtensions
-{
-	public static Result<TValue> ToResult<TValue>(this TValue? value, Error error) =>
-		value is not null
-			? Result.Success(value)
-			: Result.Failure<TValue>(error);
-	
-	public static Task<Result<TResult>> ToResultAsync<TResult>(this Task<TResult?> task, Error error) =>
-		task.ContinueWith(t => t.Result.ToResult(error));
-}

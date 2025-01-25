@@ -11,6 +11,16 @@ public static class ModuleExtensions
 	{
 		var modules = ModuleRepository.Modules.ToList();
 		
+		try
+		{
+			builder.AddRedisDistributedCache(connectionName: "cache");
+		}
+		catch
+		{
+			// HACK: Allows application to run without a Redis server. This is useful when, for example, generating a database migration.
+			builder.Services.AddDistributedMemoryCache();
+		}
+		
 		builder.Services
 		   .ConfigureApplicationLayer(modules)
 		   .ConfigureInfrastructureLayer();
