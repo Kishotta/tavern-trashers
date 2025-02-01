@@ -34,7 +34,7 @@ public sealed class WriteAuditLogInterceptor(IAuditingUserProvider auditingUserP
         var userId = auditingUserProvider.GetUserId();
         var auditEntries = new List<AuditEntry>();
         
-        foreach (var entry in context.ChangeTracker.Entries<Entity>())
+        foreach (var entry in context.ChangeTracker.Entries<EntityBase>())
         {
             if (!entry.ShouldBeAudited()) continue;
             

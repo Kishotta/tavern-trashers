@@ -15,10 +15,18 @@ var cache = builder.AddRedis("cache")
    .WithRedisInsight()
    .WithDataVolume();
 
-builder.AddProject<Projects.TavernTrashers_Api>("api")
+var api = builder.AddProject<Projects.TavernTrashers_Api>("api")
    .WithReference(database)
    .WaitFor(database)
    .WaitForCompletion(migrations)
-   .WithReference(cache);
+   .WithReference(cache)
+   .WithExternalHttpEndpoints();
+
+builder.AddNpmApp("spa", "../../web/tavern-trashers-spa")
+   .WithReference(api)
+   .WaitFor(api)
+   .WithHttpEndpoint(4200, env: "PORT")
+   .WithExternalHttpEndpoints()
+   .PublishAsDockerFile();
 
 await builder.Build().RunAsync();

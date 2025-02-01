@@ -11,11 +11,17 @@ public class CampaignRepository(CampaignsDbContext dbContext) : ICampaignReposit
 	public async Task<IEnumerable<Campaign>> GetAsync(CancellationToken cancellationToken = default) =>
 		await dbContext
 		   .Campaigns
+		   .Include(campaign => campaign.Questionnaires)
+		   .ThenInclude(questionnaire => questionnaire.Questions)
+		   .ThenInclude(question => question.Choices)
 		   .ToListAsync(cancellationToken);
 
-	public async Task<Result<Campaign>> GetAsync(CampaignId campaignId, CancellationToken cancellationToken = default) =>
+	public async Task<Result<Campaign>> GetAsync(Guid campaignId, CancellationToken cancellationToken = default) =>
 		await dbContext
 		   .Campaigns
+		   .Include(campaign => campaign.Questionnaires)
+		   .ThenInclude(questionnaire => questionnaire.Questions)
+		   .ThenInclude(question => question.Choices)
 		   .SingleOrDefaultAsync(campaign => campaign.Id == campaignId, cancellationToken: cancellationToken)
 		   .ToResultAsync(CampaignErrors.NotFound(campaignId));
 

@@ -34,6 +34,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Modules.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Common.Presentation", "api\common\TavernTrashers.Api.Common.Presentation\TavernTrashers.Api.Common.Presentation.csproj", "{DA97B6D6-1DE7-4081-955B-A24CBBB5E3C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Modules.Campaigns.Domain.Tests", "api\modules\campaigns\TavernTrashers.Api.Modules.Campaigns.Domain.Tests\TavernTrashers.Api.Modules.Campaigns.Domain.Tests.csproj", "{EEB9DF11-D1D4-4632-9565-9261BE540488}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Common.Testing", "api\common\TavernTrashers.Api.Common.Testing\TavernTrashers.Api.Common.Testing.csproj", "{78264F5F-C517-4B6A-A6E9-1B1E14E7467A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{0E0B7D46-9131-48F4-9354-4D7D8CA27C2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +61,8 @@ Global
 		{72B87F6F-D793-4CEC-9EBB-11B0A371DECC} = {348D770D-B6C0-4D6E-9039-C35630209945}
 		{9603281F-69C0-47DF-85E8-F697DB2276A0} = {1FF4209B-133B-4121-A124-A75140797D7E}
 		{DA97B6D6-1DE7-4081-955B-A24CBBB5E3C7} = {348D770D-B6C0-4D6E-9039-C35630209945}
+		{EEB9DF11-D1D4-4632-9565-9261BE540488} = {1FF4209B-133B-4121-A124-A75140797D7E}
+		{78264F5F-C517-4B6A-A6E9-1B1E14E7467A} = {348D770D-B6C0-4D6E-9039-C35630209945}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9603F123-0EE6-4E35-AE62-82D351B447A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -105,5 +113,13 @@ Global
 		{DA97B6D6-1DE7-4081-955B-A24CBBB5E3C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA97B6D6-1DE7-4081-955B-A24CBBB5E3C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA97B6D6-1DE7-4081-955B-A24CBBB5E3C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEB9DF11-D1D4-4632-9565-9261BE540488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEB9DF11-D1D4-4632-9565-9261BE540488}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEB9DF11-D1D4-4632-9565-9261BE540488}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEB9DF11-D1D4-4632-9565-9261BE540488}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78264F5F-C517-4B6A-A6E9-1B1E14E7467A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78264F5F-C517-4B6A-A6E9-1B1E14E7467A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78264F5F-C517-4B6A-A6E9-1B1E14E7467A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78264F5F-C517-4B6A-A6E9-1B1E14E7467A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

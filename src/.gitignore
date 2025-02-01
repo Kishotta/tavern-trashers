@@ -41,3 +41,11 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
+
+# Angular
+/dist/
+/bazel-out
+/integration/bazel/bazel-*
+*.log
+node_modules/
+modules/ssr-benchmarks/node_modules/

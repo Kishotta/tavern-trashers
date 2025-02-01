@@ -1,8 +1,6 @@
-using TavernTrashers.Api.Common.Domain.Entities;
-
 namespace TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
 
-public sealed class CampaignCreatedDomainEvent(CampaignId campaignId) : DomainEvent
+public sealed class CampaignCreatedDomainEvent(Guid campaignId) : DomainEvent
 {
-	public CampaignId CampaignId { get; } = campaignId;
+	public Guid CampaignId { get; } = campaignId;
 }

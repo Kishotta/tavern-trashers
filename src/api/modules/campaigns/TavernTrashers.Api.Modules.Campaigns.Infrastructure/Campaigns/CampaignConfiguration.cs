@@ -11,11 +11,7 @@ public class CampaignConfiguration : IEntityTypeConfiguration<Campaign>
 	{
 		builder.HasKey(campaign => campaign.Id);
 
-		builder.Property(campaign => campaign.Id)
-		   .HasConversion<CampaignIdConverter>()
-		   .ValueGeneratedNever();
+		builder.HasMany(campaign => campaign.Questionnaires)
+		   .WithOne();
 	}
 }
-
-public class CampaignIdConverter() 
-	: ValueConverter<CampaignId, Guid>(id => id, value => value);

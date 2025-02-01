@@ -1,13 +1,16 @@
 using TavernTrashers.Api.Common.Domain.Auditing;
-using TavernTrashers.Api.Common.Domain.Entities;
+using TavernTrashers.Api.Modules.Campaigns.Domain.Questionnaires;
 
 namespace TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
 
 [Auditable]
-public class Campaign : Entity<CampaignId>
+public class Campaign : Entity
 {
 	public string Name { get; private set; } = string.Empty;
 	public string Description { get; private set; } = string.Empty;
+	
+	public IReadOnlyCollection<Questionnaire> Questionnaires => questionnaires.AsReadOnly();
+	private readonly List<Questionnaire> questionnaires = [];
 	
 	private Campaign() { }
 
@@ -17,7 +20,7 @@ public class Campaign : Entity<CampaignId>
 	{
 		var campaign = new Campaign
 		{
-			Id          = CampaignId.Create(),
+			Id          = Guid.NewGuid(),
 			Name        = name,
 			Description = description
 		};
