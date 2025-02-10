@@ -1,4 +1,5 @@
 using TavernTrashers.Api.Common.Domain.Auditing;
+using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Modules.Campaigns.Domain.Questionnaires;
 
 namespace TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
@@ -11,7 +12,7 @@ public class Campaign : Entity
 	
 	private Campaign() { }
 
-	public static Campaign Create(
+	public static Result<Campaign> Create(
 		string name,
 		string description)
 	{

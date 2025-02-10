@@ -19,6 +19,19 @@ public class CampaignRepository(CampaignsDbContext dbContext) : ICampaignReposit
 		   .SingleOrDefaultAsync(campaign => campaign.Id == campaignId, cancellationToken: cancellationToken)
 		   .ToResultAsync(CampaignErrors.NotFound(campaignId));
 
+	public async Task<IEnumerable<Campaign>> GetReadOnlyAsync(CancellationToken cancellationToken = default) =>
+		await dbContext
+		   .Campaigns
+		   .AsNoTracking()
+		   .ToListAsync(cancellationToken);
+
+	public async Task<Result<Campaign>> GetReadOnlyAsync(Guid campaignId, CancellationToken cancellationToken = default) =>
+		await dbContext
+		   .Campaigns
+		   .AsNoTracking()
+		   .SingleOrDefaultAsync(campaign => campaign.Id == campaignId, cancellationToken: cancellationToken)
+		   .ToResultAsync(CampaignErrors.NotFound(campaignId));
+
 	public void Add(Campaign campaign) => dbContext.Campaigns.Add(campaign);
 	public void Remove(Campaign campaign) => dbContext.Campaigns.Remove(campaign);
 }
