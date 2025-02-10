@@ -1,0 +1,12 @@
+{
+  "Campaigns": {
+    "Inbox": {
+      "IntervalInMilliseconds": 1000,
+      "BatchSize": 10
+    },
+    "Outbox": {
+      "IntervalInMilliseconds": 1000,
+      "BatchSize": 10
+    }
+  }
+}

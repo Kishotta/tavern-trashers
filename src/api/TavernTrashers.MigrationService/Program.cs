@@ -4,9 +4,10 @@ using TavernTrashers.ServiceDefaults;
 
 var builder = Host.CreateApplicationBuilder(args);
 
+builder.AddServiceDefaults();
+
 builder.AddModules();
 
-builder.AddServiceDefaults();
 builder.Services.AddHostedService<Worker>();
 
 builder.Services.AddOpenTelemetry()

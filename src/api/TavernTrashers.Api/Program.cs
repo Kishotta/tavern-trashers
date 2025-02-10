@@ -1,22 +1,23 @@
 using Scalar.AspNetCore;
 using TavernTrashers.Api.Common.Presentation;
+using TavernTrashers.Api.Common.Presentation.Endpoints;
 using TavernTrashers.Api.Extensions;
 using TavernTrashers.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddModules();
-
 builder.AddServiceDefaults();
 
 builder.Services.AddExceptionHandling();
+
+builder.AddModules();
+
+builder.Services.AddOpenApi();
 
 builder.Services.AddCors(options =>
 	options.AddDefaultPolicy(configurePolicy => configurePolicy.AllowAnyMethod()
 	   .AllowAnyHeader()
 	   .AllowAnyOrigin()));
-
-builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
@@ -33,5 +34,9 @@ app.MapEndpoints();
 app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 await app.RunAsync();

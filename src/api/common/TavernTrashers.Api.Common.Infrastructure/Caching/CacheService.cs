@@ -11,7 +11,9 @@ internal sealed class CacheService(IDistributedCache cache) : ICacheService
     {
         var bytes = await cache.GetAsync(key, cancellationToken);
 
-        return bytes is null ? default : Deserialize<T>(bytes);
+        return bytes is null
+            ? default
+            : Deserialize<T>(bytes);
     }
 
     public Task SetAsync<T>(string key, T value, TimeSpan? expiration = null, CancellationToken cancellationToken = default)
@@ -32,8 +34,6 @@ internal sealed class CacheService(IDistributedCache cache) : ICacheService
         return buffer.WrittenSpan.ToArray();
     }
     
-    private static T Deserialize<T>(byte[] bytes)
-    {
-        return JsonSerializer.Deserialize<T>(bytes)!;
-    }
+    private static T Deserialize<T>(byte[] bytes) => 
+        JsonSerializer.Deserialize<T>(bytes)!;
 }

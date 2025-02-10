@@ -10,8 +10,5 @@ public class CampaignConfiguration : IEntityTypeConfiguration<Campaign>
 	public void Configure(EntityTypeBuilder<Campaign> builder)
 	{
 		builder.HasKey(campaign => campaign.Id);
-
-		builder.HasMany(campaign => campaign.Questionnaires)
-		   .WithOne();
 	}
 }

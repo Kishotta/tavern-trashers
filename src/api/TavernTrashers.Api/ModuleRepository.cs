@@ -1,4 +1,5 @@
 using TavernTrashers.Api.Common.Infrastructure;
+using TavernTrashers.Api.Common.Infrastructure.Modules;
 
 namespace TavernTrashers.Api;
 

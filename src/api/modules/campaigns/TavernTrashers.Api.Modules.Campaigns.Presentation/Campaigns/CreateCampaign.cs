@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using TavernTrashers.Api.Common.Presentation;
+using TavernTrashers.Api.Common.Presentation.Endpoints;
 using TavernTrashers.Api.Modules.Campaigns.Application.Campaigns;
 using TavernTrashers.Api.Modules.Campaigns.Application.Campaigns.CreateCampaign;
 

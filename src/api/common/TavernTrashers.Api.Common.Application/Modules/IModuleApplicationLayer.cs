@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace TavernTrashers.Api.Common.Application.Modules;
 
-public interface IApplicationModule
+public interface IModuleApplicationLayer
 {
-	public Assembly ApplicationAssembly { get; }
+	Assembly ApplicationAssembly { get; }
 }

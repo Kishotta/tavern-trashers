@@ -2,6 +2,8 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
 using TavernTrashers.Api.Common.Application;
 using TavernTrashers.Api.Common.Infrastructure;
+using TavernTrashers.Api.Common.Infrastructure.Caching;
+using TavernTrashers.Api.Common.Infrastructure.Modules;
 
 namespace TavernTrashers.Api.Extensions;
 
@@ -11,28 +13,29 @@ public static class ModuleExtensions
 	{
 		var modules = ModuleRepository.Modules.ToList();
 		
-		try
-		{
-			builder.AddRedisDistributedCache(connectionName: "cache");
-		}
-		catch
-		{
-			// HACK: Allows application to run without a Redis server. This is useful when, for example, generating a database migration.
-			builder.Services.AddDistributedMemoryCache();
-		}
+		builder.AddDistributedCache();
+		
+		builder.Configuration.ConfigureModules(modules);
 		
 		builder.Services
 		   .ConfigureApplicationLayer(modules)
-		   .ConfigureInfrastructureLayer();
+		   .ConfigureInfrastructureLayer(builder.Configuration, modules);
 
 		foreach (var module in modules)
-		{
 			module.AddModule(builder);
-		}
 		
 		builder.Services.Configure<JsonOptions>(options =>
 		{
 			options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 		});
+	}
+	
+	private static void ConfigureModules(this IConfigurationBuilder configurationBuilder, IEnumerable<IModule> modules)
+	{
+		foreach (var module in modules.Select(module => module.Name))
+		{
+			configurationBuilder.AddJsonFile($"modules.{module}.json", false, true);
+			configurationBuilder.AddJsonFile($"modules.{module}.Development.json", false, true);
+		}
 	}
 }

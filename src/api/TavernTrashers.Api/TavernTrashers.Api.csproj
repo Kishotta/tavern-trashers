@@ -18,8 +18,4 @@
       <ProjectReference Include="..\modules\campaigns\TavernTrashers.Api.Modules.Campaigns.Infrastructure\TavernTrashers.Api.Modules.Campaigns.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Entities\" />
-    </ItemGroup>
-
 </Project>

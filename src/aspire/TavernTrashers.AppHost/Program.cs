@@ -7,19 +7,34 @@ var postgres = builder.AddPostgres("postgres")
 
 var database = postgres.AddDatabase("database", "tavern_trashers");
 
-var migrations = builder.AddProject<Projects.TavernTrashers_MigrationService>("migrations")
-   .WithReference(database)
-   .WaitFor(database);
-
 var cache = builder.AddRedis("cache")
    .WithRedisInsight()
-   .WithDataVolume();
+   .WithDataVolume()
+   .WithLifetime(ContainerLifetime.Persistent);
+
+var queue = builder.AddRabbitMQ("queue")
+   .WithManagementPlugin()
+   .WithDataVolume()
+   .WithLifetime(ContainerLifetime.Persistent);
+
+var keycloak = builder.AddKeycloak("keycloak")
+   .WithDataVolume()
+   .WithLifetime(ContainerLifetime.Persistent);
+
+var migrations = builder.AddProject<Projects.TavernTrashers_MigrationService>("migrations")
+   .WithReference(database)
+   .WaitFor(database)
+   .WithReference(cache)
+   .WithReference(queue);
 
 var api = builder.AddProject<Projects.TavernTrashers_Api>("api")
    .WithReference(database)
    .WaitFor(database)
    .WaitForCompletion(migrations)
    .WithReference(cache)
+   .WithReference(queue)
+   .WithReference(keycloak)
+   .WaitFor(keycloak)
    .WithExternalHttpEndpoints();
 
 builder.AddNpmApp("spa", "../../web/tavern-trashers-spa")

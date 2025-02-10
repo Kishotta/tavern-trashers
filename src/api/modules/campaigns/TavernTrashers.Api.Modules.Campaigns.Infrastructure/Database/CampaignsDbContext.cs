@@ -17,7 +17,7 @@ public class CampaignsDbContext(DbContextOptions<CampaignsDbContext> options)
 	
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.HasDefaultSchema(CampaignsModule.Schema);
+		modelBuilder.HasDefaultSchema(new CampaignsModule().Schema);
 
 		modelBuilder.ApplyConfigurationsFromAssembly(Common.Infrastructure.AssemblyReference.Assembly);
 		modelBuilder.ApplyConfigurationsFromAssembly(AssemblyReference.Assembly);

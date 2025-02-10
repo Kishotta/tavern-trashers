@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
 
-namespace TavernTrashers.Api.Common.Presentation;
+namespace TavernTrashers.Api.Common.Presentation.Endpoints;
 
 public static class ResultExtensions
 {

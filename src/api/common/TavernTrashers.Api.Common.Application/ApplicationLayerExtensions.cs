@@ -9,7 +9,7 @@ public static class ApplicationLayerExtensions
 {
 	public static IServiceCollection ConfigureApplicationLayer(
 		this IServiceCollection services, 
-		IEnumerable<IApplicationModule> modules)
+		IEnumerable<IModuleApplicationLayer> modules)
 	{
 		// All MediatR handlers must be registered at the same time
 		var moduleApplicationAssemblies = modules

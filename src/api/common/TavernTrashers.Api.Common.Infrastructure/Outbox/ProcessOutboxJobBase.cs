@@ -8,6 +8,7 @@ using Quartz;
 using TavernTrashers.Api.Common.Application.Clock;
 using TavernTrashers.Api.Common.Application.Data;
 using TavernTrashers.Api.Common.Domain.Entities;
+using TavernTrashers.Api.Common.Infrastructure.Modules;
 using TavernTrashers.Api.Common.Infrastructure.Serialization;
 
 namespace TavernTrashers.Api.Common.Infrastructure.Outbox;
@@ -18,14 +19,12 @@ public abstract class ProcessOutboxJobBase(
     IDateTimeProvider dateTimeProvider,
     ILogger logger) : IJob
 {
-    protected abstract string ModuleName { get; }
-    protected abstract Assembly ApplicationAssembly { get; }
-    protected abstract string Schema { get; }
+    protected abstract IModule Module { get; }
     protected abstract int BatchSize { get; }
     
     public async Task Execute(IJobExecutionContext context)
     {
-        logger.LogTrace("{Module} - Beginning to process outbox messages", ModuleName);
+        logger.LogTrace("{Module} - Beginning to process outbox messages", Module.Name);
         
         await using var connection = await dbConnectionFactory.OpenConnectionAsync();
         await using var transaction = await connection.BeginTransactionAsync();
@@ -43,7 +42,7 @@ public abstract class ProcessOutboxJobBase(
             }
             catch (Exception caughtException)
             {
-                logger.LogError(caughtException, "{Module} - Exception while processing outbox message {MessageId}", ModuleName, outboxMessage.Id);
+                logger.LogError(caughtException, "{Module} - Exception while processing outbox message {MessageId}", Module.Name, outboxMessage.Id);
                 
                 exception = caughtException;
             }
@@ -53,7 +52,7 @@ public abstract class ProcessOutboxJobBase(
         
         await transaction.CommitAsync();
         
-        logger.LogDebug("{Module} - Completed processing outbox messages", ModuleName);
+        logger.LogDebug("{Module} - Completed processing outbox messages", Module.Name);
     }
 
     private async Task PublishDomainEvent(IDomainEvent domainEvent)
@@ -63,7 +62,7 @@ public abstract class ProcessOutboxJobBase(
         var domainEventHandlers = DomainEventHandlersFactory.GetHandlers(
             domainEvent.GetType(),
             scope.ServiceProvider,
-            ApplicationAssembly);
+            Module.ApplicationAssembly);
 
         foreach (var domainEventHandler in domainEventHandlers)
         {
@@ -80,7 +79,7 @@ public abstract class ProcessOutboxJobBase(
              SELECT
                 id AS {nameof(OutboxMessageResponse.Id)},
                 content AS {nameof(OutboxMessageResponse.Content)}
-             FROM {Schema}.outbox_messages
+             FROM {Module.Schema}.outbox_messages
              WHERE processed_at_utc IS NULL
              ORDER BY occurred_at_utc
              LIMIT {BatchSize}
@@ -99,7 +98,7 @@ public abstract class ProcessOutboxJobBase(
     {
         var sql =
             $"""
-             UPDATE {Schema}.outbox_messages
+             UPDATE {Module.Schema}.outbox_messages
              SET processed_at_utc = @ProcessedAtUtc,
                 error = @Error
              WHERE id = @Id
