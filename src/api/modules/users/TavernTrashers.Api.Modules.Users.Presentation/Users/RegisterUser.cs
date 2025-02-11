@@ -14,23 +14,16 @@ internal sealed class RegisterUser : IEndpoint
 	public void MapEndpoint(IEndpointRouteBuilder app)
 	{
 		app.MapPost("users/register", async (
-				RegisterUserRequest request, 
-				ISender sender, 
-				HttpContext context, 
-				LinkGenerator linkGenerator) =>
-			{
-				var result = await sender.Send(new RegisterUserCommand(
-					request.Email,
-					request.Password,
-					request.FirstName,
-					request.LastName));
-
-				return result.Match(
-					() => Results.Created(
-						linkGenerator.GetUriByName(context, nameof(GetUserProfile), new { id = result.Value.Id }),
-						result.Value),
-					ApiResults.Problem);
-			})
+				RegisterUserRequest request,
+				ISender sender,
+				HttpContext httpContext,
+				LinkGenerator linkGenerator) => await sender.Send(
+					new RegisterUserCommand(
+						request.Email,
+						request.Password,
+						request.FirstName,
+						request.LastName))
+			   .CreatedAsync(user => new Uri(linkGenerator.GetUriByName(httpContext, nameof(GetUserProfile), new { id = user.Id })!)))
 		   .AllowAnonymous()
 		   .WithName(nameof(RegisterUser))
 		   .WithTags(Tags.Users);

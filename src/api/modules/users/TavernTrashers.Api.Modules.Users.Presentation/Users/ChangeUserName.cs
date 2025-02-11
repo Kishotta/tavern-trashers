@@ -14,17 +14,14 @@ internal sealed class ChangeUserName : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut("users/{id:guid}/profile", async (Guid id, ChangeUserNameRequest request, ISender sender) =>
-            {
-                var result = await sender.Send(new ChangeUserNameCommand(
-                    id,
-                    request.FirstName,
-                    request.LastName));
-
-                return result.Match(Results.Ok, ApiResults.Problem);
-            })
-            .RequireAuthorization(Permissions.ChangeUserName)
-            .WithName(nameof(ChangeUserName))
-            .WithTags(Tags.Users);
+                await sender.Send(new ChangeUserNameCommand(
+                        id,
+                        request.FirstName,
+                        request.LastName))
+	               .OkAsync())
+           .RequireAuthorization(Permissions.ChangeUserName)
+           .WithName(nameof(ChangeUserName))
+           .WithTags(Tags.Users);
     }
 
     internal sealed record ChangeUserNameRequest(string FirstName, string LastName);
