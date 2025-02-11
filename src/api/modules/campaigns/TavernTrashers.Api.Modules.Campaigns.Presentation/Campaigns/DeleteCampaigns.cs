@@ -13,10 +13,10 @@ public class DeleteCampaign : IEndpoint
 	public void MapEndpoint(IEndpointRouteBuilder app)
 	{
 		app.MapDelete("/campaigns/{id:guid}", async (Guid id, ISender sender) =>
-			await sender
-			   .Send(new DeleteCampaignCommand(id))
-			   .OkAsync())
-			.WithName(nameof(DeleteCampaign))
+				await sender
+				   .Send(new DeleteCampaignCommand(id))
+				   .OkAsync())
+		   .WithName(nameof(DeleteCampaign))
 		   .WithTags(Tags.Campaigns)
 		   .WithSummary("Delete Campaign")
 		   .WithDescription("Permanently delete a campaign.");

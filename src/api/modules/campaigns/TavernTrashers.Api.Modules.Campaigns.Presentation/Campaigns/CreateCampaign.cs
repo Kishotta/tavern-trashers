@@ -15,9 +15,11 @@ public class CreateCampaign : IEndpoint
 	public void MapEndpoint(IEndpointRouteBuilder app)
 	{
 		app.MapPost("/campaigns", async (CreateCampaignRequest request, ISender sender, HttpContext httpContext, LinkGenerator linkGenerator) =>
-			await sender
-			   .Send(new CreateCampaignCommand(request.Name, request.Description))
-			   .CreatedAsync(campaign => new Uri(linkGenerator.GetUriByName(httpContext, nameof(GetCampaign), new { id = campaign.Id })!)))
+				await sender
+				   .Send(new CreateCampaignCommand(request.Name, request.Description))
+				   .CreatedAsync(campaign =>
+						new Uri(linkGenerator.GetUriByName(httpContext, nameof(GetCampaign),
+							new { id = campaign.Id })!)))
 		   .WithName(nameof(CreateCampaign))
 		   .WithTags(Tags.Campaigns)
 		   .WithSummary("Create Campaign")

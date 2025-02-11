@@ -13,9 +13,9 @@ public class GetCampaigns : IEndpoint
 	public void MapEndpoint(IEndpointRouteBuilder app)
 	{
 		app.MapGet("/campaigns", async (ISender sender) =>
-			await sender
-			   .Send(new GetCampaignsQuery())
-			   .OkAsync())
+				await sender
+				   .Send(new GetCampaignsQuery())
+				   .OkAsync())
 		   .WithName(nameof(GetCampaigns))
 		   .WithTags(Tags.Campaigns)
 		   .WithSummary("Get all Campaigns")
