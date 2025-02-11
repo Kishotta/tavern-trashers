@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using TavernTrashers.Api.Common.Application;
 using TavernTrashers.Api.Common.Infrastructure;
 using TavernTrashers.Api.Common.Infrastructure.Caching;
@@ -12,8 +13,15 @@ public static class ModuleExtensions
 	public static void AddModules(this IHostApplicationBuilder builder)
 	{
 		var modules = ModuleRepository.Modules.ToList();
-		
-		builder.AddDistributedCache();
+
+		try
+		{
+			builder.AddDistributedCache();
+		}
+		catch
+		{
+			builder.Services.AddDistributedMemoryCache();
+		}
 		
 		builder.Configuration.ConfigureModules(modules);
 		

@@ -7,14 +7,14 @@ using TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
 namespace TavernTrashers.Api.Modules.Campaigns.Application.Campaigns.CreateCampaign;
 
 internal sealed class CreateCampaignCommandHandler(
-	ICampaignRepository campaigns,
+	ICampaignRepository campaignRepository,
 	IUnitOfWork unitOfWork) 
 	: ICommandHandler<CreateCampaignCommand, CampaignResponse>
 {
 	public async Task<Result<CampaignResponse>> Handle(CreateCampaignCommand command, CancellationToken cancellationToken) =>
 		await Campaign
 		   .Create(command.Name, command.Description)
-		   .Do(campaigns.Add)
+		   .Do(campaignRepository.Add)
 		   .DoAsync(async _ => await unitOfWork.SaveChangesAsync(cancellationToken))
 		   .TransformAsync(campaign => (CampaignResponse)campaign);
 }

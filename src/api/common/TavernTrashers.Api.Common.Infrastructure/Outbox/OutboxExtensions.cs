@@ -5,7 +5,7 @@ namespace TavernTrashers.Api.Common.Infrastructure.Outbox;
 
 internal static class OutboxExtensions
 {
-	internal static IServiceCollection AddOutbox(this IServiceCollection services)
+	internal static IServiceCollection AddOutboxInterceptor(this IServiceCollection services)
 	{
 		services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
 		

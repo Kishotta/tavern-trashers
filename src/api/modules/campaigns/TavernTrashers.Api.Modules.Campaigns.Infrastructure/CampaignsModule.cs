@@ -36,12 +36,7 @@ public class CampaignsModule : Module
 
 	protected override void ConfigureServices(IHostApplicationBuilder builder)
 	{
-		builder.Services
-		   .Configure<OutboxOptions>(builder.Configuration.GetSection($"{Name}:Outbox"))
-		   .ConfigureOptions<ConfigureProcessOutboxJob>();
-		
-		// builder.Services
-		//    .Configure<InboxOptions>(builder.Configuration.GetSection($"{Name}:Inbox"))
-		//    .ConfigureOptions<ConfigureProcessInboxJob>()
+		ConfigureOutbox<OutboxOptions, ProcessOutboxJob, ConfigureProcessOutboxJob>(builder);
+		ConfigureInbox<InboxOptions, ProcessInboxJob, ConfigureProcessInboxJob>(builder);
 	}
 }

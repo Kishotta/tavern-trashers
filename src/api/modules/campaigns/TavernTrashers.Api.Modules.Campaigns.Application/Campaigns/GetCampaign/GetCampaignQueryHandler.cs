@@ -6,7 +6,8 @@ using TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
 
 namespace TavernTrashers.Api.Modules.Campaigns.Application.Campaigns.GetCampaign;
 
-internal sealed class GetCampaignQueryHandler(ICampaignRepository campaignRepository) : IQueryHandler<GetCampaignQuery, CampaignResponse>
+internal sealed class GetCampaignQueryHandler(ICampaignRepository campaignRepository) 
+	: IQueryHandler<GetCampaignQuery, CampaignResponse>
 {
 	public async Task<Result<CampaignResponse>> Handle(GetCampaignQuery query, CancellationToken cancellationToken) =>
 		await campaignRepository

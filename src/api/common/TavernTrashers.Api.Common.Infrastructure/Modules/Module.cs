@@ -1,7 +1,9 @@
 using System.Reflection;
 using MassTransit;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TavernTrashers.Api.Common.Application.EventBus;
+using TavernTrashers.Api.Common.Infrastructure.Inbox;
 using TavernTrashers.Api.Common.Infrastructure.Outbox;
 using TavernTrashers.Api.Common.Presentation.Endpoints;
 
@@ -49,4 +51,24 @@ public abstract class Module : IModule
 					   .AddConsumer(typeof(IntegrationEventHandler<>).MakeGenericType(integrationEventType));
 				});
 		};
+
+	protected void ConfigureOutbox<TOutboxOptions, TProcessOutboxJob, TConfigureProcessOutboxJob>(IHostApplicationBuilder builder)
+		where TOutboxOptions : OutboxOptionsBase
+		where TProcessOutboxJob : ProcessOutboxJobBase
+		where TConfigureProcessOutboxJob : ConfigureProcessOutboxJobBase<TOutboxOptions, TProcessOutboxJob>
+	{
+		builder.Services
+		   .Configure<TOutboxOptions>(builder.Configuration.GetSection($"{Name}:Outbox"))
+		   .ConfigureOptions<TConfigureProcessOutboxJob>();
+	}
+
+	protected void ConfigureInbox<TInboxOptions, TProcessInboxJob, TConfigureProcessInboxJob>(IHostApplicationBuilder builder)
+		where TInboxOptions : InboxOptionsBase
+		where TProcessInboxJob : ProcessInboxJobBase
+		where TConfigureProcessInboxJob : ConfigureProcessInboxJobBase<TInboxOptions, TProcessInboxJob>
+	{
+		builder.Services
+		   .Configure<TInboxOptions>(builder.Configuration.GetSection($"{Name}:Inbox"))
+		   .ConfigureOptions<TConfigureProcessInboxJob>();
+	}
 }

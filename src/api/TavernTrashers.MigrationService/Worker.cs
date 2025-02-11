@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using OpenTelemetry.Trace;
 using TavernTrashers.Api.Modules.Campaigns.Infrastructure;
 using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
+using TavernTrashers.Api.Modules.Users.Infrastructure.Database;
 
 namespace TavernTrashers.MigrationService;
 
@@ -23,7 +24,8 @@ public class Worker(
         {
             using var scope = serviceProvider.CreateScope();
             DbContext[] dbContexts = [
-                scope.ServiceProvider.GetRequiredService<CampaignsDbContext>()
+                scope.ServiceProvider.GetRequiredService<CampaignsDbContext>(),
+                scope.ServiceProvider.GetRequiredService<UsersDbContext>()
             ];
             
             foreach (var dbContext in dbContexts)

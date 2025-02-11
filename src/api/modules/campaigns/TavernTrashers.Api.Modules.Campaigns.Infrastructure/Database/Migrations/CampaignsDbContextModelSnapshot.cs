@@ -72,6 +72,59 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                     b.ToTable("audit_logs", "campaigns");
                 });
 
+            modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Inbox.InboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(3000)
+                        .HasColumnType("jsonb")
+                        .HasColumnName("content");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("text")
+                        .HasColumnName("error");
+
+                    b.Property<DateTime>("OccurredAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("occurred_at_utc");
+
+                    b.Property<DateTime?>("ProcessedAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("processed_at_utc");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_inbox_messages");
+
+                    b.ToTable("inbox_messages", "campaigns");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Inbox.InboxMessageConsumer", b =>
+                {
+                    b.Property<Guid>("InboxMessageId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("inbox_message_id");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("name");
+
+                    b.HasKey("InboxMessageId", "Name")
+                        .HasName("pk_inbox_message_consumers");
+
+                    b.ToTable("inbox_message_consumers", "campaigns");
+                });
+
             modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Outbox.OutboxMessage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -108,9 +161,27 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                     b.ToTable("outbox_messages", "campaigns");
                 });
 
+            modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Outbox.OutboxMessageConsumer", b =>
+                {
+                    b.Property<Guid>("OutboxMessageId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("outbox_message_id");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("name");
+
+                    b.HasKey("OutboxMessageId", "Name")
+                        .HasName("pk_outbox_message_consumers");
+
+                    b.ToTable("outbox_message_consumers", "campaigns");
+                });
+
             modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.Campaign", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
@@ -128,6 +199,132 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasName("pk_campaigns");
 
                     b.ToTable("campaigns", "campaigns");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Choices.Choice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("question_id");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text");
+
+                    b.HasKey("Id")
+                        .HasName("pk_choices");
+
+                    b.HasIndex("QuestionId")
+                        .HasDatabaseName("ix_choices_question_id");
+
+                    b.ToTable("choices", "campaigns");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Questionnaires.Questionnaire", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CampaignId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("campaign_id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("pk_questionnaires");
+
+                    b.HasIndex("CampaignId")
+                        .HasDatabaseName("ix_questionnaires_campaign_id");
+
+                    b.ToTable("questionnaires", "campaigns");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Questions.Question", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Prompt")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("prompt");
+
+                    b.Property<Guid>("QuestionnaireId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("questionnaire_id");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_questions");
+
+                    b.HasIndex("QuestionnaireId")
+                        .HasDatabaseName("ix_questions_questionnaire_id");
+
+                    b.ToTable("questions", "campaigns");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Choices.Choice", b =>
+                {
+                    b.HasOne("TavernTrashers.Api.Modules.Campaigns.Domain.Questions.Question", null)
+                        .WithMany("Choices")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_choices_questions_question_id");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Questionnaires.Questionnaire", b =>
+                {
+                    b.HasOne("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.Campaign", "Campaign")
+                        .WithMany()
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_questionnaires_campaigns_campaign_id");
+
+                    b.Navigation("Campaign");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Questions.Question", b =>
+                {
+                    b.HasOne("TavernTrashers.Api.Modules.Campaigns.Domain.Questionnaires.Questionnaire", null)
+                        .WithMany("Questions")
+                        .HasForeignKey("QuestionnaireId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_questions_questionnaires_questionnaire_id");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Questionnaires.Questionnaire", b =>
+                {
+                    b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Questions.Question", b =>
+                {
+                    b.Navigation("Choices");
                 });
 #pragma warning restore 612, 618
         }

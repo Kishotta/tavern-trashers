@@ -1,0 +1,19 @@
+{
+  "Users": {
+    "KeyCloak": {
+      "AdminUrl": "",
+      "TokenUrl": "",
+      "ConfidentialClientId": "",
+      "ConfidentialClientSecret": "",
+      "PublicClientId": ""
+    },
+    "Inbox": {
+      "IntervalInMilliseconds": 1000,
+      "BatchSize": 10
+    },
+    "Outbox": {
+      "IntervalInMilliseconds": 1000,
+      "BatchSize": 10
+    }
+  }
+}

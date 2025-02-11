@@ -14,7 +14,7 @@ public class CreateCampaign : IEndpoint
 {
 	public void MapEndpoint(IEndpointRouteBuilder app)
 	{
-		app.MapPost("/campaigns", async (Request request, ISender sender, HttpContext httpContext, LinkGenerator linkGenerator) =>
+		app.MapPost("/campaigns", async (CreateCampaignRequest request, ISender sender, HttpContext httpContext, LinkGenerator linkGenerator) =>
 			await sender
 			   .Send(new CreateCampaignCommand(request.Name, request.Description))
 			   .CreatedAsync(campaign => new Uri(linkGenerator.GetUriByName(httpContext, nameof(GetCampaign), new { id = campaign.Id })!)))
@@ -22,10 +22,10 @@ public class CreateCampaign : IEndpoint
 		   .WithTags(Tags.Campaigns)
 		   .WithSummary("Create Campaign")
 		   .WithDescription("Create a new campaign.")
-		   .Accepts<Request>("application/json")
+		   .Accepts<CreateCampaignRequest>("application/json")
 		   .Produces<CampaignResponse>(StatusCodes.Status201Created, "application/json")
 		   .Produces<ProblemDetails>(StatusCodes.Status400BadRequest, "application/json");
 	}
 
-	internal sealed record Request(string Name, string Description);
+	internal sealed record CreateCampaignRequest(string Name, string Description);
 }

@@ -8,14 +8,14 @@ using TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
 namespace TavernTrashers.Api.Modules.Campaigns.Application.Campaigns.DeleteCampaign;
 
 internal sealed class DeleteCampaignCommandHandler(
-	ICampaignRepository campaigns,
+	ICampaignRepository campaignRepository,
 	IUnitOfWork unitOfWork) 
 	: ICommandHandler<DeleteCampaignCommand, CampaignResponse>
 {
 	public async Task<Result<CampaignResponse>> Handle(DeleteCampaignCommand command, CancellationToken cancellationToken) =>
-		await campaigns
+		await campaignRepository
 		   .GetAsync(command.CampaignId, cancellationToken)
-		   .DoAsync(campaigns.Remove)
+		   .DoAsync(campaignRepository.Remove)
 		   .DoAsync(async _ => await unitOfWork.SaveChangesAsync(cancellationToken))
 		   .TransformAsync(campaign => (CampaignResponse)campaign);
 }

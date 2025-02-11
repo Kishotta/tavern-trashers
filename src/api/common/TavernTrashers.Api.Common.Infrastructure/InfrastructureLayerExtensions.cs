@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Quartz;
 using TavernTrashers.Api.Common.Application.EventBus;
 using TavernTrashers.Api.Common.Application.Messaging;
@@ -11,6 +12,7 @@ using TavernTrashers.Api.Common.Infrastructure.Caching;
 using TavernTrashers.Api.Common.Infrastructure.Clock;
 using TavernTrashers.Api.Common.Infrastructure.Database;
 using TavernTrashers.Api.Common.Infrastructure.EventBus;
+using TavernTrashers.Api.Common.Infrastructure.Inbox;
 using TavernTrashers.Api.Common.Infrastructure.Modules;
 using TavernTrashers.Api.Common.Infrastructure.Outbox;
 
@@ -32,7 +34,7 @@ public static class InfrastructureLayerExtensions
 		   .AddDateTimeProvider()
 		   .AddDbConnectionFactory(configuration.GetConnectionString("database")!)
 		   .AddEventBus(configuration.GetConnectionString("queue")!, modules)
-		   .AddOutbox()
+		   .AddOutboxInterceptor()
 		   .AddQuartzJobs();
 
 		return services;
@@ -92,7 +94,7 @@ public static class InfrastructureLayerExtensions
 		return services;
 	}
 
-	internal static IServiceCollection AddQuartzJobs(this IServiceCollection services)
+	private static IServiceCollection AddQuartzJobs(this IServiceCollection services)
 	{
 		services.AddQuartz(configurator =>
 		{

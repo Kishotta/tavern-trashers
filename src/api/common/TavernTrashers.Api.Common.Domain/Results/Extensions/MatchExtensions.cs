@@ -1,6 +1,6 @@
 namespace TavernTrashers.Api.Common.Domain.Results.Extensions;
 
-public static partial class ResultExtensions
+public static class MatchExtensions
 {
 	public static TOut Match<TOut>(
 		this Result result,
