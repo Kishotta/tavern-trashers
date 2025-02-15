@@ -17,7 +17,7 @@ var queue = builder.AddRabbitMQ("queue")
    .WithDataVolume()
    .WithLifetime(ContainerLifetime.Persistent);
 
-var keycloak = builder.AddKeycloak("keycloak")
+var keycloak = builder.AddKeycloak("identity")
    .WithDataVolume()
    .WithLifetime(ContainerLifetime.Persistent);
 

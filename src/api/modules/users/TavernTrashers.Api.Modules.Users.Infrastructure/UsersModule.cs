@@ -37,16 +37,24 @@ public class UsersModule : Module
 	{
 		ConfigureOutbox<OutboxOptions, ProcessOutboxJob, ConfigureProcessOutboxJob>(builder);
 		ConfigureInbox<InboxOptions, ProcessInboxJob, ConfigureProcessInboxJob>(builder);
-		
+
 		builder.Services
 		   .Configure<KeyCloakOptions>(builder.Configuration.GetSection($"{Name}:KeyCloak"))
 		   .AddTransient<IIdentityProviderService, KeyCloakIdentityProviderService>()
-		   .AddTransient<KeyCloakAuthDelegatingHandler>()
+		   .AddTransient<KeyCloakAuthDelegatingHandler>();
+			
+		builder.Services
 		   .AddHttpClient<KeyCloakClient>((serviceProvider, httpClient) =>
 			{
 				var keyCloakOptions = serviceProvider.GetRequiredService<IOptions<KeyCloakOptions>>().Value;
 				httpClient.BaseAddress = new Uri(keyCloakOptions.AdminUrl);
 			})
 		   .AddHttpMessageHandler<KeyCloakAuthDelegatingHandler>();
+
+		builder.Services.AddHttpClient<KeyCloakTokenClient>((serviceProvider, httpClient) =>
+		{
+			var keyCloakOptions = serviceProvider.GetRequiredService<IOptions<KeyCloakOptions>>().Value;
+			httpClient.BaseAddress = new Uri(keyCloakOptions.TokenUrl);
+		});
 	}
 }
