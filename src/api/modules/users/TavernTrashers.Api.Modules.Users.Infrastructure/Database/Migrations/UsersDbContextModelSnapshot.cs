@@ -130,7 +130,8 @@ namespace TavernTrashers.Api.Modules.Users.Infrastructure.Database.Migrations
                         .HasColumnName("affected_columns");
 
                     b.Property<string>("NewValues")
-                        .HasColumnType("text")
+                        .HasMaxLength(3000)
+                        .HasColumnType("jsonb")
                         .HasColumnName("new_values");
 
                     b.Property<DateTime>("OccurredAtUtc")
@@ -138,12 +139,14 @@ namespace TavernTrashers.Api.Modules.Users.Infrastructure.Database.Migrations
                         .HasColumnName("occurred_at_utc");
 
                     b.Property<string>("OldValues")
-                        .HasColumnType("text")
+                        .HasMaxLength(3000)
+                        .HasColumnType("jsonb")
                         .HasColumnName("old_values");
 
                     b.Property<string>("PrimaryKey")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(500)
+                        .HasColumnType("jsonb")
                         .HasColumnName("primary_key");
 
                     b.Property<string>("TableName")

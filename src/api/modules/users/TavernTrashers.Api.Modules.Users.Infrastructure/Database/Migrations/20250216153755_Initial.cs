@@ -26,9 +26,9 @@ namespace TavernTrashers.Api.Modules.Users.Infrastructure.Database.Migrations
                     type = table.Column<string>(type: "text", nullable: false),
                     table_name = table.Column<string>(type: "text", nullable: false),
                     occurred_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    primary_key = table.Column<string>(type: "text", nullable: false),
-                    old_values = table.Column<string>(type: "text", nullable: true),
-                    new_values = table.Column<string>(type: "text", nullable: true),
+                    primary_key = table.Column<string>(type: "jsonb", maxLength: 500, nullable: false),
+                    old_values = table.Column<string>(type: "jsonb", maxLength: 3000, nullable: true),
+                    new_values = table.Column<string>(type: "jsonb", maxLength: 3000, nullable: true),
                     affected_columns = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>

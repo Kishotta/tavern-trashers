@@ -1,6 +1,5 @@
 using TavernTrashers.Api.Common.Domain.Auditing;
 using TavernTrashers.Api.Common.Domain.Results;
-using TavernTrashers.Api.Modules.Campaigns.Domain.Questionnaires;
 
 namespace TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
 

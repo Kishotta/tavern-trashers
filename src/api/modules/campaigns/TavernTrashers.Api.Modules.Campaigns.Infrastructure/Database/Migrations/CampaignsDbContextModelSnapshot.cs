@@ -35,7 +35,8 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasColumnName("affected_columns");
 
                     b.Property<string>("NewValues")
-                        .HasColumnType("text")
+                        .HasMaxLength(3000)
+                        .HasColumnType("jsonb")
                         .HasColumnName("new_values");
 
                     b.Property<DateTime>("OccurredAtUtc")
@@ -43,12 +44,14 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasColumnName("occurred_at_utc");
 
                     b.Property<string>("OldValues")
-                        .HasColumnType("text")
+                        .HasMaxLength(3000)
+                        .HasColumnType("jsonb")
                         .HasColumnName("old_values");
 
                     b.Property<string>("PrimaryKey")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(500)
+                        .HasColumnType("jsonb")
                         .HasColumnName("primary_key");
 
                     b.Property<string>("TableName")
@@ -199,132 +202,6 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasName("pk_campaigns");
 
                     b.ToTable("campaigns", "campaigns");
-                });
-
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Choices.Choice", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("QuestionId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("question_id");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("text");
-
-                    b.HasKey("Id")
-                        .HasName("pk_choices");
-
-                    b.HasIndex("QuestionId")
-                        .HasDatabaseName("ix_choices_question_id");
-
-                    b.ToTable("choices", "campaigns");
-                });
-
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Questionnaires.Questionnaire", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("CampaignId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("campaign_id");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("title");
-
-                    b.HasKey("Id")
-                        .HasName("pk_questionnaires");
-
-                    b.HasIndex("CampaignId")
-                        .HasDatabaseName("ix_questionnaires_campaign_id");
-
-                    b.ToTable("questionnaires", "campaigns");
-                });
-
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Questions.Question", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Prompt")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("prompt");
-
-                    b.Property<Guid>("QuestionnaireId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("questionnaire_id");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer")
-                        .HasColumnName("type");
-
-                    b.HasKey("Id")
-                        .HasName("pk_questions");
-
-                    b.HasIndex("QuestionnaireId")
-                        .HasDatabaseName("ix_questions_questionnaire_id");
-
-                    b.ToTable("questions", "campaigns");
-                });
-
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Choices.Choice", b =>
-                {
-                    b.HasOne("TavernTrashers.Api.Modules.Campaigns.Domain.Questions.Question", null)
-                        .WithMany("Choices")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_choices_questions_question_id");
-                });
-
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Questionnaires.Questionnaire", b =>
-                {
-                    b.HasOne("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.Campaign", "Campaign")
-                        .WithMany()
-                        .HasForeignKey("CampaignId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_questionnaires_campaigns_campaign_id");
-
-                    b.Navigation("Campaign");
-                });
-
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Questions.Question", b =>
-                {
-                    b.HasOne("TavernTrashers.Api.Modules.Campaigns.Domain.Questionnaires.Questionnaire", null)
-                        .WithMany("Questions")
-                        .HasForeignKey("QuestionnaireId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_questions_questionnaires_questionnaire_id");
-                });
-
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Questionnaires.Questionnaire", b =>
-                {
-                    b.Navigation("Questions");
-                });
-
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Questions.Question", b =>
-                {
-                    b.Navigation("Choices");
                 });
 #pragma warning restore 612, 618
         }

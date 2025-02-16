@@ -12,8 +12,8 @@ using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
 namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(CampaignsDbContext))]
-    [Migration("20250125151649_AddAuditLog")]
-    partial class AddAuditLog
+    [Migration("20250216152914_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,7 +38,8 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasColumnName("affected_columns");
 
                     b.Property<string>("NewValues")
-                        .HasColumnType("text")
+                        .HasMaxLength(3000)
+                        .HasColumnType("jsonb")
                         .HasColumnName("new_values");
 
                     b.Property<DateTime>("OccurredAtUtc")
@@ -46,12 +47,14 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasColumnName("occurred_at_utc");
 
                     b.Property<string>("OldValues")
-                        .HasColumnType("text")
+                        .HasMaxLength(3000)
+                        .HasColumnType("jsonb")
                         .HasColumnName("old_values");
 
                     b.Property<string>("PrimaryKey")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(500)
+                        .HasColumnType("jsonb")
                         .HasColumnName("primary_key");
 
                     b.Property<string>("TableName")
@@ -73,6 +76,59 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasName("pk_audit_logs");
 
                     b.ToTable("audit_logs", "campaigns");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Inbox.InboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(3000)
+                        .HasColumnType("jsonb")
+                        .HasColumnName("content");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("text")
+                        .HasColumnName("error");
+
+                    b.Property<DateTime>("OccurredAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("occurred_at_utc");
+
+                    b.Property<DateTime?>("ProcessedAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("processed_at_utc");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_inbox_messages");
+
+                    b.ToTable("inbox_messages", "campaigns");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Inbox.InboxMessageConsumer", b =>
+                {
+                    b.Property<Guid>("InboxMessageId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("inbox_message_id");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("name");
+
+                    b.HasKey("InboxMessageId", "Name")
+                        .HasName("pk_inbox_message_consumers");
+
+                    b.ToTable("inbox_message_consumers", "campaigns");
                 });
 
             modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Outbox.OutboxMessage", b =>
@@ -111,9 +167,27 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                     b.ToTable("outbox_messages", "campaigns");
                 });
 
+            modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Outbox.OutboxMessageConsumer", b =>
+                {
+                    b.Property<Guid>("OutboxMessageId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("outbox_message_id");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("name");
+
+                    b.HasKey("OutboxMessageId", "Name")
+                        .HasName("pk_outbox_message_consumers");
+
+                    b.ToTable("outbox_message_consumers", "campaigns");
+                });
+
             modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.Campaign", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
