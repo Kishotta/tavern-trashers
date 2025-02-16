@@ -7,11 +7,18 @@ internal static class AuthenticationExtensions
     internal static IServiceCollection AddAuthenticationInternal(this IServiceCollection services)
     {
         services.AddAuthentication()
-           .AddJwtBearer();
+           .AddKeycloakJwtBearer(
+		        "identity",
+                "tavern-trashers",
+                options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.Audience = "account";
+                });
+
+        services.AddAuthorizationBuilder();
 
         services.AddHttpContextAccessor();
-
-        services.ConfigureOptions<JwtBearerConfigureOptions>();
         
         return services;
     }

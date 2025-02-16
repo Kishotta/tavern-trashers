@@ -19,7 +19,7 @@ internal sealed class GetUserProfile : IEndpoint
 			    await sender
 				   .Send(new GetUserQuery(claims.GetUserId()))
 				   .OkAsync())
-		   .RequireAuthorization(Permissions.GetUserProfile)
+		   .RequireAuthorization()
 		   .WithName(nameof(GetUserProfile))
 		   .WithTags(Tags.Users);
     }

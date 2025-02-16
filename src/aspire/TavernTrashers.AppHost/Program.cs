@@ -17,9 +17,10 @@ var queue = builder.AddRabbitMQ("queue")
    .WithDataVolume()
    .WithLifetime(ContainerLifetime.Persistent);
 
-var keycloak = builder.AddKeycloak("identity")
+var identity = builder.AddKeycloak("identity")
    .WithDataVolume()
-   .WithLifetime(ContainerLifetime.Persistent);
+   .WithLifetime(ContainerLifetime.Persistent)
+   .WithExternalHttpEndpoints();
 
 var migrations = builder.AddProject<Projects.TavernTrashers_MigrationService>("migrations")
    .WithReference(database)
@@ -33,8 +34,15 @@ var api = builder.AddProject<Projects.TavernTrashers_Api>("api")
    .WaitForCompletion(migrations)
    .WithReference(cache)
    .WithReference(queue)
-   .WithReference(keycloak)
-   .WaitFor(keycloak)
+   .WithReference(identity)
+   .WaitFor(identity)
+   .WithExternalHttpEndpoints();
+
+builder.AddProject<Projects.TavernTrashers_Web>("web")
+   .WithReference(api)
+   .WaitFor(api)
+   .WithReference(identity)
+   .WaitFor(identity)
    .WithExternalHttpEndpoints();
 
 builder.AddNpmApp("spa", "../../web/tavern-trashers-spa")

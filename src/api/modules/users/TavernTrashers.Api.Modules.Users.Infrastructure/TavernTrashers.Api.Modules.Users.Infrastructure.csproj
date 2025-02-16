@@ -1,11 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
     <ItemGroup>
       <ProjectReference Include="..\..\..\common\TavernTrashers.Api.Common.Infrastructure\TavernTrashers.Api.Common.Infrastructure.csproj" />
       <ProjectReference Include="..\TavernTrashers.Api.Modules.Users.Application\TavernTrashers.Api.Modules.Users.Application.csproj" />

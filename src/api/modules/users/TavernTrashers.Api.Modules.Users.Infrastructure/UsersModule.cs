@@ -2,10 +2,12 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using TavernTrashers.Api.Common.Application.Authorization;
 using TavernTrashers.Api.Common.Infrastructure.Database;
 using TavernTrashers.Api.Modules.Users.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Users.Application.Abstractions.Identity;
 using TavernTrashers.Api.Modules.Users.Domain.Users;
+using TavernTrashers.Api.Modules.Users.Infrastructure.Authorization;
 using TavernTrashers.Api.Modules.Users.Infrastructure.Database;
 using TavernTrashers.Api.Modules.Users.Infrastructure.Identity;
 using TavernTrashers.Api.Modules.Users.Infrastructure.Inbox;
@@ -25,6 +27,7 @@ public class UsersModule : Module
 	
 	public override Type IdempotentDomainEventHandlerType => typeof(IdempotentDomainEventHandler<>);
 	public override Type IdempotentIntegrationEventHandlerType => typeof(IdempotentIntegrationEventHandler<>);
+	
 	protected override void AddDatabase(IHostApplicationBuilder builder)
 	{
 		builder.Services
@@ -38,6 +41,8 @@ public class UsersModule : Module
 		ConfigureOutbox<OutboxOptions, ProcessOutboxJob, ConfigureProcessOutboxJob>(builder);
 		ConfigureInbox<InboxOptions, ProcessInboxJob, ConfigureProcessInboxJob>(builder);
 
+		builder.Services.AddScoped<IPermissionService, PermissionService>();
+		
 		builder.Services
 		   .Configure<KeyCloakOptions>(builder.Configuration.GetSection($"{Name}:KeyCloak"))
 		   .AddTransient<IIdentityProviderService, KeyCloakIdentityProviderService>()

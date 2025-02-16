@@ -24,6 +24,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\api\TavernTrashers.Api\TavernTrashers.Api.csproj" />
       <ProjectReference Include="..\..\api\TavernTrashers.MigrationService\TavernTrashers.MigrationService.csproj" />
+      <ProjectReference Include="..\..\web\TavernTrashers.Web\TavernTrashers.Web.csproj" />
     </ItemGroup>
 
 </Project>
