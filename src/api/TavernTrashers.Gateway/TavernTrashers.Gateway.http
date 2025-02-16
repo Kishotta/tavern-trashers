@@ -1,0 +1,6 @@
+@TavernTrashers.Gateway_HostAddress = http://localhost:5274
+
+GET {{TavernTrashers.Gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

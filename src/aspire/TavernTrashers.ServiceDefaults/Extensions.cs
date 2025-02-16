@@ -72,7 +72,8 @@ public static class Extensions
 				   .AddEntityFrameworkCoreInstrumentation()
 				   .AddRedisInstrumentation()
 				   .AddNpgsql()
-				   .AddSource(MassTransit.Logging.DiagnosticHeaders.DefaultListenerName);
+				   .AddSource(MassTransit.Logging.DiagnosticHeaders.DefaultListenerName)
+				   .AddSource("Yarp.ReverseProxy");
 			});
 
 		builder.AddOpenTelemetryExporters();
