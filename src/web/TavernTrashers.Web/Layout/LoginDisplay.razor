@@ -3,11 +3,19 @@
 
 <AuthorizeView>
     <Authorized>
-        Hello, @context.User.Identity?.Name!
-        <button class="nav-link btn btn-link" @onclick="BeginLogOut">Log out</button>
+        <MudMenu>
+            <ActivatorContent>
+                <MudAvatar>
+                    @context.User.Identity?.Name![0]
+                </MudAvatar>
+            </ActivatorContent>
+            <ChildContent>
+                <MudMenuItem Label="Log out" @onclick="BeginLogOut"/>
+            </ChildContent>
+        </MudMenu>
     </Authorized>
     <NotAuthorized>
-        <a href="authentication/login">Log in</a>
+        <MudButton Href="authentication/login">Log in</MudButton>
     </NotAuthorized>
 </AuthorizeView>
 
