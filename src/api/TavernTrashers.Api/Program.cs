@@ -14,10 +14,12 @@ builder.AddModules();
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddCors(options =>
-	options.AddDefaultPolicy(configurePolicy => configurePolicy.AllowAnyMethod()
-	   .AllowAnyHeader()
-	   .AllowAnyOrigin()));
+builder.Services
+   .AddCors(options =>
+		options.AddDefaultPolicy(configurePolicy => configurePolicy
+		   .AllowAnyMethod()
+		   .AllowAnyHeader()
+		   .AllowAnyOrigin()));
 
 var app = builder.Build();
 

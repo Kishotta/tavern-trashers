@@ -11,17 +11,24 @@ internal sealed class RegisterUserCommandHandler(
 	IIdentityProviderService identityProvider,
 	IUserRepository userRepository,
 	IUnitOfWork unitOfWork)
-	: ICommandHandler<RegisterUserCommand, UserResponse>
+	: ICommandHandler<RegisterUserCommand, AuthToken>
 {
-	public async Task<Result<UserResponse>> Handle(RegisterUserCommand request, CancellationToken cancellationToken) =>
+	public async Task<Result<AuthToken>> Handle(RegisterUserCommand request, CancellationToken cancellationToken) =>
 		await identityProvider
 		   .RegisterUserAsync(new UserModel(
 				request.Email,
 				request.Password,
 				request.FirstName,
 				request.LastName), cancellationToken)
-		   .ThenAsync(userId => User.Create(request.Email, request.FirstName, request.LastName, userId))
+		   .ThenAsync(identityId => User.Create(
+				request.Email,
+				request.FirstName,
+				request.LastName,
+				identityId))
 		   .DoAsync(userRepository.Insert)
 		   .DoAsync(_ => unitOfWork.SaveChangesAsync(cancellationToken))
-		   .TransformAsync(user => (UserResponse)user);
+		   .ThenAsync(_ => identityProvider.GetUserAuthTokenAsync(
+				request.Email, 
+				request.Password, 
+				cancellationToken));
 }

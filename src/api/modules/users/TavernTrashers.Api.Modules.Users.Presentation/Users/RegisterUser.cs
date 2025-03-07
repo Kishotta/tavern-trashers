@@ -15,22 +15,22 @@ internal sealed class RegisterUser : IEndpoint
 	{
 		app.MapPost("users/register", async (
 					RegisterUserRequest request,
-					ISender sender,
-					HttpContext httpContext,
-					LinkGenerator linkGenerator) =>
+					ISender sender) =>
 				await sender.Send(
 						new RegisterUserCommand(
 							request.Email,
 							request.Password,
 							request.FirstName,
 							request.LastName))
-				   .CreatedAsync(user =>
-						new Uri(linkGenerator.GetUriByName(httpContext, nameof(GetUserProfile),
-							new { id = user.Id })!)))
+				   .OkAsync())
 		   .AllowAnonymous()
 		   .WithName(nameof(RegisterUser))
 		   .WithTags(Tags.Users);
 	}
 
-	internal sealed record RegisterUserRequest(string Email, string Password, string FirstName, string LastName);
+	internal sealed record RegisterUserRequest(
+		string Email, 
+		string Password, 
+		string FirstName, 
+		string LastName);
 }

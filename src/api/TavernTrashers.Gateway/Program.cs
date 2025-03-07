@@ -23,7 +23,16 @@ builder.Services
 
 builder.Services.AddAuthorizationBuilder();
 
+builder.Services
+  .AddCors(options =>
+      options.AddDefaultPolicy(configurePolicy => configurePolicy
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowAnyOrigin()));
+
 var app = builder.Build();
+
+app.UseCors();
 
 app.UseAuthentication()
    .UseAuthorization();

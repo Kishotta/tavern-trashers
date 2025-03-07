@@ -1,13 +1,23 @@
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 using TavernTrashers.Web;
+using TavernTrashers.Web.Clients;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddScoped<CustomBaseAddressAuthorizationMessageHandler>();
+
+builder.Services.AddHttpClient<ITavernTrashersClient, TavernTrashersClient>((provider, client) =>
+	{
+#pragma warning disable S1075
+		client.BaseAddress = new Uri("http://localhost:5274");
+#pragma warning restore S1075
+	})
+   .AddHttpMessageHandler<CustomBaseAddressAuthorizationMessageHandler>();
 
 builder.Services.AddMudServices();
 

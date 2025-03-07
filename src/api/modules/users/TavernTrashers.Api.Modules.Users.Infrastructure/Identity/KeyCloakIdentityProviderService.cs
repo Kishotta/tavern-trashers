@@ -7,10 +7,12 @@ namespace TavernTrashers.Api.Modules.Users.Infrastructure.Identity;
 
 internal sealed class KeyCloakIdentityProviderService(
     KeyCloakClient keyCloakClient,
+    KeyCloakTokenClient keyCloakTokenClient,
     ILogger<KeyCloakIdentityProviderService> logger)
     : IIdentityProviderService
 { 
     private const string PasswordCredentialType = "Password";
+    
     public async Task<Result<string>> RegisterUserAsync(UserModel user, CancellationToken cancellationToken = default)
     {
         var userRepresentation = new UserRepresentation(
@@ -26,14 +28,27 @@ internal sealed class KeyCloakIdentityProviderService(
 
         try
         {
-            var identityId = await keyCloakClient.RegisterUserAsync(userRepresentation, cancellationToken);
-            return identityId;
+            return await keyCloakClient.RegisterUserAsync(userRepresentation, cancellationToken);
         }
         catch (HttpRequestException exception) when (exception.StatusCode == HttpStatusCode.Conflict)
         {
             logger.LogError(exception, "User registration failed");
 
             return IdentityProviderErrors.EmailIsNotUnique;
+        }
+    }
+    
+    public async Task<Result<AuthToken>> GetUserAuthTokenAsync(string email, string password, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await keyCloakTokenClient.GetUserAuthToken(email, password, cancellationToken);
+        }
+        catch (HttpRequestException exception) when (exception.StatusCode == HttpStatusCode.BadRequest)
+        {
+            logger.LogError(exception, "User authentication failed");
+
+            return IdentityProviderErrors.InvalidCredentials;
         }
     }
 }

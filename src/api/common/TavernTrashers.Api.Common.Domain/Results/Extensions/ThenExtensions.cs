@@ -27,4 +27,14 @@ public static class ThenExtensions
 			? binder(result)
 			: result.Error;
 	}
+	
+	public static async Task<Result<TOut>> ThenAsync<TIn, TOut>(
+		this Task<Result<TIn>> taskResult,
+		Func<TIn, Task<Result<TOut>>> binder)
+	{
+		var result = await taskResult.ConfigureAwait(false);
+		return result.IsSuccess
+			? await binder(result)
+			: result.Error;
+	}
 }

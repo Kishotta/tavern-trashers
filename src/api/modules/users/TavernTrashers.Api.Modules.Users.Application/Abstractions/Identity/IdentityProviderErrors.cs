@@ -8,4 +8,9 @@ public static class IdentityProviderErrors
 		Error.Conflict(
 			"Identity.EmailIsNotUnique",
 			"The specified email is not unique");
+
+	public static readonly Error InvalidCredentials =
+		Error.Problem(
+			"Identity.InvalidCredentials", 
+			"Unable to authenticate with the provided credentials");
 }
