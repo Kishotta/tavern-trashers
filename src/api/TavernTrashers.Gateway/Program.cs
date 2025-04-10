@@ -13,22 +13,22 @@ builder.Services
 builder.Services
    .AddAuthentication()
    .AddKeycloakJwtBearer(
-      "identity",
-      "tavern-trashers",
-      options =>
-      {
-         options.RequireHttpsMetadata = false;
-         options.Audience             = "account";
-      });
+		"identity",
+		"tavern-trashers",
+		options =>
+		{
+			options.RequireHttpsMetadata = false;
+			options.Audience             = "account";
+		});
 
 builder.Services.AddAuthorizationBuilder();
 
 builder.Services
-  .AddCors(options =>
-      options.AddDefaultPolicy(configurePolicy => configurePolicy
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowAnyOrigin()));
+   .AddCors(options =>
+		options.AddDefaultPolicy(configurePolicy => configurePolicy
+		   .AllowAnyMethod()
+		   .AllowAnyHeader()
+		   .AllowAnyOrigin()));
 
 var app = builder.Build();
 

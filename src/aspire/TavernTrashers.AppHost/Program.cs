@@ -1,3 +1,5 @@
+using Projects;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 var postgres = builder.AddPostgres("postgres")
@@ -24,13 +26,13 @@ var identity = builder.AddKeycloak("identity", 3000)
    .WithEnvironment("PROXY_ADDRESS_FORWARDING", "true")
    .WithExternalHttpEndpoints();
 
-var migrations = builder.AddProject<Projects.TavernTrashers_MigrationService>("migrations")
+var migrations = builder.AddProject<TavernTrashers_MigrationService>("migrations")
    .WithReference(database)
    .WaitFor(database)
    .WithReference(cache)
    .WithReference(queue);
 
-var api = builder.AddProject<Projects.TavernTrashers_Api>("api")
+var api = builder.AddProject<TavernTrashers_Api>("api")
    .WithReference(database)
    .WaitFor(database)
    .WaitForCompletion(migrations)
@@ -40,15 +42,20 @@ var api = builder.AddProject<Projects.TavernTrashers_Api>("api")
    .WaitFor(identity)
    .WithExternalHttpEndpoints();
 
-var gateway = builder.AddProject<Projects.TavernTrashers_Gateway>("gateway")
-   .WithReference(api) 
+var gateway = builder.AddProject<TavernTrashers_Gateway>("gateway")
+   .WithReference(api)
    .WaitFor(api)
    .WithReference(identity)
    .WaitFor(identity)
    .WithExternalHttpEndpoints();
 
-builder.AddProject<Projects.TavernTrashers_Web>("web")
+builder.AddNpmApp("web", "../../Web/tavern-trashers-web")
+   .WithReference(gateway)
    .WaitFor(gateway)
-   .WithExternalHttpEndpoints();
+   .WithReference(identity)
+   .WaitFor(identity)
+   .WithHttpEndpoint(env: "PORT")
+   .WithExternalHttpEndpoints()
+   .PublishAsDockerFile();
 
 await builder.Build().RunAsync();
