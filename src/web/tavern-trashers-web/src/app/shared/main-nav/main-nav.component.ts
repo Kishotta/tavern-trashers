@@ -18,6 +18,10 @@ export class MainNavComponent {
     this.auth$ = this.store.select(selectAuth);
   }
 
+  get userName$() {
+    return this.auth$.pipe(map((auth) => auth.user?.name));
+  }
+
   get userImage$() {
     return this.userName$.pipe(
       map(
@@ -26,12 +30,6 @@ export class MainNavComponent {
             userName
           )}`
       )
-    );
-  }
-
-  get userName$() {
-    return this.auth$.pipe(
-      map((auth) => `${auth.user?.given_name} ${auth.user?.family_name}`)
     );
   }
 }

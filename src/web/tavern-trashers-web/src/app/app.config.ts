@@ -6,22 +6,34 @@ import {
 import { provideRouter } from '@angular/router';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptors,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { AuthEffects } from './state/auth/auth.effects';
 import { provideEffects } from '@ngrx/effects';
 import { authReducer } from './state/auth/auth.reducer';
+import { campaignsReducer } from './state/campaigns/campaigns.reducer';
+import { CampaignsEffects } from './state/campaigns/campaigns.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(),
-    provideOAuthClient(),
+    provideHttpClient(withInterceptors([]), withInterceptorsFromDi()),
+    provideOAuthClient({
+      resourceServer: {
+        allowedUrls: ['/api'],
+        sendAccessToken: true,
+      },
+    }),
     provideStore(),
-    provideEffects([AuthEffects]),
     provideState({ name: 'auth', reducer: authReducer }),
+    provideState({ name: 'campaigns', reducer: campaignsReducer }),
+    provideEffects([AuthEffects, CampaignsEffects]),
     provideStoreDevtools({
       maxAge: 25, // Retains last 25 states
       logOnly: !isDevMode(), // Restrict extension to log-only mode

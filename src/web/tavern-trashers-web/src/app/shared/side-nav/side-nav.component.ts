@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-side-nav',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './side-nav.component.html',
-  styleUrl: './side-nav.component.css'
+  styleUrl: './side-nav.component.css',
 })
-export class SideNavComponent {
-
-}
+export class SideNavComponent {}
