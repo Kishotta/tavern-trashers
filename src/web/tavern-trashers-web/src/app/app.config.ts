@@ -3,7 +3,7 @@ import {
   isDevMode,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withRouterConfig } from '@angular/router';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 import { routes } from './app.routes';
 import {
@@ -18,11 +18,12 @@ import { provideEffects } from '@ngrx/effects';
 import { authReducer } from './state/auth/auth.reducer';
 import { campaignsReducer } from './state/campaigns/campaigns.reducer';
 import { CampaignsEffects } from './state/campaigns/campaigns.effects';
+import { layoutReducer } from './state/layout/layout.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes, withRouterConfig({ onSameUrlNavigation: 'reload' })),
     provideHttpClient(withInterceptors([]), withInterceptorsFromDi()),
     provideOAuthClient({
       resourceServer: {
@@ -33,6 +34,7 @@ export const appConfig: ApplicationConfig = {
     provideStore(),
     provideState({ name: 'auth', reducer: authReducer }),
     provideState({ name: 'campaigns', reducer: campaignsReducer }),
+    provideState({ name: 'layout', reducer: layoutReducer }),
     provideEffects([AuthEffects, CampaignsEffects]),
     provideStoreDevtools({
       maxAge: 25, // Retains last 25 states

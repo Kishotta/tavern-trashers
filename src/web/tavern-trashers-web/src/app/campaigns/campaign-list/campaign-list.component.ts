@@ -1,49 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import {
-  Campaign,
-  CampaignsState,
-} from '../../state/campaigns/campaigns.reducer';
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Campaign } from '../../state/campaigns/campaigns.reducer';
 import {
-  clearCampaignSelection,
-  loadCampaigns,
-  selectCampaign,
-} from '../../state/campaigns/campaigns.actions';
-import { ProblemDetails } from '../../state/problemDetails';
+  selectCampaigns,
+  selectSelectedCampaign,
+} from '../../state/campaigns/campaigns.selectors';
+import { Router, RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
+import { loadCampaigns } from '../../state/campaigns/campaigns.actions';
 
 @Component({
   selector: 'app-campaign-list',
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, RouterLink],
   templateUrl: './campaign-list.component.html',
   styleUrl: './campaign-list.component.css',
 })
-export class CampaignListComponent implements OnInit {
-  campaigns$!: Observable<Campaign[]>;
-  selectedCampaignId$!: Observable<string | null>;
-  error$!: Observable<ProblemDetails | null>;
+export class CampaignListComponent {
+  protected campaigns$: Observable<Campaign[] | null>;
+  protected selectedCampaign$: Observable<Campaign | null>;
 
-  constructor(
-    private store: Store<{ campaigns: CampaignsState }>,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
-
-  ngOnInit(): void {
+  constructor(private router: Router, private store: Store) {
     this.store.dispatch(loadCampaigns());
 
-    this.route.firstChild?.paramMap.subscribe((params) => {
-      const id = params.get('id');
-      if (id) this.store.dispatch(selectCampaign({ campaignId: id }));
-      else this.store.dispatch(clearCampaignSelection());
-    });
+    this.campaigns$ = this.store.select(selectCampaigns);
+    this.selectedCampaign$ = this.store.select(selectSelectedCampaign);
+  }
 
-    this.campaigns$ = this.store.select((state) => state.campaigns.campaigns);
-    this.selectedCampaignId$ = this.store.select(
-      (state) => state.campaigns.selectedCampaignId
-    );
-    this.error$ = this.store.select((state) => state.campaigns.error);
+  onCampaignSelect(campaign: any) {
+    this.router.navigate(['campaigns', campaign.id]);
   }
 }

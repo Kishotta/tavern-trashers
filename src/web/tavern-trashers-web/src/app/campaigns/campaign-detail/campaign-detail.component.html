@@ -1,1 +1,41 @@
-<p>campaign-detail works!</p>
+@if(campaign$ | async; as campaign) {
+<div class="px-6 py-4">
+  <div>
+    <nav class="desktop:hidden" aria-label="Back">
+      <a
+        [routerLink]="['/campaigns']"
+        class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700"
+      >
+        <div class="mr-1 -ml-1 size-5 shrink-0 text-gray-400">
+          <i class="fa-regular fa-arrow-left fa-fw"></i>
+        </div>
+
+        Back
+      </a>
+    </nav>
+  </div>
+  <div class="mt-2 mobile:flex mobile:items-center mobile:justify-between">
+    <div class="min-w-0 flex-1">
+      <h2
+        class="text-2xl/7 font-bold text-gray-900 truncate ext-3xl tracking-tight"
+      >
+        {{ campaign.name }}
+      </h2>
+    </div>
+    <div class="mt-4 flex shrink-0 md:mt-0 md:ml-4">
+      <button
+        type="button"
+        class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+      >
+        Edit
+      </button>
+      <button
+        type="button"
+        class="ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      >
+        Publish
+      </button>
+    </div>
+  </div>
+</div>
+}

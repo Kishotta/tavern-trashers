@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tap } from 'rxjs';
 import { login, logout, tryAutoLogin } from './auth.actions';
-import { AuthService } from '../../auth.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthEffects {

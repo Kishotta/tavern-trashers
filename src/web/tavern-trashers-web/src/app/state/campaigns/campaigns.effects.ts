@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { CampaignsService } from '../../services/campaigns.service';
+import { CampaignsService } from './campaigns.service';
 import {
   loadCampaigns,
   loadCampaignsFailure,

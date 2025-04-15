@@ -1,35 +1,23 @@
 <div
-  class="h-18 flex shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-xs sm:gap-x-6 sm:px-6 lg:px-8"
+  class="h-18 flex shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-xs tabket:gap-x-6 tabket:px-6 desktop:px-8"
 >
-  <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
+  <button type="button" class="-m-2.5 p-2.5 text-gray-700 desktop:hidden">
     <span class="sr-only">Open sidebar</span>
-    <svg
-      class="size-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      aria-hidden="true"
-      data-slot="icon"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-      />
-    </svg>
+    <div class="size-6">
+      <i class="fa-regular fa-bars fa-fw fa-lg"></i>
+    </div>
   </button>
 
   <!-- Separator -->
-  <div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true"></div>
+  <div class="h-6 w-px bg-gray-900/10 desktop:hidden" aria-hidden="true"></div>
 
-  <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+  <div class="flex flex-1 gap-x-4 self-stretch desktop:gap-x-6">
     <form class="grid flex-1 grid-cols-1" action="#" method="GET">
       <input
         type="search"
         name="search"
         aria-label="Search"
-        class="col-start-1 row-start-1 block size-full bg-white pl-8 text-base text-gray-900 outline-hidden placeholder:text-gray-400 sm:text-sm/6"
+        class="col-start-1 row-start-1 block size-full bg-white pl-8 text-base text-gray-900 outline-hidden placeholder:text-gray-400 desktop:text-sm/6"
         placeholder="Search"
       />
       <div
@@ -39,7 +27,7 @@
       </div>
     </form>
 
-    <div class="flex items-center gap-x-4 lg:gap-x-6">
+    <div class="flex items-center gap-x-4 desktop:gap-x-6">
       <button
         type="button"
         class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
@@ -52,7 +40,7 @@
 
       <!-- Separator -->
       <div
-        class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"
+        class="hidden desktop:block desktop:h-6 desktop:w-px desktop:bg-gray-900/10"
         aria-hidden="true"
       ></div>
 
@@ -71,7 +59,7 @@
             [src]="userImage$ | async"
             alt=""
           />
-          <span class="hidden lg:flex lg:items-center">
+          <span class="hidden desktop:flex desktop:items-center">
             <span
               class="ml-4 text-sm/6 font-semibold text-gray-900"
               aria-hidden="true"

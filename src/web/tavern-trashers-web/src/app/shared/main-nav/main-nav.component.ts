@@ -24,12 +24,7 @@ export class MainNavComponent {
 
   get userImage$() {
     return this.userName$.pipe(
-      map(
-        (userName) =>
-          `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
-            userName
-          )}`
-      )
+      map((name) => `https://api.dicebear.com/9.x/initials/svg?seed=${name}`)
     );
   }
 }

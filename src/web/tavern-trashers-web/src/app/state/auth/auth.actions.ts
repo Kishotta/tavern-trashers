@@ -10,8 +10,3 @@ export const loginSuccess = createAction(
 );
 
 export const logout = createAction('[Auth] Logout');
-
-export const tokenRefreshed = createAction(
-  '[Auth] Token Refreshed',
-  props<{ accessToken: string }>()
-);

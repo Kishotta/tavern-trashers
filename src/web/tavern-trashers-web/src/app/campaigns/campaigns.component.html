@@ -1,9 +1,14 @@
-<div class="h-full flex">
-  <aside class="hidden w-96 overflow-y-auto border-r border-gray-200 xl:block">
-    <router-outlet name="list" />
-  </aside>
+<div class="flex md:flex-row h-full">
+  <!-- List Pane: visible on large screens always, or conditionally on mobile -->
+  <div
+    class="h-full w-full desktop:w-96"
+    [ngClass]="{ 'hidden desktop:block': campaignSelected }"
+  >
+    <app-campaign-list />
+  </div>
 
-  <main class="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-    <router-outlet name="detail" />
-  </main>
+  <!-- Detail Pane: shows the router outlet -->
+  <div class="lg:block flex-1 relative">
+    <router-outlet />
+  </div>
 </div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { loginSuccess, tokenRefreshed } from './state/auth/auth.actions';
+import { loginSuccess } from './auth.actions';
 import { OAuthEvent, OAuthService } from 'angular-oauth2-oidc';
 import { authCodeFlowConfig } from './auth.config';
 import { filter } from 'rxjs';
@@ -48,9 +48,17 @@ export class AuthService {
       )
       .subscribe(() => {
         const claims = this.oauthService.getIdentityClaims();
-        this.store.dispatch(loginSuccess({ user: claims }));
-        const accessToken = this.oauthService.getAccessToken();
-        this.store.dispatch(tokenRefreshed({ accessToken: accessToken }));
+        this.store.dispatch(
+          loginSuccess({
+            user: {
+              id: claims['sub'],
+              name: claims['name'],
+              firstName: claims['given_name'],
+              lastName: claims['family_name'],
+              email: claims['email'],
+            },
+          })
+        );
       });
   }
 }
