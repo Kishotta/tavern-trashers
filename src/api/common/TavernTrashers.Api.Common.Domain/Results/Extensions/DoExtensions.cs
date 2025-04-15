@@ -9,7 +9,7 @@ public static class DoExtensions
 
 		return result;
 	}
-	
+
 	public static async Task<Result<TValue>> DoAsync<TValue>(this Result<TValue> result, Func<TValue, Task> action)
 	{
 		if (result.IsSuccess)
@@ -17,8 +17,10 @@ public static class DoExtensions
 
 		return result;
 	}
-	
-	public static async Task<Result<TValue>> DoAsync<TValue>(this Task<Result<TValue>> resultTask, Action<TValue> action)
+
+	public static async Task<Result<TValue>> DoAsync<TValue>(
+		this Task<Result<TValue>> resultTask,
+		Action<TValue> action)
 	{
 		var result = await resultTask.ConfigureAwait(false);
 
@@ -27,8 +29,10 @@ public static class DoExtensions
 
 		return result;
 	}
-	
-	public static async Task<Result<TValue>> DoAsync<TValue>(this Task<Result<TValue>> resultTask, Func<TValue, Task> action)
+
+	public static async Task<Result<TValue>> DoAsync<TValue>(
+		this Task<Result<TValue>> resultTask,
+		Func<TValue, Task> action)
 	{
 		var result = await resultTask.ConfigureAwait(false);
 

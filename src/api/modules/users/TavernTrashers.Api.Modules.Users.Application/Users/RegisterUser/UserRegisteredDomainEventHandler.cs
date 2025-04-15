@@ -11,17 +11,19 @@ namespace TavernTrashers.Api.Modules.Users.Application.Users.RegisterUser;
 
 internal sealed class UserRegisteredDomainEventHandler(
 	ISender sender,
-	IEventBus eventBus) 
+	IEventBus eventBus)
 	: DomainEventHandler<UserRegisteredDomainEvent>
 {
-	public override async Task Handle(UserRegisteredDomainEvent notification, CancellationToken cancellationToken = default) =>
+	public override async Task Handle(
+		UserRegisteredDomainEvent domainEvent,
+		CancellationToken cancellationToken = default) =>
 		await sender
-		   .Send(new GetUserQuery(notification.UserId), cancellationToken)
+		   .Send(new GetUserQuery(domainEvent.UserId), cancellationToken)
 		   .EnsureSuccessAsync(error => new TavernTrashersException(nameof(GetUserQuery), error))
 		   .DoAsync(user => eventBus.PublishAsync(
 				new UserRegisteredIntegrationEvent(
-					notification.Id,
-					notification.OccurredAtUtc,
+					domainEvent.Id,
+					domainEvent.OccurredAtUtc,
 					user.Id,
 					user.Email,
 					user.FirstName,

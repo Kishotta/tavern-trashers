@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
@@ -11,9 +12,11 @@ using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
 namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(CampaignsDbContext))]
-    partial class CampaignsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250415042941_AddCampaignDm")]
+    partial class AddCampaignDm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

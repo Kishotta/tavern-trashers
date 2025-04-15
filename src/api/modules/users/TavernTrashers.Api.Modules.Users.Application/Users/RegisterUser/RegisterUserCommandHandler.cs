@@ -13,22 +13,34 @@ internal sealed class RegisterUserCommandHandler(
 	IUnitOfWork unitOfWork)
 	: ICommandHandler<RegisterUserCommand, AuthToken>
 {
-	public async Task<Result<AuthToken>> Handle(RegisterUserCommand request, CancellationToken cancellationToken) =>
-		await identityProvider
-		   .RegisterUserAsync(new UserModel(
+	public async Task<Result<AuthToken>> Handle(
+		RegisterUserCommand request,
+		CancellationToken cancellationToken) =>
+		await RegisterUserWithIdpAsync(request, cancellationToken)
+		   .ThenAsync(identityId => CreateUserEntityAsync(identityId, request))
+		   .DoAsync(userRepository.Insert)
+		   .DoAsync(_ => unitOfWork.SaveChangesAsync(cancellationToken))
+		   .ThenAsync(user => identityProvider.GetUserAuthTokenAsync(
+				user.Email,
+				request.Password,
+				cancellationToken));
+
+	private Task<Result<string>> RegisterUserWithIdpAsync(
+		RegisterUserCommand request,
+		CancellationToken cancellationToken) =>
+		identityProvider
+		   .RegisterUserAsync(new(
 				request.Email,
 				request.Password,
 				request.FirstName,
-				request.LastName), cancellationToken)
-		   .ThenAsync(identityId => User.Create(
-				request.Email,
-				request.FirstName,
-				request.LastName,
-				identityId))
-		   .DoAsync(userRepository.Insert)
-		   .DoAsync(_ => unitOfWork.SaveChangesAsync(cancellationToken))
-		   .ThenAsync(_ => identityProvider.GetUserAuthTokenAsync(
-				request.Email, 
-				request.Password, 
-				cancellationToken));
+				request.LastName), cancellationToken);
+
+	private static User CreateUserEntityAsync(
+		string identityId,
+		RegisterUserCommand request) =>
+		User.Create(
+			request.Email,
+			request.FirstName,
+			request.LastName,
+			identityId);
 }

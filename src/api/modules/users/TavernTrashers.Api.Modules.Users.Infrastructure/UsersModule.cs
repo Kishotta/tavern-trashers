@@ -24,17 +24,16 @@ public class UsersModule : Module
 
 	public override Assembly ApplicationAssembly => Application.AssemblyReference.Assembly;
 	public override Assembly PresentationAssembly => Presentation.AssemblyReference.Assembly;
-	
+
 	public override Type IdempotentDomainEventHandlerType => typeof(IdempotentDomainEventHandler<>);
 	public override Type IdempotentIntegrationEventHandlerType => typeof(IdempotentIntegrationEventHandler<>);
-	
-	protected override void AddDatabase(IHostApplicationBuilder builder)
-	{
+	public override Type IntegrationEventConsumerType => typeof(IntegrationEventConsumer<>);
+
+	protected override void AddDatabase(IHostApplicationBuilder builder) =>
 		builder.Services
 		   .AddDbContext<UsersDbContext>(Postgres.StandardOptions(builder.Configuration, Schema))
 		   .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<UsersDbContext>())
 		   .AddScoped<IUserRepository, UserRepository>();
-	}
 
 	protected override void ConfigureServices(IHostApplicationBuilder builder)
 	{
@@ -42,24 +41,24 @@ public class UsersModule : Module
 		ConfigureInbox<InboxOptions, ProcessInboxJob, ConfigureProcessInboxJob>(builder);
 
 		builder.Services.AddScoped<IPermissionService, PermissionService>();
-		
+
 		builder.Services
 		   .Configure<KeyCloakOptions>(builder.Configuration.GetSection($"{Name}:KeyCloak"))
 		   .AddTransient<IIdentityProviderService, KeyCloakIdentityProviderService>()
 		   .AddTransient<KeyCloakAuthDelegatingHandler>();
-			
+
 		builder.Services
 		   .AddHttpClient<KeyCloakClient>((serviceProvider, httpClient) =>
 			{
 				var keyCloakOptions = serviceProvider.GetRequiredService<IOptions<KeyCloakOptions>>().Value;
-				httpClient.BaseAddress = new Uri(keyCloakOptions.AdminUrl);
+				httpClient.BaseAddress = new(keyCloakOptions.AdminUrl);
 			})
 		   .AddHttpMessageHandler<KeyCloakAuthDelegatingHandler>();
 
 		builder.Services.AddHttpClient<KeyCloakTokenClient>((serviceProvider, httpClient) =>
 		{
 			var keyCloakOptions = serviceProvider.GetRequiredService<IOptions<KeyCloakOptions>>().Value;
-			httpClient.BaseAddress = new Uri(keyCloakOptions.TokenUrl);
+			httpClient.BaseAddress = new(keyCloakOptions.TokenUrl);
 		});
 	}
 }

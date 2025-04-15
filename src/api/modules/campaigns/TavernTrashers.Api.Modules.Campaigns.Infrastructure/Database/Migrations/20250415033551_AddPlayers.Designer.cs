@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
@@ -11,9 +12,11 @@ using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
 namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(CampaignsDbContext))]
-    partial class CampaignsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250415033551_AddPlayers")]
+    partial class AddPlayers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,25 +25,6 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("CampaignPlayer", b =>
-                {
-                    b.Property<Guid>("CampaignId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("campaign_id");
-
-                    b.Property<Guid>("DungeonMastersId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("dungeon_masters_id");
-
-                    b.HasKey("CampaignId", "DungeonMastersId")
-                        .HasName("pk_campaign_player");
-
-                    b.HasIndex("DungeonMastersId")
-                        .HasDatabaseName("ix_campaign_player_dungeon_masters_id");
-
-                    b.ToTable("campaign_player", "campaigns");
-                });
 
             modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Auditing.Audit", b =>
                 {
@@ -217,16 +201,6 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<string>("Setting")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("setting");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("status");
-
                     b.HasKey("Id")
                         .HasName("pk_campaigns");
 
@@ -259,23 +233,6 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasName("pk_players");
 
                     b.ToTable("players", "campaigns");
-                });
-
-            modelBuilder.Entity("CampaignPlayer", b =>
-                {
-                    b.HasOne("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.Campaign", null)
-                        .WithMany()
-                        .HasForeignKey("CampaignId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_campaign_player_campaigns_campaign_id");
-
-                    b.HasOne("TavernTrashers.Api.Modules.Campaigns.Domain.Players.Player", null)
-                        .WithMany()
-                        .HasForeignKey("DungeonMastersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_campaign_player_players_dungeon_masters_id");
                 });
 #pragma warning restore 612, 618
         }
