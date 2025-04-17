@@ -19,6 +19,7 @@ import { authReducer } from './state/auth/auth.reducer';
 import { campaignsReducer } from './state/campaigns/campaigns.reducer';
 import { CampaignsEffects } from './state/campaigns/campaigns.effects';
 import { layoutReducer } from './state/layout/layout.reducer';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -44,5 +45,6 @@ export const appConfig: ApplicationConfig = {
       traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
       connectInZone: true, // If set to true, the connection is established within the Angular zone
     }),
+    provideAnimationsAsync(),
   ],
 };

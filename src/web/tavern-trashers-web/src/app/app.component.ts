@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { tryAutoLogin } from './state/auth/auth.actions';
+import { Component } from '@angular/core';
 import { LayoutComponent } from './shared/layout/layout.component';
 import { RouterOutlet } from '@angular/router';
+import { AuthFacade } from './state/auth/auth.facade';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +9,10 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'tavern-trashers-web';
 
-  constructor(private store: Store) {}
-
-  ngOnInit(): void {
-    this.store.dispatch(tryAutoLogin());
+  constructor(private auth: AuthFacade) {
+    this.auth.tryAutoLogin();
   }
 }

@@ -4,7 +4,7 @@
   <button type="button" class="-m-2.5 p-2.5 text-gray-700 desktop:hidden">
     <span class="sr-only">Open sidebar</span>
     <div class="size-6">
-      <i class="fa-regular fa-bars fa-fw fa-lg"></i>
+      <i class="fa-light fa-bars fa-fw fa-lg"></i>
     </div>
   </button>
 
@@ -23,7 +23,7 @@
       <div
         class="pointer-events-none col-start-1 row-start-1 size-6 self-center text-gray-400"
       >
-        <i class="fa-regular fa-search fa-fw fa-lg"></i>
+        <i class="fa-light fa-search fa-fw fa-lg"></i>
       </div>
     </form>
 
@@ -34,7 +34,7 @@
       >
         <span class="sr-only">View notifications</span>
         <div class="size-6">
-          <i class="fa-regular fa-bell fa-fw fa-lg"></i>
+          <i class="fa-light fa-bell fa-fw fa-lg"></i>
         </div>
       </button>
 
@@ -45,68 +45,61 @@
       ></div>
 
       <!-- Profile dropdown -->
-      <div class="relative">
-        <button
-          type="button"
-          class="-m-1.5 flex items-center p-1.5"
-          id="user-menu-button"
-          aria-expanded="false"
-          aria-haspopup="true"
-        >
-          <span class="sr-only">Open user menu</span>
-          <img
-            class="size-8 rounded-full bg-gray-50"
-            [src]="userImage$ | async"
-            alt=""
-          />
-          <span class="hidden desktop:flex desktop:items-center">
-            <span
-              class="ml-4 text-sm/6 font-semibold text-gray-900"
-              aria-hidden="true"
-              >{{ userName$ | async }}</span
-            >
-            <div class="ml-2 size-6 text-gray-400">
-              <i class="fa-regular fa-chevron-down fa-fw fa-sm"></i>
-            </div>
-          </span>
-        </button>
-
-        <!--
-                Dropdown menu, show/hide based on menu state.
-
-                Entering: "transition ease-out duration-100"
-                  From: "transform opacity-0 scale-95"
-                  To: "transform opacity-100 scale-100"
-                Leaving: "transition ease-in duration-75"
-                  From: "transform opacity-100 scale-100"
-                  To: "transform opacity-0 scale-95"
-              -->
-        <div
-          class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 ring-1 shadow-lg ring-gray-900/5 focus:outline-hidden"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="user-menu-button"
-          tabindex="-1"
-        >
-          <!-- Active: "bg-gray-50 outline-hidden", Not Active: "" -->
-          <a
-            href="#"
-            class="block px-3 py-1 text-sm/6 text-gray-900"
-            role="menuitem"
-            tabindex="-1"
-            id="user-menu-item-0"
-            >Your profile</a
+      @if(isLoggedIn$ | async) {
+      <tt-dropdown>
+        <ng-template #trigger>
+          <button
+            type="button"
+            class="group -m-1.5 flex items-center p-1.5 outline-none"
+            id="user-menu-button"
+            aria-expanded="false"
+            aria-haspopup="true"
           >
-          <a
-            href="#"
-            class="block px-3 py-1 text-sm/6 text-gray-900"
+            <span class="sr-only">Open user menu</span>
+            <img class="size-8" [src]="userImage$ | async" alt="" />
+            <span class="hidden desktop:flex desktop:items-center">
+              <span
+                class="ml-4 text-sm/6 font-semibold text-gray-900 group-focus:underline"
+                aria-hidden="true"
+                >{{ userName$ | async }}</span
+              >
+              <div class="ml-2 size-6 text-gray-400">
+                <i class="fa-light fa-chevron-down fa-fw fa-lg"></i>
+              </div>
+            </span>
+          </button>
+        </ng-template>
+        <ng-template #menu>
+          <button
+            (click)="logout()"
+            class="block w-full text-left px-3 py-1 text-sm/6 text-gray-700 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none cursor-pointer text-nowrap"
             role="menuitem"
-            tabindex="-1"
             id="user-menu-item-1"
-            >Sign out</a
           >
+            Log out
+          </button>
+        </ng-template>
+      </tt-dropdown>
+      } @else {
+      <button
+        (click)="login()"
+        type="button"
+        class="-m-1.5 flex items-center p-1.5 text-gray-400 hover:text-gray-500"
+        id="user-menu-button"
+        aria-expanded="false"
+        aria-haspopup="true"
+      >
+        <span class="sr-only">Open user menu</span>
+        <div class="size-6">
+          <i class="fa-light fa-user fa-fw fa-lg"></i>
         </div>
-      </div>
+        <span class="hidden desktop:flex desktop:items-center">
+          <span class="ml-4 text-sm/6 font-semibold" aria-hidden="true"
+            >Log in</span
+          >
+        </span>
+      </button>
+      }
     </div>
   </div>
 </div>

@@ -48,6 +48,9 @@ export class AuthService {
       )
       .subscribe(() => {
         const claims = this.oauthService.getIdentityClaims();
+        if (!claims) {
+          return;
+        }
         this.store.dispatch(
           loginSuccess({
             user: {
