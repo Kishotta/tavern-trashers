@@ -6,10 +6,15 @@ import { CampaignDetailComponent } from './campaigns/campaign-detail/campaign-de
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
   {
+    path: 'register',
+    loadComponent: () =>
+      import(
+        './features/user-registration/components/user-registration-page/user-registration-page.component'
+      ).then((m) => m.UserRegistrationPageComponent),
+  },
+  {
     path: 'campaigns',
     component: CampaignsComponent,
-    children: [
-      { path: ':id', component: CampaignDetailComponent },
-    ],
+    children: [{ path: ':id', component: CampaignDetailComponent }],
   },
 ];

@@ -81,24 +81,41 @@
         </ng-template>
       </tt-dropdown>
       } @else {
-      <button
-        (click)="login()"
-        type="button"
-        class="-m-1.5 flex items-center p-1.5 text-gray-400 hover:text-gray-500"
-        id="user-menu-button"
-        aria-expanded="false"
-        aria-haspopup="true"
-      >
-        <span class="sr-only">Open user menu</span>
-        <div class="size-6">
-          <i class="fa-light fa-user fa-fw fa-lg"></i>
-        </div>
-        <span class="hidden desktop:flex desktop:items-center">
-          <span class="ml-4 text-sm/6 font-semibold" aria-hidden="true"
-            >Log in</span
+      <tt-dropdown>
+        <ng-template #trigger>
+          <button
+            type="button"
+            class="-m-1.5 flex items-center p-1.5 text-gray-400 hover:text-gray-500"
+            id="user-menu-button"
+            aria-expanded="false"
+            aria-haspopup="true"
           >
-        </span>
-      </button>
+            <span class="sr-only">Open user menu</span>
+            <div class="size-6">
+              <i class="fa-light fa-user fa-fw fa-lg"></i>
+            </div>
+          </button>
+        </ng-template>
+        <ng-template #menu>
+          <button
+            (click)="login()"
+            class="block w-full text-left px-3 py-1 text-sm/6 text-gray-700 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none cursor-pointer text-nowrap"
+            role="menuitem"
+            id="user-menu-item-1"
+          >
+            Log in
+          </button>
+          <button
+            (click)="register()"
+            class="block w-full text-left px-3 py-1 text-sm/6 text-gray-700 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none cursor-pointer text-nowrap"
+            role="menuitem"
+            id="user-menu-item-1"
+          >
+            Sign up
+          </button>
+        </ng-template>
+      </tt-dropdown>
+
       }
     </div>
   </div>

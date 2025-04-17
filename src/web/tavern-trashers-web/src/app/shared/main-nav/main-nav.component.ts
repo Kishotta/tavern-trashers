@@ -6,6 +6,7 @@ import { selectAuth } from '../../state/auth/auth.selectors';
 import { AsyncPipe } from '@angular/common';
 import { AuthFacade } from '../../state/auth/auth.facade';
 import { DropdownComponent } from '../../common/dropdown/dropdown.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-nav',
@@ -16,7 +17,7 @@ import { DropdownComponent } from '../../common/dropdown/dropdown.component';
 export class MainNavComponent {
   private auth$: Observable<AuthState>;
 
-  constructor(private auth: AuthFacade) {
+  constructor(private auth: AuthFacade, private router: Router) {
     this.auth$ = this.auth.state$;
   }
 
@@ -35,6 +36,10 @@ export class MainNavComponent {
           `https://api.dicebear.com/9.x/avataaars-neutral/svg?seed=${name}&scale=90&radius=20&backgroundColor=ae5d29,f8d25c,fd9841,b6e3f4,c0aede,d1d4f9,ffd5dc,d08b5b&eyebrows=angryNatural,defaultNatural,flatNatural,frownNatural,raisedExcitedNatural,sadConcernedNatural,upDownNatural&eyes=default,eyeRoll,side,squint,surprised&mouth=default,disbelief,eating,grimace,sad,serious,smile,twinkle,screamOpen,concerned,tongue`
       )
     );
+  }
+
+  register() {
+    this.router.navigate(['/register']);
   }
 
   login() {

@@ -94,4 +94,8 @@ export class DropdownComponent {
   toggle() {
     this.dropdownStore.toggle();
   }
+
+  close() {
+    this.dropdownStore.close();
+  }
 }

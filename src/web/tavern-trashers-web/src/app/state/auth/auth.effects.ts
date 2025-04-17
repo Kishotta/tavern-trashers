@@ -1,13 +1,51 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { tap } from 'rxjs';
-import { login, logout, tryAutoLogin } from './auth.actions';
+import { catchError, map, of, switchMap, tap } from 'rxjs';
+import {
+  login,
+  logout,
+  register,
+  registerFailure,
+  registerSuccess,
+  tryAutoLogin,
+} from './auth.actions';
 import { AuthService } from './auth.service';
+import { ProblemDetails } from '../problemDetails';
 
 @Injectable()
 export class AuthEffects {
   private actions$: Actions = inject(Actions);
   constructor(private authService: AuthService) {}
+
+  register$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(register),
+      switchMap(({ userRegistrationRequest }) =>
+        this.authService.register(userRegistrationRequest).pipe(
+          map((authToken) => {
+            return registerSuccess({ authToken });
+          }),
+          catchError((error: ProblemDetails) => {
+            return of(registerFailure({ error: error.title }));
+          })
+        )
+      )
+    )
+  );
+
+  registerSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(registerSuccess),
+      tap(({ authToken }) => {
+        this.authService.forceLogin(
+          authToken.access_token,
+          authToken.id_token,
+          authToken.refresh_token
+        );
+      }),
+      map(() => tryAutoLogin())
+    )
+  );
 
   tryAutoLogin$ = createEffect(
     () =>
