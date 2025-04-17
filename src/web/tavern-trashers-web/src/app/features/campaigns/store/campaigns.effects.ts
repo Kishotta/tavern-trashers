@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { CampaignsService } from './campaigns.service';
 import {
   loadCampaigns,
   loadCampaignsFailure,
   loadCampaignsSuccess,
 } from './campaigns.actions';
 import { catchError, map, mergeMap, of } from 'rxjs';
+import { CampaignsService } from '../services/campaigns.service';
 
 @Injectable()
 export class CampaignsEffects {

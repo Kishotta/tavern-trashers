@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
+import { ProblemDetails } from '../../../state/problemDetails';
 import { Campaign } from './campaigns.reducer';
-import { ProblemDetails } from '../problemDetails';
 
 export const loadCampaigns = createAction('[Campaigns] Load Campaigns');
 

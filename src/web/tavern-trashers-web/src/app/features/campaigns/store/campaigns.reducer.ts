@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { ProblemDetails } from '../problemDetails';
+import { ProblemDetails } from '../../../state/problemDetails';
 import {
   clearCampaignSelection,
   loadCampaigns,

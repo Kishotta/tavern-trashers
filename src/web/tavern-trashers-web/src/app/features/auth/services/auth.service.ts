@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { loginSuccess } from './auth.actions';
 import { OAuthEvent, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { authCodeFlowConfig } from './auth.config';
 import { filter, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { UserRegistrationRequest } from './user-registration-request';
+import { AuthToken } from './auth-token';
+import { loginSuccess } from '../store/auth.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -80,19 +82,4 @@ export class AuthService {
   logout(): void {
     this.oauthService.logOut();
   }
-}
-
-export interface UserRegistrationRequest {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
-
-export interface AuthToken {
-  access_token: string;
-  token_type: string;
-  refresh_token: string;
-  expires_in: number;
-  id_token: string;
 }

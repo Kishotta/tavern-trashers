@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { AuthToken, UserRegistrationRequest } from './auth.service';
+import { AuthToken } from '../services/auth-token';
+import { UserRegistrationRequest } from '../services/user-registration-request';
 
 export const register = createAction(
   '[Auth] Register',

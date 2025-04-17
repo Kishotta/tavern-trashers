@@ -9,8 +9,8 @@ import {
   registerSuccess,
   tryAutoLogin,
 } from './auth.actions';
-import { AuthService } from './auth.service';
-import { ProblemDetails } from '../problemDetails';
+import { AuthService } from '../services/auth.service';
+import { ProblemDetails } from '../../../state/problemDetails';
 
 @Injectable()
 export class AuthEffects {

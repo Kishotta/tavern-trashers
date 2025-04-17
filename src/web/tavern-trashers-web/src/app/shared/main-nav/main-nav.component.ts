@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, map } from 'rxjs';
-import { AuthState } from '../../state/auth/auth.reducer';
-import { selectAuth } from '../../state/auth/auth.selectors';
+import { AuthState } from '../../features/auth/store/auth.reducer';
+import { selectAuth } from '../../features/auth/store/auth.selectors';
 import { AsyncPipe } from '@angular/common';
-import { AuthFacade } from '../../state/auth/auth.facade';
+import { AuthFacade } from '../../features/auth/services/auth.facade';
 import { DropdownComponent } from '../../common/dropdown/dropdown.component';
 import { Router } from '@angular/router';
 

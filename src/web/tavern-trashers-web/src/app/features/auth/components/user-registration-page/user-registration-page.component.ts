@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AuthFacade } from '../../../../state/auth/auth.facade';
+import { AuthFacade } from '../../services/auth.facade';
 import { JsonPipe } from '@angular/common';
 
 @Component({

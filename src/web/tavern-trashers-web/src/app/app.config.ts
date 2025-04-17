@@ -13,11 +13,11 @@ import {
 } from '@angular/common/http';
 import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { AuthEffects } from './state/auth/auth.effects';
+import { AuthEffects } from './features/auth/store/auth.effects';
 import { provideEffects } from '@ngrx/effects';
-import { authReducer } from './state/auth/auth.reducer';
-import { campaignsReducer } from './state/campaigns/campaigns.reducer';
-import { CampaignsEffects } from './state/campaigns/campaigns.effects';
+import { authReducer } from './features/auth/store/auth.reducer';
+import { campaignsReducer } from './features/campaigns/store/campaigns.reducer';
+import { CampaignsEffects } from './features/campaigns/store/campaigns.effects';
 import { layoutReducer } from './state/layout/layout.reducer';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 

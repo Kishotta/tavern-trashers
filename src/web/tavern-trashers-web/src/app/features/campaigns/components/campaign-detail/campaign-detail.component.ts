@@ -1,11 +1,11 @@
+import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Campaign } from '../../state/campaigns/campaigns.reducer';
-import { selectSelectedCampaign } from '../../state/campaigns/campaigns.selectors';
-import { AsyncPipe } from '@angular/common';
-import { selectCampaign } from '../../state/campaigns/campaigns.actions';
+import { selectCampaign } from '../../store/campaigns.actions';
+import { Campaign } from '../../store/campaigns.reducer';
+import { selectSelectedCampaign } from '../../store/campaigns.selectors';
 
 @Component({
   selector: 'app-campaign-detail',

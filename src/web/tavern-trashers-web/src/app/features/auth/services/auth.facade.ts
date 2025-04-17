@@ -1,10 +1,10 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { login, logout, register, tryAutoLogin } from './auth.actions';
 import { Observable } from 'rxjs';
-import { AuthState } from './auth.reducer';
-import { selectAuth } from './auth.selectors';
-import { UserRegistrationRequest } from './auth.service';
+import { AuthState } from '../store/auth.reducer';
+import { selectAuth } from '../store/auth.selectors';
+import { UserRegistrationRequest } from './user-registration-request';
+import { register, tryAutoLogin, login, logout } from '../store/auth.actions';
 
 @Injectable({
   providedIn: 'root',

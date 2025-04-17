@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { LayoutComponent } from './shared/layout/layout.component';
 import { RouterOutlet } from '@angular/router';
-import { AuthFacade } from './state/auth/auth.facade';
+import { AuthFacade } from './features/auth/services/auth.facade';
 
 @Component({
   selector: 'app-root',
