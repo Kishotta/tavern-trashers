@@ -1,0 +1,12 @@
+<button
+  (click)="onClick()"
+  role="menuitem"
+  class="group flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-gray-700 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none cursor-pointer text-nowrap"
+>
+  @if(icon) {
+  <div class="size-5 text-gray-400 group-hover:text-gray-500">
+    <i class="fa-light fa-{{ icon }} fa-fw"></i>
+  </div>
+  }
+  <ng-content />
+</button>

@@ -1,0 +1,10 @@
+<div [class]="`isolate flex ${spacingClasses} overflow-hidden`">
+  @for(profile of profiles; track profile; let index = $index) {
+  <img
+    [src]="profile.imageSrc"
+    [alt]="profile.name"
+    [class]="`relative inline-block ${sizingClasses} rounded-full ring-2 ring-white`"
+    [style]="`z-index: ${profiles.length - index };`"
+  />
+  }
+</div>

@@ -1,6 +1,89 @@
 <div class="h-full flex flex-col items-center justify-center gap-y-4">
-    <h1 class="text-4xl font-bold">Welcome to Tavern Trashers!</h1>
-    <p class="mb-8 text-lg">
-      Your companion for managing campaigns, players, and characters.
-    </p>
+  <h1 class="text-4xl font-bold">Welcome to Tavern Trashers!</h1>
+  <p class="mb-8 text-lg">
+    Your companion for managing campaigns, players, and characters.
+  </p>
+  <tt-avatar
+    [profile]="{
+      name: 'Simon',
+      detail: 'Lvl 10 Paladin',
+      imageSrc: 'https://picsum.photos/seed/Simon/200'
+    }"
+    statusPosition="top"
+    shape="square"
+    statusColor="red"
+    size="xl"
+  />
+
+  <tt-avatar-group
+    [profiles]="[
+      {
+        name: 'Beleth',
+        detail: 'Lvl 6 Bard',
+        imageSrc: 'https://picsum.photos/seed/Connor/200'
+      },
+      {
+        name: 'Sylira',
+        detail: 'Lvl 6 Artificer',
+        imageSrc: 'https://picsum.photos/seed/Chelsea/200'
+      },
+      {
+        name: 'Emerson',
+        detail: 'Lvl 6 Fighter',
+        imageSrc: 'https://picsum.photos/seed/Kyle/200'
+      },
+      {
+        name: 'Chukwuemeka',
+        detail: 'Lvl 6 Monk',
+        imageSrc: 'https://picsum.photos/seed/Kim/200'
+      }
+    ]"
+    size="lg"
+  >
+  </tt-avatar-group>
+
+  <div class="flex flex-col gap-y-1">
+    <tt-badge text="Grappled" pill dot small />
+    <tt-badge text="Paralyzed" color="yellow" pill dot small />
+    <tt-badge text="Charmed" color="pink" pill dot small />
   </div>
+  <div class="flex gap-x-2">
+    <tt-badge text="Friendly" color="green" pill dismissable />
+    <tt-badge text="Neutral" pill />
+    <tt-badge text="Hostile" color="red" pill />
+  </div>
+  <div class="flex gap-x-2">
+    <tt-badge text="Bard" color="pink" flat />
+    <tt-badge text="Sorcerer" color="red" flat />
+    <tt-badge text="Warlock" color="indigo" flat />
+  </div>
+  <div class="flex items-center gap-x-2">
+    <tt-button text="Save" />
+    <tt-button
+      text="Make Saving Throw"
+      leadingIcon="dice-d20"
+      rounded
+      color="green"
+    />
+  </div>
+  <div class="flex gap-x-2">
+    <tt-button icon="ellipsis-vertical" variant="secondary" />
+    <tt-button text="Dagger" leadingIcon="dice-d4" variant="secondary" />
+    <tt-button text="Short Sword" leadingIcon="dice-d6" variant="soft" />
+    <tt-button
+      text="Battle Axe"
+      leadingIcon="dice-d12"
+      color="yellow"
+      variant="soft"
+    />
+  </div>
+
+  <tt-dropdown>
+    <tt-button
+      ngProjectAs="trigger"
+      text="Options"
+      trailingIcon="chevron-down"
+      variant="secondary"
+    />
+  </tt-dropdown>
+</div>
