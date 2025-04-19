@@ -1,28 +1,19 @@
-using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using TavernTrashers.Api.Common.Domain.Results.Extensions;
-using TavernTrashers.Api.Common.Presentation;
-using TavernTrashers.Api.Common.Presentation.Endpoints;
-using TavernTrashers.Api.Modules.Users.Application.Users.ChangeUserName;
+using TavernTrashers.Api.Modules.Users.Application.Users;
 
 namespace TavernTrashers.Api.Modules.Users.Presentation.Users;
 
 internal sealed class ChangeUserName : IEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
-    {
-	    app.MapPut("users/{id:guid}/profile", async (Guid id, ChangeUserNameRequest request, ISender sender) =>
-			    await sender.Send(new ChangeUserNameCommand(
-					    id,
-					    request.FirstName,
-					    request.LastName))
+	public void MapEndpoint(IEndpointRouteBuilder app) =>
+		app.MapPut("users/{id:guid}/profile", async (Guid id, ChangeUserNameRequest request, ISender sender) =>
+				await sender.Send(new ChangeUserNameCommand(
+						id,
+						request.FirstName,
+						request.LastName))
 				   .OkAsync())
 		   .RequireAuthorization(Permissions.ChangeUserName)
 		   .WithName(nameof(ChangeUserName))
 		   .WithTags(Tags.Users);
-    }
 
-    internal sealed record ChangeUserNameRequest(string FirstName, string LastName);
+	internal sealed record ChangeUserNameRequest(string FirstName, string LastName);
 }

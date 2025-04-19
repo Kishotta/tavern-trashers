@@ -1,5 +1,5 @@
 <div class="relative inline-block" #dropdownRoot>
-  <div (click)="toggleDropdown()">
+  <div (click)="toggleDropdown()" (clicked)="closeDropdown()">
     <ng-content select="trigger"></ng-content>
   </div>
 

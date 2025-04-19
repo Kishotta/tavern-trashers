@@ -14,5 +14,6 @@ export const authCodeFlowConfig: AuthConfig = {
 
   responseType: 'code',
 
+  clearHashAfterLogin: true,
   showDebugInformation: true,
 };

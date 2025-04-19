@@ -23,25 +23,6 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CampaignPlayer", b =>
-                {
-                    b.Property<Guid>("CampaignId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("campaign_id");
-
-                    b.Property<Guid>("DungeonMastersId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("dungeon_masters_id");
-
-                    b.HasKey("CampaignId", "DungeonMastersId")
-                        .HasName("pk_campaign_player");
-
-                    b.HasIndex("DungeonMastersId")
-                        .HasDatabaseName("ix_campaign_player_dungeon_masters_id");
-
-                    b.ToTable("campaign_player", "campaigns");
-                });
-
             modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Auditing.Audit", b =>
                 {
                     b.Property<Guid>("Id")
@@ -212,20 +193,10 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<string>("Setting")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("setting");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("status");
+                        .HasColumnName("title");
 
                     b.HasKey("Id")
                         .HasName("pk_campaigns");
@@ -261,21 +232,40 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                     b.ToTable("players", "campaigns");
                 });
 
-            modelBuilder.Entity("CampaignPlayer", b =>
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.Campaign", b =>
                 {
-                    b.HasOne("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.Campaign", null)
-                        .WithMany()
-                        .HasForeignKey("CampaignId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_campaign_player_campaigns_campaign_id");
+                    b.OwnsMany("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.CampaignMember", "Members", b1 =>
+                        {
+                            b1.Property<Guid>("campaign_id")
+                                .HasColumnType("uuid")
+                                .HasColumnName("campaign_id");
 
-                    b.HasOne("TavernTrashers.Api.Modules.Campaigns.Domain.Players.Player", null)
-                        .WithMany()
-                        .HasForeignKey("DungeonMastersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_campaign_player_players_dungeon_masters_id");
+                            b1.Property<Guid>("PlayerId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uuid")
+                                .HasColumnName("player_id");
+
+                            b1.Property<string>("Role")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("role");
+
+                            b1.Property<string>("Status")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("status");
+
+                            b1.HasKey("campaign_id", "PlayerId")
+                                .HasName("pk_campaign_members");
+
+                            b1.ToTable("campaign_members", "campaigns");
+
+                            b1.WithOwner()
+                                .HasForeignKey("campaign_id")
+                                .HasConstraintName("fk_campaign_members_campaigns_campaign_id");
+                        });
+
+                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

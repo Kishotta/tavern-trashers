@@ -1,4 +1,3 @@
-using MediatR;
 using TavernTrashers.Api.Common.Application.EventBus;
 using TavernTrashers.Api.Common.Application.Exceptions;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;

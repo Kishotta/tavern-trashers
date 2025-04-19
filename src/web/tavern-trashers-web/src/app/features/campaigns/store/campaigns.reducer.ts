@@ -10,7 +10,7 @@ import {
 
 export interface Campaign {
   id: string;
-  name: string;
+  title: string;
   description: string;
 }
 

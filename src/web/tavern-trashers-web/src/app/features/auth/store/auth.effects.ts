@@ -64,8 +64,9 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(login),
-        tap(() => {
-          this.authService.login();
+        tap((login) => {
+          console.log('Calling login with redirect URL:', login.redirectUrl);
+          this.authService.login(login.redirectUrl);
         })
       ),
     { dispatch: false }

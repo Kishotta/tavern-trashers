@@ -1,11 +1,6 @@
 using System.Security.Claims;
-using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using TavernTrashers.Api.Common.Presentation.Authentication;
-using TavernTrashers.Api.Common.Presentation.Endpoints;
-using TavernTrashers.Api.Modules.Users.Application.Users.GetUser;
+using TavernTrashers.Api.Modules.Users.Application.Users;
 
 namespace TavernTrashers.Api.Modules.Users.Presentation.Users;
 

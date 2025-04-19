@@ -6,8 +6,9 @@ public static class TransformExtensions
 		result.IsSuccess
 			? mapper(result)
 			: result.Error;
-	
-	public static async Task<Result<TOut>> TransformAsync<TIn, TOut>(this Task<Result<TIn>> resultTask,
+
+	public static async Task<Result<TOut>> TransformAsync<TIn, TOut>(
+		this Task<Result<TIn>> resultTask,
 		Func<TIn, TOut> mapper)
 	{
 		var result = await resultTask.ConfigureAwait(false);
@@ -15,7 +16,7 @@ public static class TransformExtensions
 			? mapper(result)
 			: result.Error;
 	}
-	
+
 	public static async Task<TOut> TransformAsync<TIn, TOut>(this Task<TIn> taskValue, Func<TIn, TOut> mapper)
 	{
 		var value = await taskValue.ConfigureAwait(false);

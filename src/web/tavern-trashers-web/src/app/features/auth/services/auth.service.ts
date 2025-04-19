@@ -65,14 +65,24 @@ export class AuthService {
     this.oauthStorage.setItem('access_token', accessToken);
     this.oauthStorage.setItem('id_token', idToken);
     this.oauthStorage.setItem('refresh_token', refreshToken);
+
+    this.oauthService.refreshToken();
   }
 
   tryLogIn(): void {
     this.oauthService.tryLogin();
   }
 
-  login(): void {
-    this.oauthService.initLoginFlow();
+  login(redirectUrl: string | null): void {
+    console.log(
+      'Angular OAuth2 OIDC login flow started with redirect URL:',
+      redirectUrl
+    );
+    if (redirectUrl) {
+      this.oauthService.initLoginFlow(redirectUrl);
+    } else {
+      this.oauthService.initLoginFlow();
+    }
   }
 
   isLoggedIn(): boolean {

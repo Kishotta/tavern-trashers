@@ -6,10 +6,11 @@ import { Observable } from 'rxjs';
 import { selectCampaign } from '../../store/campaigns.actions';
 import { Campaign } from '../../store/campaigns.reducer';
 import { selectSelectedCampaign } from '../../store/campaigns.selectors';
+import { PageHeadingComponent } from "../../../../common/page/components/page-heading/page-heading.component";
 
 @Component({
   selector: 'app-campaign-detail',
-  imports: [AsyncPipe, RouterLink],
+  imports: [AsyncPipe, RouterLink, PageHeadingComponent],
   templateUrl: './campaign-detail.component.html',
   styleUrl: './campaign-detail.component.css',
 })

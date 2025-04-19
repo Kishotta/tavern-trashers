@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { AuthFacade } from '../../services/auth.facade';
 import { JsonPipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-registration-page',
@@ -17,7 +18,11 @@ import { JsonPipe } from '@angular/common';
 export class UserRegistrationPageComponent {
   protected formGroup: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private auth: AuthFacade) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private auth: AuthFacade,
+    private router: Router
+  ) {
     this.formGroup = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -31,6 +36,7 @@ export class UserRegistrationPageComponent {
     if (this.formGroup.valid) {
       const { firstName, lastName, email, password } = this.formGroup.value;
       this.auth.register({ firstName, lastName, email, password });
+      this.router.navigate(['/']);
     }
   }
 }

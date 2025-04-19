@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AuthState } from '../store/auth.reducer';
-import { selectAuth } from '../store/auth.selectors';
+import { selectAuth, selectIsLoggedIn } from '../store/auth.selectors';
 import { UserRegistrationRequest } from './user-registration-request';
 import { register, tryAutoLogin, login, logout } from '../store/auth.actions';
 
@@ -16,6 +16,10 @@ export class AuthFacade {
     return this.store.select(selectAuth);
   }
 
+  get isLoggedIn$(): Observable<boolean> {
+    return this.store.select(selectIsLoggedIn);
+  }
+
   register(userRegistrationRequest: UserRegistrationRequest): void {
     this.store.dispatch(register({ userRegistrationRequest }));
   }
@@ -24,8 +28,9 @@ export class AuthFacade {
     this.store.dispatch(tryAutoLogin());
   }
 
-  login(): void {
-    this.store.dispatch(login());
+  login(redirectUrl: string | null = null): void {
+    console.log('Dispatching login action with redirect URL:', redirectUrl);
+    this.store.dispatch(login({ redirectUrl }));
   }
 
   logout(): void {

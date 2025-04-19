@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './features/auth/services/auth.guards';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,7 @@ export const routes: Routes = [
   },
   {
     path: 'campaigns',
+    canActivate: [authGuard],
     loadComponent: () =>
       import(
         './features/campaigns/components/campaigns-page/campaigns-page.component'

@@ -2,6 +2,14 @@ namespace TavernTrashers.Api.Common.Domain.Results.Extensions;
 
 public static class DoExtensions
 {
+	public static Result Do(this Result result, Action action)
+	{
+		if (result.IsSuccess)
+			action();
+
+		return result;
+	}
+
 	public static Result<TValue> Do<TValue>(this Result<TValue> result, Action<TValue> action)
 	{
 		if (result.IsSuccess)

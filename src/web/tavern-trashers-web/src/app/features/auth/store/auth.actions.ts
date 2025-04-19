@@ -19,7 +19,10 @@ export const registerFailure = createAction(
 
 export const tryAutoLogin = createAction('[Auth] Try Auto Login');
 
-export const login = createAction('[Auth] Login');
+export const login = createAction(
+  '[Auth] Login',
+  props<{ redirectUrl: string | null }>()
+);
 
 export const loginSuccess = createAction(
   '[Auth] Login Success',
