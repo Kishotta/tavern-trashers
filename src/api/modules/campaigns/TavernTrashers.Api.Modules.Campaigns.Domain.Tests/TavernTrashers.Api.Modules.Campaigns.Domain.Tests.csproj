@@ -7,14 +7,18 @@
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.4">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-        <PackageReference Include="xunit" Version="2.9.3" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0"/>
+        <PackageReference Include="xunit" Version="2.9.3"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Update="SonarAnalyzer.CSharp" Version="10.8.0.113526">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
 
@@ -23,8 +27,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\common\TavernTrashers.Api.Common.Testing\TavernTrashers.Api.Common.Testing.csproj" />
-      <ProjectReference Include="..\TavernTrashers.Api.Modules.Campaigns.Domain\TavernTrashers.Api.Modules.Campaigns.Domain.csproj" />
+        <ProjectReference Include="..\..\..\common\TavernTrashers.Api.Common.Testing\TavernTrashers.Api.Common.Testing.csproj"/>
+        <ProjectReference Include="..\TavernTrashers.Api.Modules.Campaigns.Domain\TavernTrashers.Api.Modules.Campaigns.Domain.csproj"/>
     </ItemGroup>
 
 </Project>

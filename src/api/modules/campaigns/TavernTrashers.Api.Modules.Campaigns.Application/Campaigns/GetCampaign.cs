@@ -13,5 +13,5 @@ internal sealed class GetCampaignQueryHandler(ICampaignRepository campaignReposi
 	public async Task<Result<CampaignResponse>> Handle(GetCampaignQuery query, CancellationToken cancellationToken) =>
 		await campaignRepository
 		   .GetReadOnlyAsync(query.CampaignId, cancellationToken)
-		   .ThenAsync<Campaign, CampaignResponse>(campaign => campaign);
+		   .TransformAsync(campaign => (CampaignResponse)campaign);
 }

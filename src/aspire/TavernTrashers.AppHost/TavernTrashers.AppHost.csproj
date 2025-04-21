@@ -9,22 +9,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aspire.Hosting.AppHost" Version="9.1.0" />
-        <PackageReference Include="Aspire.Hosting.Keycloak" Version="9.0.0-preview.5.24551.3" />
-        <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.1.0" />
-        <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.1.0" />
-        <PackageReference Update="SonarAnalyzer.CSharp" Version="10.5.0.109200">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.0"/>
+        <PackageReference Include="Aspire.Hosting.Keycloak" Version="9.0.0-preview.5.24551.3"/>
+        <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.2.0"/>
+        <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.2.0"/>
+        <PackageReference Update="SonarAnalyzer.CSharp" Version="10.8.0.113526">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.1.0" />
-        <PackageReference Include="Aspire.Hosting.Redis" Version="9.1.0" />
+        <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.2.0"/>
+        <PackageReference Include="Aspire.Hosting.Redis" Version="9.2.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\api\TavernTrashers.Api\TavernTrashers.Api.csproj" />
-      <ProjectReference Include="..\..\api\TavernTrashers.Gateway\TavernTrashers.Gateway.csproj" />
-      <ProjectReference Include="..\..\api\TavernTrashers.MigrationService\TavernTrashers.MigrationService.csproj" />
+        <ProjectReference Include="..\..\api\TavernTrashers.Api\TavernTrashers.Api.csproj"/>
+        <ProjectReference Include="..\..\api\TavernTrashers.Gateway\TavernTrashers.Gateway.csproj"/>
+        <ProjectReference Include="..\..\api\TavernTrashers.MigrationService\TavernTrashers.MigrationService.csproj"/>
     </ItemGroup>
 
 </Project>

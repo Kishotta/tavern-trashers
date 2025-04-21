@@ -1,4 +1,5 @@
 using TavernTrashers.Api.Common.Domain.Auditing;
+using TavernTrashers.Api.Common.Domain.Results;
 
 namespace TavernTrashers.Api.Modules.Campaigns.Domain.Players;
 
@@ -10,7 +11,7 @@ public class Player : Entity
 	public string LastName { get; private set; } = string.Empty;
 	public string Email { get; private set; } = string.Empty;
 
-	public static Player Create(
+	public static Result<Player> Create(
 		Guid id,
 		string firstName,
 		string lastName,

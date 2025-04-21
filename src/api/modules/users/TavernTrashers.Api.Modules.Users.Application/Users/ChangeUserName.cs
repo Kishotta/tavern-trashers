@@ -26,6 +26,7 @@ internal sealed class ChangeUserNameCommandHandler(
 		   .DoAsync(async user =>
 			{
 				user.ChangeName(request.FirstName, request.LastName);
+
 				await unitOfWork.SaveChangesAsync(cancellationToken);
 			})
 		   .TransformAsync(user => (UserResponse)user);

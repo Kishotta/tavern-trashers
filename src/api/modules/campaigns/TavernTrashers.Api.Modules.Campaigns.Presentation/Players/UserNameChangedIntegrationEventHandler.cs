@@ -1,7 +1,7 @@
 using TavernTrashers.Api.Common.Application.EventBus;
 using TavernTrashers.Api.Common.Application.Exceptions;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
-using TavernTrashers.Api.Modules.Campaigns.Application.Players.ChangePlayerName;
+using TavernTrashers.Api.Modules.Campaigns.Application.Players;
 using TavernTrashers.Api.Modules.Users.IntegrationEvents;
 
 namespace TavernTrashers.Api.Modules.Campaigns.Presentation.Players;

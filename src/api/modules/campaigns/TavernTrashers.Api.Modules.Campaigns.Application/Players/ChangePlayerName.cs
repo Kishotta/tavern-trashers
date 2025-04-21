@@ -4,7 +4,12 @@ using TavernTrashers.Api.Common.Domain.Results.Extensions;
 using TavernTrashers.Api.Modules.Campaigns.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Campaigns.Domain.Players;
 
-namespace TavernTrashers.Api.Modules.Campaigns.Application.Players.ChangePlayerName;
+namespace TavernTrashers.Api.Modules.Campaigns.Application.Players;
+
+public sealed record ChangePlayerNameCommand(
+	Guid PlayerId,
+	string FirstName,
+	string LastName) : ICommand;
 
 internal sealed class ChangePlayerNameCommandHandler(IPlayerRepository playerRepository, IUnitOfWork unitOfWork)
 	: ICommandHandler<ChangePlayerNameCommand>
