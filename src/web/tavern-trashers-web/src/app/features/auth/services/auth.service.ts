@@ -24,6 +24,7 @@ export class AuthService {
 
   private configureOAuthService() {
     this.oauthService.configure(authCodeFlowConfig);
+    this.oauthService.setStorage(localStorage);
     this.oauthService.setupAutomaticSilentRefresh();
     this.oauthService.loadDiscoveryDocument();
   }
