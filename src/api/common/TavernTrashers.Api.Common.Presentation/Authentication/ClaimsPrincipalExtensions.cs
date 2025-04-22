@@ -14,6 +14,10 @@ public static class ClaimsPrincipalExtensions
 			: throw new TavernTrashersException("User identifier is unavailable");
 	}
 
+	public static string GetEmailAddress(this ClaimsPrincipal? principal) =>
+		principal?.FindFirstValue(ClaimTypes.Email) ??
+		throw new TavernTrashersException("User email address is unavailable");
+
 	public static string GetIdentityId(this ClaimsPrincipal? principal) =>
 		principal?.FindFirstValue(ClaimTypes.NameIdentifier) ??
 		throw new TavernTrashersException("User identity is unavailable");
