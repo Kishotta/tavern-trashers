@@ -54,7 +54,7 @@ builder.AddNpmApp("web", "../../Web/tavern-trashers-web")
    .WaitFor(gateway)
    .WithReference(identity)
    .WaitFor(identity)
-   .WithHttpEndpoint(env: "PORT")
+   .WithHttpEndpoint(env: "PORT", port: 4200)
    .WithExternalHttpEndpoints()
    .PublishAsDockerFile();
 
