@@ -11,10 +11,11 @@ import { selectBreakpoint } from '../../state/layout/layout.selectors';
 import { DropdownComponent } from '../../common/dropdown/components/dropdown/dropdown.component';
 import { DropdownItemComponent } from "../../common/dropdown/components/dropdown-item/dropdown-item.component";
 import { DropdownDividerComponent } from "../../common/dropdown/components/dropdown-divider/dropdown-divider.component";
+import { NotificationsComponent } from "../../features/notifications/components/notifications/notifications.component";
 
 @Component({
   selector: 'app-main-nav',
-  imports: [AsyncPipe, AvatarComponent, DropdownComponent, DropdownItemComponent, DropdownDividerComponent],
+  imports: [AsyncPipe, AvatarComponent, DropdownComponent, DropdownItemComponent, DropdownDividerComponent, NotificationsComponent],
   templateUrl: './main-nav.component.html',
   styleUrl: './main-nav.component.css',
 })

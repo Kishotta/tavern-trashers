@@ -14,6 +14,7 @@ public class GetCampaign : IEndpoint
 					await sender
 					   .Send(new GetCampaignQuery(campaignId))
 					   .OkAsync())
+		   .RequireAuthorization()
 		   .WithName(nameof(GetCampaign))
 		   .WithTags(Tags.Campaigns)
 		   .WithSummary("Get Campaign by Id")

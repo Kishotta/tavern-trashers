@@ -12,8 +12,8 @@ using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
 namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(CampaignsDbContext))]
-    [Migration("20250415033551_AddPlayers")]
-    partial class AddPlayers
+    [Migration("20250427162256_AddInvitations")]
+    partial class AddInvitations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("campaigns")
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -196,10 +196,10 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("name");
+                        .HasColumnName("title");
 
                     b.HasKey("Id")
                         .HasName("pk_campaigns");
@@ -207,7 +207,7 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                     b.ToTable("campaigns", "campaigns");
                 });
 
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Players.Player", b =>
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Members.Member", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -230,9 +230,50 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasColumnName("last_name");
 
                     b.HasKey("Id")
-                        .HasName("pk_players");
+                        .HasName("pk_members");
 
-                    b.ToTable("players", "campaigns");
+                    b.ToTable("members", "campaigns");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.Campaign", b =>
+                {
+                    b.OwnsMany("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.Invitation", "Invitations", b1 =>
+                        {
+                            b1.Property<Guid>("CampaignId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("campaign_id");
+
+                            b1.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.Property<string>("CampaignTitle")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("campaign_title");
+
+                            b1.Property<string>("Email")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("email");
+
+                            b1.Property<string>("Role")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("role");
+
+                            b1.HasKey("CampaignId", "Id")
+                                .HasName("pk_campaign_invitations");
+
+                            b1.ToTable("campaign_invitations", "campaigns");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CampaignId")
+                                .HasConstraintName("fk_campaign_invitations_campaigns_campaign_id");
+                        });
+
+                    b.Navigation("Invitations");
                 });
 #pragma warning restore 612, 618
         }

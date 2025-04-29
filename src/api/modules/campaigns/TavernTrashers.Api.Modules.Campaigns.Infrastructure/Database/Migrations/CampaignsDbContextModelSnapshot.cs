@@ -18,7 +18,7 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("campaigns")
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -204,7 +204,7 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                     b.ToTable("campaigns", "campaigns");
                 });
 
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Players.Player", b =>
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Members.Member", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -227,45 +227,50 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasColumnName("last_name");
 
                     b.HasKey("Id")
-                        .HasName("pk_players");
+                        .HasName("pk_members");
 
-                    b.ToTable("players", "campaigns");
+                    b.ToTable("members", "campaigns");
                 });
 
             modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.Campaign", b =>
                 {
-                    b.OwnsMany("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.CampaignMember", "Members", b1 =>
+                    b.OwnsMany("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.Invitation", "Invitations", b1 =>
                         {
-                            b1.Property<Guid>("campaign_id")
+                            b1.Property<Guid>("CampaignId")
                                 .HasColumnType("uuid")
                                 .HasColumnName("campaign_id");
 
-                            b1.Property<Guid>("PlayerId")
+                            b1.Property<Guid>("Id")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("uuid")
-                                .HasColumnName("player_id");
+                                .HasColumnName("id");
+
+                            b1.Property<string>("CampaignTitle")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("campaign_title");
+
+                            b1.Property<string>("Email")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("email");
 
                             b1.Property<string>("Role")
                                 .IsRequired()
                                 .HasColumnType("text")
                                 .HasColumnName("role");
 
-                            b1.Property<string>("Status")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("status");
+                            b1.HasKey("CampaignId", "Id")
+                                .HasName("pk_campaign_invitations");
 
-                            b1.HasKey("campaign_id", "PlayerId")
-                                .HasName("pk_campaign_members");
-
-                            b1.ToTable("campaign_members", "campaigns");
+                            b1.ToTable("campaign_invitations", "campaigns");
 
                             b1.WithOwner()
-                                .HasForeignKey("campaign_id")
-                                .HasConstraintName("fk_campaign_members_campaigns_campaign_id");
+                                .HasForeignKey("CampaignId")
+                                .HasConstraintName("fk_campaign_invitations_campaigns_campaign_id");
                         });
 
-                    b.Navigation("Members");
+                    b.Navigation("Invitations");
                 });
 #pragma warning restore 612, 618
         }

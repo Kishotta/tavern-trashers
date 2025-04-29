@@ -1,4 +1,4 @@
-<div class="relative inline-block" #dropdownRoot>
+<div class="mobile:relative inline-block" #dropdownRoot>
   <div (click)="toggleDropdown()" (clicked)="closeDropdown()">
     <ng-content select="trigger"></ng-content>
   </div>
@@ -6,11 +6,8 @@
   @if(isOpen) {
 
   <div
-    class="absolute z-10 mt-2 py-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black/5 focus:outline-none"
-    [ngClass]="{
-      'left-0': alignment === 'left',
-      'right-0': alignment === 'right'
-    }"
+    @dropdownAnimation
+    [class]="`absolute z-10 ${alignmentClasses} mt-2 py-2 ${sizeClasses} mobile:rounded-md shadow-lg bg-white ring-1 ring-black/5 focus:outline-none overflow-hidden`"
   >
     <ng-content select="menu"></ng-content>
   </div>

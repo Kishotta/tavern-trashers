@@ -10,14 +10,15 @@ public class CampaignConfiguration : IEntityTypeConfiguration<Campaign>
 	{
 		builder.HasKey(campaign => campaign.Id);
 
-		builder.OwnsMany(campaign => campaign.Members, memberBuilder =>
-		{
-			memberBuilder.ToTable("campaign_members");
-			memberBuilder.WithOwner().HasForeignKey("campaign_id");
-			memberBuilder.HasKey("campaign_id", nameof(CampaignMember.PlayerId));
+		builder.OwnsMany(
+			campaign => campaign.Invitations,
+			invitationBuilder =>
+			{
+				invitationBuilder.ToTable("campaign_invitations");
 
-			memberBuilder.Property(member => member.Role).HasConversion<string>();
-			memberBuilder.Property(member => member.Status).HasConversion<string>();
-		});
+				invitationBuilder
+				   .Property(invitation => invitation.Role)
+				   .HasConversion<string>();
+			});
 	}
 }

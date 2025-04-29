@@ -12,25 +12,19 @@ public class CampaignRepository(CampaignsDbContext dbContext, IClaimsProvider cl
 	public async Task<IEnumerable<Campaign>> GetAsync(CancellationToken cancellationToken = default) =>
 		await dbContext
 		   .Campaigns
-		   .Where(campaign => campaign.Members.Any(member =>
-				member.PlayerId == claims.UserId && member.Status == MembershipStatus.Joined))
 		   .ToListAsync(cancellationToken);
 
 	public async Task<Result<Campaign>> GetAsync(Guid campaignId, CancellationToken cancellationToken = default) =>
 		await dbContext
 		   .Campaigns
-		   .Where(campaign => campaign.Members.Any(member =>
-				member.PlayerId == claims.UserId && member.Status == MembershipStatus.Joined))
 		   .SingleOrDefaultAsync(campaign => campaign.Id == campaignId, cancellationToken)
-		   .ToResultAsync(CampaignErrors.NotFound(campaignId));
+		   .ToResultAsync(CampaignErrors.NotFound);
 
 	public async Task<IEnumerable<Campaign>> GetReadOnlyAsync(
 		CancellationToken cancellationToken = default) =>
 		await dbContext
 		   .Campaigns
 		   .AsNoTracking()
-		   .Where(campaign => campaign.Members.Any(member =>
-				member.PlayerId == claims.UserId && member.Status == MembershipStatus.Joined))
 		   .ToListAsync(cancellationToken);
 
 	public async Task<Result<Campaign>> GetReadOnlyAsync(
@@ -39,11 +33,18 @@ public class CampaignRepository(CampaignsDbContext dbContext, IClaimsProvider cl
 		await dbContext
 		   .Campaigns
 		   .AsNoTracking()
-		   .Where(campaign => campaign.Members.Any(member =>
-				member.PlayerId == claims.UserId && member.Status == MembershipStatus.Joined))
 		   .SingleOrDefaultAsync(campaign => campaign.Id == campaignId, cancellationToken)
-		   .ToResultAsync(CampaignErrors.NotFound(campaignId));
+		   .ToResultAsync(CampaignErrors.NotFound);
 
 	public void Add(Campaign campaign) => dbContext.Campaigns.Add(campaign);
 	public void Remove(Campaign campaign) => dbContext.Campaigns.Remove(campaign);
+
+	public async Task<IEnumerable<Invitation>> GetMemberInvitationsReadOnlyAsync(
+		CancellationToken cancellationToken = default) =>
+		await dbContext
+		   .Campaigns
+		   .AsNoTracking()
+		   .SelectMany(campaign => campaign.Invitations)
+		   .Where(invitation => invitation.Email == claims.GetEmail())
+		   .ToListAsync(cancellationToken);
 }

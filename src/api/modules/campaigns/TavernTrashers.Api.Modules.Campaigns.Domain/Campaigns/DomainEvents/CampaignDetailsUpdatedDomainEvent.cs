@@ -1,4 +1,4 @@
-namespace TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
+namespace TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.DomainEvents;
 
 public sealed class CampaignDetailsUpdatedDomainEvent(Guid campaignId) : DomainEvent
 {

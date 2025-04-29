@@ -23,7 +23,7 @@ internal sealed class UpdateCampaignCommandHandler(
 		await campaignRepository.GetAsync(command.CampaignId, cancellationToken)
 		   .DoAsync(async campaign =>
 			{
-				campaign.UpdateDetails(claims.UserId, command.Title, command.Description);
+				campaign.UpdateDetails(claims.GetUserId(), command.Title, command.Description);
 
 				await unitOfWork.SaveChangesAsync(cancellationToken);
 			})

@@ -39,11 +39,14 @@ export class AuthService {
             event.type == 'token_refreshed'
         )
       )
-      .subscribe(() => {
+      .subscribe((event) => {
+        console.log('[OAuth] Event received:', event.type);
+
         const claims = this.oauthService.getIdentityClaims();
         if (!claims) {
           return;
         }
+
         this.store.dispatch(
           loginSuccess({
             user: {

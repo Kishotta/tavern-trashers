@@ -5,6 +5,15 @@ public static class EnsureExtensions
 	public static Result Ensure(this Result result, Func<bool> condition, Error error) =>
 		condition() ? result : error;
 
+	public static Result<TValue> Ensure<TValue>(this Result<TValue> result, Func<bool> condition, Error error) =>
+		condition() ? result : error;
+
+	public static Result<TValue> Ensure<TValue>(
+		this Result<TValue> result,
+		Func<TValue, bool> condition,
+		Error error) =>
+		condition(result) ? result : error;
+
 	public static async Task<Result<TValue>> EnsureAsync<TValue>(
 		this Task<TValue> taskValue,
 		Func<TValue, bool> predicate,

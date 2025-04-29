@@ -16,4 +16,5 @@ public interface ICampaignRepository
 
 	void Add(Campaign campaign);
 	void Remove(Campaign campaign);
+	Task<IEnumerable<Invitation>> GetMemberInvitationsReadOnlyAsync(CancellationToken cancellationToken = default);
 }

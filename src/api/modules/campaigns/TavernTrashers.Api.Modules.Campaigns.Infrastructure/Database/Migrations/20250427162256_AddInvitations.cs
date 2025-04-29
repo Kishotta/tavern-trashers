@@ -6,32 +6,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCampaignMembers : Migration
+    public partial class AddInvitations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "name",
-                schema: "campaigns",
-                table: "campaigns",
-                newName: "title");
-
             migrationBuilder.CreateTable(
-                name: "campaign_members",
+                name: "campaign_invitations",
                 schema: "campaigns",
                 columns: table => new
                 {
-                    player_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     campaign_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false),
                     role = table.Column<string>(type: "text", nullable: false),
-                    status = table.Column<string>(type: "text", nullable: false)
+                    campaign_title = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_campaign_members", x => new { x.campaign_id, x.player_id });
+                    table.PrimaryKey("pk_campaign_invitations", x => new { x.campaign_id, x.id });
                     table.ForeignKey(
-                        name: "fk_campaign_members_campaigns_campaign_id",
+                        name: "fk_campaign_invitations_campaigns_campaign_id",
                         column: x => x.campaign_id,
                         principalSchema: "campaigns",
                         principalTable: "campaigns",
@@ -44,14 +39,8 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "campaign_members",
+                name: "campaign_invitations",
                 schema: "campaigns");
-
-            migrationBuilder.RenameColumn(
-                name: "title",
-                schema: "campaigns",
-                table: "campaigns",
-                newName: "name");
         }
     }
 }

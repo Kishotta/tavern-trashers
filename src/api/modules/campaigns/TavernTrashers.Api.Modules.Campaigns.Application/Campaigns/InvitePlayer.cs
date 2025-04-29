@@ -1,5 +1,4 @@
 using FluentValidation;
-using TavernTrashers.Api.Common.Application.Authentication;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
@@ -8,26 +7,27 @@ using TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
 
 namespace TavernTrashers.Api.Modules.Campaigns.Application.Campaigns;
 
-public sealed record InvitePlayerCommand(Guid CampaignId, Guid InviteeId)
-	: ICommand<CampaignResponse>;
+public sealed record InvitePlayerCommand(Guid CampaignId, string Email)
+	: ICommand<InvitationResponse>;
 
 internal sealed class InvitePlayerCommandHandler(
-	IClaimsProvider claims,
 	ICampaignRepository campaignRepository,
-	IUnitOfWork unitOfWork)
-	: ICommandHandler<InvitePlayerCommand, CampaignResponse>
+	IUnitOfWork unitOfWork) : ICommandHandler<InvitePlayerCommand, InvitationResponse>
 {
-	public async Task<Result<CampaignResponse>> Handle(
+	public async Task<Result<InvitationResponse>> Handle(
 		InvitePlayerCommand command,
 		CancellationToken cancellationToken) =>
 		await campaignRepository.GetAsync(command.CampaignId, cancellationToken)
-		   .DoAsync(async campaign =>
-			{
-				campaign.InvitePlayer(claims.UserId, command.InviteeId);
-
-				await unitOfWork.SaveChangesAsync(cancellationToken);
-			})
-		   .TransformAsync(campaign => (CampaignResponse)campaign);
+		   .ThenAsync(campaign => campaign.InvitePlayer(command.Email))
+		   .DoAsync(_ => unitOfWork.SaveChangesAsync(cancellationToken))
+		   .TransformAsync(invitation => (InvitationResponse)invitation);
 }
 
-internal sealed class InvitePlayerCommandValidator : AbstractValidator<InvitePlayerCommand> { }
+internal sealed class InvitePlayerCommandValidator : AbstractValidator<InvitePlayerCommand>
+{
+	public InvitePlayerCommandValidator()
+	{
+		RuleFor(command => command.CampaignId).NotEmpty();
+		RuleFor(command => command.Email).NotEmpty().EmailAddress();
+	}
+}

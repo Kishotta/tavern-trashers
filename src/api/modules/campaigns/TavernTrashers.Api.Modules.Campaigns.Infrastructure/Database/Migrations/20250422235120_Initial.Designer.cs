@@ -12,7 +12,7 @@ using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
 namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(CampaignsDbContext))]
-    [Migration("20250216152914_Initial")]
+    [Migration("20250422235120_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("campaigns")
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -196,15 +196,43 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("name");
+                        .HasColumnName("title");
 
                     b.HasKey("Id")
                         .HasName("pk_campaigns");
 
                     b.ToTable("campaigns", "campaigns");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Members.Member", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("first_name");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("last_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_members");
+
+                    b.ToTable("members", "campaigns");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,7 +12,6 @@ public sealed record CreateCampaignCommand(string Title, string Description)
 	: ICommand<CampaignResponse>;
 
 internal sealed class CreateCampaignCommandHandler(
-	IClaimsProvider claims,
 	ICampaignRepository campaignRepository,
 	IUnitOfWork unitOfWork)
 	: ICommandHandler<CreateCampaignCommand, CampaignResponse>
@@ -20,7 +19,7 @@ internal sealed class CreateCampaignCommandHandler(
 	public async Task<Result<CampaignResponse>> Handle(
 		CreateCampaignCommand command,
 		CancellationToken cancellationToken) =>
-		await Campaign.Create(claims.UserId, command.Title, command.Description)
+		await Campaign.Create(command.Title, command.Description)
 		   .DoAsync(async campaign =>
 			{
 				campaignRepository.Add(campaign);

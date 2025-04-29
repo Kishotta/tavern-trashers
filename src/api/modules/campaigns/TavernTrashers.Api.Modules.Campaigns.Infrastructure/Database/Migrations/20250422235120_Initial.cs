@@ -40,7 +40,7 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
+                    title = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -76,6 +76,21 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_inbox_messages", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "members",
+                schema: "campaigns",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    first_name = table.Column<string>(type: "text", nullable: false),
+                    last_name = table.Column<string>(type: "text", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_members", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -126,6 +141,10 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
 
             migrationBuilder.DropTable(
                 name: "inbox_messages",
+                schema: "campaigns");
+
+            migrationBuilder.DropTable(
+                name: "members",
                 schema: "campaigns");
 
             migrationBuilder.DropTable(

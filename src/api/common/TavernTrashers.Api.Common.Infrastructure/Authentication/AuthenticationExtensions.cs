@@ -21,7 +21,7 @@ internal static class AuthenticationExtensions
 
 		services.AddHttpContextAccessor();
 
-		services.AddScoped<IClaimsProvider, HttpContextClaimsProvider>();
+		services.AddSingleton<IClaimsProvider, HttpContextClaimsProvider>();
 
 		return services;
 	}

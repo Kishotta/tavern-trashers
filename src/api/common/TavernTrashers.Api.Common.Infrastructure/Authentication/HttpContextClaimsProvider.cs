@@ -8,8 +8,8 @@ namespace TavernTrashers.Api.Common.Infrastructure.Authentication;
 
 public class HttpContextClaimsProvider(IHttpContextAccessor httpContextAccessor) : IClaimsProvider
 {
-	public Guid UserId => Principal.GetUserId();
-	public string Email => Principal.GetEmailAddress();
+	public Guid GetUserId() => Principal.GetUserId();
+	public string GetEmail() => Principal.GetEmailAddress();
 
 	public ClaimsPrincipal Principal =>
 		httpContextAccessor.HttpContext?.User ??

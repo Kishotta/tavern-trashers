@@ -2,7 +2,9 @@ namespace TavernTrashers.Api.Common.Domain.Results.Extensions;
 
 public static class TransformExtensions
 {
-	public static Result<TOut> Transform<TIn, TOut>(this Result<TIn> result, Func<TIn, TOut> mapper) =>
+	public static Result<TOut> Transform<TIn, TOut>(
+		this Result<TIn> result,
+		Func<TIn, TOut> mapper) =>
 		result.IsSuccess
 			? mapper(result)
 			: result.Error;
@@ -17,7 +19,9 @@ public static class TransformExtensions
 			: result.Error;
 	}
 
-	public static async Task<TOut> TransformAsync<TIn, TOut>(this Task<TIn> taskValue, Func<TIn, TOut> mapper)
+	public static async Task<TOut> TransformAsync<TIn, TOut>(
+		this Task<TIn> taskValue,
+		Func<TIn, TOut> mapper)
 	{
 		var value = await taskValue.ConfigureAwait(false);
 

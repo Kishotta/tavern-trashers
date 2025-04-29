@@ -21,6 +21,7 @@ public class CreateCampaign : IEndpoint
 				   .Send(new CreateCampaignCommand(request.Title, request.Description))
 				   .CreatedAsync(campaign =>
 						new(linkGenerator.GetUriByName(httpContext, nameof(GetCampaign), new { id = campaign.Id })!)))
+		   .RequireAuthorization()
 		   .WithName(nameof(CreateCampaign))
 		   .WithTags(Tags.Campaigns)
 		   .WithSummary("Create Campaign")

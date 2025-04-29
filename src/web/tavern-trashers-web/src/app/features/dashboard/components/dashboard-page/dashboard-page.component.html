@@ -78,12 +78,48 @@
     />
   </div>
 
-  <tt-dropdown>
+  <tt-dropdown alignment="right" size="xl">
     <tt-button
       ngProjectAs="trigger"
       text="Options"
       trailingIcon="chevron-down"
       variant="secondary"
     />
+    <div ngProjectAs="menu">
+      <div
+        class="pointer-events-auto flex divide-x divide-gray-200 bg-white border-b border-gray-200"
+      >
+        <div class="flex w-0 flex-1 items-center p-4">
+          <div class="w-full">
+            <p class="text-sm font-medium text-gray-900">Campaign Invitation</p>
+            <p class="mt-1 text-sm text-gray-500">
+              You've been invited to play in Turn of Fortune's Wheel.
+            </p>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="flex flex-col divide-y divide-gray-200">
+            <div class="flex h-0 flex-1">
+              <!-- <tt-button variant="text" text="Accept" color="indigo" /> -->
+              <button
+                type="button"
+                class="flex w-full items-center justify-center border border-transparent px-4 py-3 text-sm font-medium text-blue-600 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+              >
+                Accept
+              </button>
+            </div>
+            <div class="flex h-0 flex-1">
+              <!-- <tt-button variant="text" text="Reject" color="gray" /> -->
+              <button
+                type="button"
+                class="flex w-full items-center justify-center border border-transparent px-4 py-3 text-sm font-medium text-gray-700 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </tt-dropdown>
 </div>

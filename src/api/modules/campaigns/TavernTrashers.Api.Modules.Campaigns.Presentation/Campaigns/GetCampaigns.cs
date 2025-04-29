@@ -13,6 +13,7 @@ public class GetCampaigns : IEndpoint
 				await sender
 				   .Send(new GetCampaignsQuery())
 				   .OkAsync())
+		   .RequireAuthorization()
 		   .WithName(nameof(GetCampaigns))
 		   .WithTags(Tags.Campaigns)
 		   .WithSummary("Get all Campaigns")

@@ -4,12 +4,12 @@ using Microsoft.Extensions.Hosting;
 using TavernTrashers.Api.Common.Infrastructure.Database;
 using TavernTrashers.Api.Modules.Campaigns.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
-using TavernTrashers.Api.Modules.Campaigns.Domain.Players;
+using TavernTrashers.Api.Modules.Campaigns.Domain.Members;
 using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Campaigns;
 using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
 using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Inbox;
+using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Members;
 using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Outbox;
-using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Players;
 using Module = TavernTrashers.Api.Common.Infrastructure.Modules.Module;
 
 namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure;
@@ -31,7 +31,7 @@ public class CampaignsModule : Module
 		   .AddDbContext<CampaignsDbContext>(Postgres.StandardOptions(builder.Configuration, Schema))
 		   .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<CampaignsDbContext>())
 		   .AddScoped<ICampaignRepository, CampaignRepository>()
-		   .AddScoped<IPlayerRepository, PlayerRepository>();
+		   .AddScoped<IMemberRepository, MemberRepository>();
 
 	protected override void ConfigureServices(IHostApplicationBuilder builder)
 	{

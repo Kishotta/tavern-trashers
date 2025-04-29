@@ -1,23 +1,23 @@
 using TavernTrashers.Api.Common.Domain.Auditing;
 using TavernTrashers.Api.Common.Domain.Results;
 
-namespace TavernTrashers.Api.Modules.Campaigns.Domain.Players;
+namespace TavernTrashers.Api.Modules.Campaigns.Domain.Members;
 
 [Auditable]
-public class Player : Entity
+public class Member : Entity
 {
-	private Player() { }
+	private Member() { }
 	public string FirstName { get; private set; } = string.Empty;
 	public string LastName { get; private set; } = string.Empty;
 	public string Email { get; private set; } = string.Empty;
 
-	public static Result<Player> Create(
+	public static Result<Member> Create(
 		Guid id,
 		string firstName,
 		string lastName,
 		string email)
 	{
-		var player = new Player
+		var player = new Member
 		{
 			Id        = id,
 			FirstName = firstName,
@@ -25,19 +25,19 @@ public class Player : Entity
 			Email     = email,
 		};
 
-		player.RaiseDomainEvent(new PlayerCreatedDomainEvent(player.Id));
+		player.RaiseDomainEvent(new MemberCreatedDomainEvent(player.Id));
 
 		return player;
 	}
 
-	public Player ChangeName(string firstName, string lastName)
+	public Result<Member> ChangeName(string firstName, string lastName)
 	{
 		if (FirstName == firstName && LastName == lastName) return this;
 
 		FirstName = firstName;
 		LastName  = lastName;
 
-		RaiseDomainEvent(new PlayerNameChangedDomainEvent(Id, firstName, lastName));
+		RaiseDomainEvent(new MemberNameChangedDomainEvent(Id, firstName, lastName));
 
 		return this;
 	}

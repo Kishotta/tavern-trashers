@@ -41,8 +41,13 @@ type ButtonColor =
 const Primary = 'primary';
 const Secondary = 'secondary';
 const Soft = 'soft';
+const Text = 'text';
 
-type ButtonVariant = typeof Primary | typeof Secondary | typeof Soft;
+type ButtonVariant =
+  | typeof Primary
+  | typeof Secondary
+  | typeof Soft
+  | typeof Text;
 
 @Component({
   selector: 'tt-button',
@@ -101,6 +106,8 @@ export class ButtonComponent {
         return this.secondaryColorClasses;
       case Soft:
         return this.softColorClasses;
+      case Text:
+        return this.textColorClasses;
     }
   }
 
@@ -111,52 +118,75 @@ export class ButtonComponent {
         return 'text-white';
       case Secondary:
         return 'text-gray-400 group-hover:text-gray-500 group-active:text-gray-600 group-focus-visible:outline-gray-500';
+      case Text:
+        return this.textColorClasses;
     }
   }
 
   get primaryColorClasses(): string {
     switch (this.color) {
       case Gray:
-        return 'text-white bg-gray-600 hover:bg-gray-700 active:bg-gray-800 focus-visible:outline-gray-700';
+        return 'font-semibold text-white bg-gray-600 hover:bg-gray-700 active:bg-gray-800 focus-visible:outline-gray-700 shadow-xs';
       case Red:
-        return 'text-white bg-red-600 hover:bg-red-500 active:bg-red-400 focus-visible:outline-red-500';
+        return 'font-semibold text-white bg-red-600 hover:bg-red-500 active:bg-red-400 focus-visible:outline-red-500 shadow-xs';
       case Yellow:
-        return 'text-white bg-yellow-500 hover:bg-yellow-400 active:bg-yellow-300 focus-visible:outline-yellow-400';
+        return 'font-semibold text-white bg-yellow-500 hover:bg-yellow-400 active:bg-yellow-300 focus-visible:outline-yellow-400 shadow-xs';
       case Green:
-        return 'text-white bg-green-600 hover:bg-green-500 active:bg-green-400 focus-visible:outline-green-500';
+        return 'font-semibold text-white bg-green-600 hover:bg-green-500 active:bg-green-400 focus-visible:outline-green-500 shadow-xs';
       case Blue:
-        return 'text-white bg-blue-600 hover:bg-blue-500 active:bg-blue-400 focus-visible:outline-blue-500';
+        return 'font-semibold text-white bg-blue-600 hover:bg-blue-500 active:bg-blue-400 focus-visible:outline-blue-500 shadow-xs';
       case Indigo:
-        return 'text-white bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-400 focus-visible:outline-indigo-500';
+        return 'font-semibold text-white bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-400 focus-visible:outline-indigo-500 shadow-xs';
       case Purple:
-        return 'text-white bg-purple-600 hover:bg-purple-500 active:bg-purple-400 focus-visible:outline-purple-500';
+        return 'font-semibold text-white bg-purple-600 hover:bg-purple-500 active:bg-purple-400 focus-visible:outline-purple-500 shadow-xs';
       case Pink:
-        return 'text-white bg-pink-600 hover:bg-pink-500 active:bg-pink-400 focus-visible:outline-pink-500';
+        return 'font-semibold text-white bg-pink-600 hover:bg-pink-500 active:bg-pink-400 focus-visible:outline-pink-500 shadow-xs';
     }
   }
 
   get secondaryColorClasses(): string {
-    return 'bg-white hover:bg-gray-50 active:bg-gray-200 text-gray-900 ring-gray-300 focus-visible:outline-gray-300 ring-1';
+    return 'font-semibold bg-white hover:bg-gray-50 active:bg-gray-200 text-gray-900 ring-gray-300 focus-visible:outline-gray-300 ring-1 shadow-xs';
   }
 
   get softColorClasses(): string {
     switch (this.color) {
       case Gray:
-        return 'text-white bg-gray-500 hover:bg-gray-400 active:bg-gray-300 focus-visible:outline-gray-500';
+        return 'font-semibold text-white bg-gray-500 hover:bg-gray-400 active:bg-gray-300 focus-visible:outline-gray-500 shadow-xs';
       case Red:
-        return 'text-white bg-red-500 hover:bg-red-400 active:bg-red-300 focus-visible:outline-red-500';
+        return 'font-semibold text-white bg-red-500 hover:bg-red-400 active:bg-red-300 focus-visible:outline-red-500 shadow-xs';
       case Yellow:
-        return 'text-white bg-yellow-400 hover:bg-yellow-300 active:bg-yellow-200 focus-visible:outline-yellow-400';
+        return 'font-semibold text-white bg-yellow-400 hover:bg-yellow-300 active:bg-yellow-200 focus-visible:outline-yellow-400 shadow-xs';
       case Green:
-        return 'text-white bg-green-500 hover:bg-green-400 active:bg-green-300 focus-visible:outline-green-500';
+        return 'font-semibold text-white bg-green-500 hover:bg-green-400 active:bg-green-300 focus-visible:outline-green-500 shadow-xs';
       case Blue:
-        return 'text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-300 focus-visible:outline-blue-500';
+        return 'font-semibold text-white bg-blue-500 hover:bg-blue-400 active:bg-blue-300 focus-visible:outline-blue-500 shadow-xs';
       case Indigo:
-        return 'text-white bg-indigo-500 hover:bg-indigo-400 active:bg-indigo-300 focus-visible:outline-indigo-500';
+        return 'font-semibold text-white bg-indigo-500 hover:bg-indigo-400 active:bg-indigo-300 focus-visible:outline-indigo-500 shadow-xs';
       case Purple:
-        return 'text-white bg-purple-500 hover:bg-purple-400 active:bg-purple-300 focus-visible:outline-purple-500';
+        return 'font-semibold text-white bg-purple-500 hover:bg-purple-400 active:bg-purple-300 focus-visible:outline-purple-500 shadow-xs';
       case Pink:
-        return 'text-white bg-pink-500 hover:bg-pink-400 active:bg-pink-300 focus-visible:outline-pink-500';
+        return 'font-semibold text-white bg-pink-500 hover:bg-pink-400 active:bg-pink-300 focus-visible:outline-pink-500 shadow-xs';
+    }
+  }
+
+  get textColorClasses(): string {
+    switch (this.color) {
+      case Gray:
+        return 'text-gray-700 hover:text-gray-500 focus-visible:outline-gray-500';
+      case Red:
+        return 'text-red-600 hover:text-red-500 focus-visible:outline-red-500';
+      case Yellow:
+        return 'text-yellow-500 hover:text-yellow-400 focus-visible:outline-yellow-400';
+      case Green:
+        return 'text-green-600 hover:text-green-500 focus-visible:outline-green-500';
+      case Blue:
+        return 'text-blue-600 hover:text-blue-500 focus-visible:outline-blue-500';
+      case Indigo:
+        return 'text-indigo-600 hover:text-indigo-500 focus-visible:outline-indigo-500';
+      case Purple:
+        return 'text-purple-600 hover:text-purple-500 focus-visible:outline-purple-500';
+      case Pink:
+        return 'text-pink-600 hover:text-pink-500 focus-visible:outline-pink-500';
     }
   }
 

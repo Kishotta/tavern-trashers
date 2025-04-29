@@ -4,6 +4,9 @@ namespace TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
 
 public static class CampaignErrors
 {
-	public static Error NotFound(Guid campaignId) =>
-		Error.NotFound("Campaigns.NotFound", $"The campaign with the identifier {campaignId} was not found");
+	public static readonly Error InvitationAlreadySent =
+		Error.Conflict("Campaigns.InvitationAlreadySent", "An invitation is already pending for that address.");
+
+	public static readonly Error NotFound =
+		Error.NotFound("Campaigns.NotFound", "Campaign not found.");
 }

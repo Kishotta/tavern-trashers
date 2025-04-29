@@ -7,7 +7,7 @@ namespace TavernTrashers.Api.Modules.Users.Presentation.Users;
 internal sealed class GetUserProfile : IEndpoint
 {
 	public void MapEndpoint(IEndpointRouteBuilder app) =>
-		app.MapGet("users/profile", async (ClaimsPrincipal claims, ISender sender) =>
+		app.MapGet("my/profile", async (ClaimsPrincipal claims, ISender sender) =>
 				await sender
 				   .Send(new GetUserQuery(claims.GetUserId()))
 				   .OkAsync())
