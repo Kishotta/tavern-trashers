@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\common\TavernTrashers.Api.Common.Presentation\TavernTrashers.Api.Common.Presentation.csproj"/>
+        <ProjectReference Include="..\TavernTrashers.Api.Modules.Dice.Application\TavernTrashers.Api.Modules.Dice.Application.csproj"/>
+    </ItemGroup>
+</Project>

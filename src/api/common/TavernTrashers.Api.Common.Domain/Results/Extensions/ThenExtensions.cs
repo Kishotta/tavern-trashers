@@ -21,6 +21,13 @@ public static class ThenExtensions
 			? binder(result)
 			: result.Error;
 
+	public static Result<TOut> Then<TIn, TOut>(
+		this Result<TIn> result,
+		Func<TIn, Result<TOut>> binder) =>
+		result.IsSuccess
+			? binder(result)
+			: result.Error;
+
 	public static async Task<Result> ThenAsync<TValue>(
 		this Task<Result<TValue>> taskResult,
 		Func<TValue, Result> binder)

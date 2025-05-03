@@ -54,6 +54,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Modules.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Gateway", "api\TavernTrashers.Gateway\TavernTrashers.Gateway.csproj", "{021D51DC-677B-4F7C-8A41-BD43875828E6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dice", "Dice", "{79252DCF-F430-49F5-9442-E2F45A55E68A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Modules.Dice.Domain", "api\modules\dice\TavernTrashers.Api.Modules.Dice.Domain\TavernTrashers.Api.Modules.Dice.Domain.csproj", "{BF2CBC27-8450-458A-9C7F-D00D1166C0D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Modules.Dice.Application", "api\modules\dice\TavernTrashers.Api.Modules.Dice.Application\TavernTrashers.Api.Modules.Dice.Application.csproj", "{CAA43ACB-F1E8-4AF4-BECB-3D24FD6CD4C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Modules.Dice.Infrastructure", "api\modules\dice\TavernTrashers.Api.Modules.Dice.Infrastructure\TavernTrashers.Api.Modules.Dice.Infrastructure.csproj", "{FAFDADD4-E65B-4198-A844-8B376DADCA0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Modules.Dice.Presentation", "api\modules\dice\TavernTrashers.Api.Modules.Dice.Presentation\TavernTrashers.Api.Modules.Dice.Presentation.csproj", "{E668F92B-9876-458D-BAA0-2F8C7BFE439E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +94,11 @@ Global
 		{62B0F8C7-4694-413D-9C1D-07044E216F6C} = {3F652053-B90E-45B2-8B66-6C22BFB393A8}
 		{AB10EAC5-293F-47A3-869E-CE69AB63F137} = {3F652053-B90E-45B2-8B66-6C22BFB393A8}
 		{021D51DC-677B-4F7C-8A41-BD43875828E6} = {F95A2ACC-FEFE-4593-8ED8-A69312CA3548}
+		{79252DCF-F430-49F5-9442-E2F45A55E68A} = {7C5A081C-622E-4498-AEA3-2232BA31823D}
+		{BF2CBC27-8450-458A-9C7F-D00D1166C0D9} = {79252DCF-F430-49F5-9442-E2F45A55E68A}
+		{CAA43ACB-F1E8-4AF4-BECB-3D24FD6CD4C3} = {79252DCF-F430-49F5-9442-E2F45A55E68A}
+		{FAFDADD4-E65B-4198-A844-8B376DADCA0B} = {79252DCF-F430-49F5-9442-E2F45A55E68A}
+		{E668F92B-9876-458D-BAA0-2F8C7BFE439E} = {79252DCF-F430-49F5-9442-E2F45A55E68A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9603F123-0EE6-4E35-AE62-82D351B447A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -166,5 +181,21 @@ Global
 		{021D51DC-677B-4F7C-8A41-BD43875828E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{021D51DC-677B-4F7C-8A41-BD43875828E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{021D51DC-677B-4F7C-8A41-BD43875828E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF2CBC27-8450-458A-9C7F-D00D1166C0D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF2CBC27-8450-458A-9C7F-D00D1166C0D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF2CBC27-8450-458A-9C7F-D00D1166C0D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF2CBC27-8450-458A-9C7F-D00D1166C0D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAA43ACB-F1E8-4AF4-BECB-3D24FD6CD4C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAA43ACB-F1E8-4AF4-BECB-3D24FD6CD4C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAA43ACB-F1E8-4AF4-BECB-3D24FD6CD4C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAA43ACB-F1E8-4AF4-BECB-3D24FD6CD4C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAFDADD4-E65B-4198-A844-8B376DADCA0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAFDADD4-E65B-4198-A844-8B376DADCA0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAFDADD4-E65B-4198-A844-8B376DADCA0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAFDADD4-E65B-4198-A844-8B376DADCA0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E668F92B-9876-458D-BAA0-2F8C7BFE439E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E668F92B-9876-458D-BAA0-2F8C7BFE439E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E668F92B-9876-458D-BAA0-2F8C7BFE439E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E668F92B-9876-458D-BAA0-2F8C7BFE439E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

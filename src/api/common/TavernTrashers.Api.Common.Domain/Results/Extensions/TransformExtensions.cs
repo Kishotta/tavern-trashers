@@ -9,6 +9,13 @@ public static class TransformExtensions
 			? mapper(result)
 			: result.Error;
 
+	public static Result<TOut> Transform<TIn, TOut>(
+		this Result<TIn> result,
+		Func<TIn, Result<TOut>> mapper) =>
+		result.IsSuccess
+			? mapper(result)
+			: result.Error;
+
 	public static async Task<Result<TOut>> TransformAsync<TIn, TOut>(
 		this Task<Result<TIn>> resultTask,
 		Func<TIn, TOut> mapper)
