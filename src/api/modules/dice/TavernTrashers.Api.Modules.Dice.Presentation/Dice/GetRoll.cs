@@ -8,23 +8,19 @@ using TavernTrashers.Api.Modules.Dice.Application.Dice;
 
 namespace TavernTrashers.Api.Modules.Dice.Presentation.Dice;
 
-public class RollDice : IEndpoint
+public class GetRoll : IEndpoint
 {
 	public void MapEndpoint(IEndpointRouteBuilder app) =>
-		app.MapPost("/dice/rolls", async (
-					RollDiceRequest request,
+		app.MapGet("/dice/rolls/{rollId:guid}", async (
+					Guid rollId,
 					ISender sender) =>
 				await sender
-				   .Send(new RollDiceCommand(request.Expression))
+				   .Send(new GetRollQuery(rollId))
 				   .OkAsync())
-		   .WithName(nameof(RollDice))
+		   .WithName(nameof(GetRoll))
 		   .WithTags(Tags.Dice)
-		   .WithSummary("Roll Dice")
-		   .WithDescription("Evaluate a dice expression and return the result.")
-		   .Accepts<RollDiceRequest>("application/json")
+		   .WithSummary("Get Roll")
+		   .WithDescription("Retrieve a specific dice roll by its ID.")
 		   .Produces<RollResponse>(StatusCodes.Status200OK, "application/json")
-		   .Produces<ProblemDetails>(StatusCodes.Status400BadRequest, "application/json")
 		   .Produces<ProblemDetails>(StatusCodes.Status404NotFound, "application/json");
-
-	internal sealed record RollDiceRequest(string Expression);
 }

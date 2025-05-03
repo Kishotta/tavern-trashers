@@ -13,8 +13,10 @@ public sealed record RollResponse(
 	IReadOnlyList<int> KeptRolls,
 	DateTime RolledAtUtc)
 {
+	public IReadOnlyCollection<RollResponse> Children { get; init; } = new List<RollResponse>();
+
 	public static implicit operator RollResponse(Roll roll) =>
-		new RollResponse(
+		new(
 			roll.Id,
 			roll.Expression,
 			roll.Total,
@@ -23,5 +25,8 @@ public sealed record RollResponse(
 			roll.Average,
 			roll.RawRolls,
 			roll.KeptRolls,
-			roll.RolledAtUtc);
+			roll.RolledAtUtc)
+		{
+			Children = roll.Children.Select(c => (RollResponse)c).ToList().AsReadOnly(),
+		};
 }
