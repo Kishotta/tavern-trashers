@@ -1,4 +1,5 @@
 using TavernTrashers.Api.Common.Domain.Results;
+using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
 
 namespace TavernTrashers.Api.Modules.Dice.Domain.AbstractSyntaxTree;
 
@@ -7,5 +8,5 @@ namespace TavernTrashers.Api.Modules.Dice.Domain.AbstractSyntaxTree;
 /// </summary>
 public interface IExpressionNode
 {
-	Result<Roll> Evaluate(IDiceEngine diceEngine);
+	Result<RollOutcome> Evaluate(IDiceEngine diceEngine);
 }

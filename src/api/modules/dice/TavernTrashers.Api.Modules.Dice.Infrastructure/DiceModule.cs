@@ -3,8 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TavernTrashers.Api.Common.Infrastructure.Database;
 using TavernTrashers.Api.Modules.Dice.Application.Abstractions.Data;
-using TavernTrashers.Api.Modules.Dice.Domain;
+using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
 using TavernTrashers.Api.Modules.Dice.Infrastructure.Database;
+using TavernTrashers.Api.Modules.Dice.Infrastructure.Dice;
 using TavernTrashers.Api.Modules.Dice.Infrastructure.Inbox;
 using TavernTrashers.Api.Modules.Dice.Infrastructure.Outbox;
 using Module = TavernTrashers.Api.Common.Infrastructure.Modules.Module;
@@ -26,7 +27,8 @@ public class DiceModule : Module
 	protected override void AddDatabase(IHostApplicationBuilder builder) =>
 		builder.Services
 		   .AddDbContext<DiceDbContext>(Postgres.StandardOptions(builder.Configuration, Schema))
-		   .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<DiceDbContext>());
+		   .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<DiceDbContext>())
+		   .AddScoped<IRollRepository, RollRepository>();
 
 	protected override void ConfigureServices(IHostApplicationBuilder builder)
 	{

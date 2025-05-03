@@ -1,47 +1,36 @@
+using TavernTrashers.Api.Common.Application.Clock;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
-using TavernTrashers.Api.Modules.Dice.Domain;
+using TavernTrashers.Api.Common.Domain.Results.Extensions;
+using TavernTrashers.Api.Modules.Dice.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Dice.Domain.RecursiveDescentParser;
+using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
 
 namespace TavernTrashers.Api.Modules.Dice.Application.Dice;
 
-public sealed record RollDiceCommand(string Expression) : ICommand<DiceRollResponse>;
+public sealed record RollDiceCommand(string Expression) : ICommand<RollResponse>;
 
-internal sealed class RollDiceCommandHandler(IDiceEngine diceEngine)
-	: ICommandHandler<RollDiceCommand, DiceRollResponse>
+internal sealed class RollDiceCommandHandler(
+	IDiceEngine diceEngine,
+	IDateTimeProvider dateTimeProvider,
+	IRollRepository rollRepository,
+	IUnitOfWork unitOfWork)
+	: ICommandHandler<RollDiceCommand, RollResponse>
 {
-	public async Task<Result<DiceRollResponse>> Handle(RollDiceCommand command, CancellationToken cancellationToken)
-	{
-		var parser = new DiceParser(command.Expression).ParseExpression();
-		if (parser.IsFailure)
-			return parser.Error;
+	public async Task<Result<RollResponse>> Handle(RollDiceCommand command, CancellationToken cancellationToken) =>
+		await new DiceParser(command.Expression)
+		   .ParseExpression()
+		   .Then(parser => parser.Evaluate(diceEngine))
+		   .Then(outcome => Roll.Create(
+				command.Expression,
+				outcome,
+				dateTimeProvider.UtcNow,
+				"{}"))
+		   .DoAsync(async roll =>
+			{
+				rollRepository.Add(roll);
 
-		var evaluation = await Task.Run(() =>
-			parser.Value.Evaluate(diceEngine), cancellationToken);
-
-		if (evaluation.IsFailure)
-			return evaluation.Error;
-
-		return new DiceRollResponse(
-			Guid.NewGuid(),
-			command.Expression,
-			evaluation.Value.Total,
-			evaluation.Value.Minimum,
-			evaluation.Value.Maximum,
-			evaluation.Value.Average,
-			evaluation.Value.RawRolls,
-			evaluation.Value.KeptRolls,
-			DateTime.UtcNow);
-	}
+				await unitOfWork.SaveChangesAsync(cancellationToken);
+			})
+		   .TransformAsync(roll => (RollResponse)roll);
 }
-
-public sealed record DiceRollResponse(
-	Guid Id,
-	string Expression,
-	int Total,
-	int Minimum,
-	int Maximum,
-	double Average,
-	IReadOnlyList<int> RawRolls,
-	IReadOnlyList<int> KeptRolls,
-	DateTime RolledAtUtc);

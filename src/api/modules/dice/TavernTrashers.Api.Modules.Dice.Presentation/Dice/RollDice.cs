@@ -22,7 +22,7 @@ public class RollDice : IEndpoint
 		   .WithSummary("Roll Dice")
 		   .WithDescription("Evaluate a dice expression and return the result.")
 		   .Accepts<RollDiceRequest>("application/json")
-		   .Produces<DiceRollResponse>(StatusCodes.Status200OK, "application/json")
+		   .Produces<RollResponse>(StatusCodes.Status200OK, "application/json")
 		   .Produces<ProblemDetails>(StatusCodes.Status400BadRequest, "application/json");
 
 	internal sealed record RollDiceRequest(string Expression);

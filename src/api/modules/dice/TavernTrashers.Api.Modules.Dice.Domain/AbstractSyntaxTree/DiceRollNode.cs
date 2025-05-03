@@ -1,4 +1,5 @@
 using TavernTrashers.Api.Common.Domain.Results;
+using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
 
 namespace TavernTrashers.Api.Modules.Dice.Domain.AbstractSyntaxTree;
 
@@ -18,7 +19,7 @@ public record DiceRollNode(
 	int modeCount)
 	: IExpressionNode
 {
-	public Result<Roll> Evaluate(IDiceEngine diceEngine)
+	public Result<RollOutcome> Evaluate(IDiceEngine diceEngine)
 	{
 		var rawRolls  = RollDice(diceEngine);
 		var keptRolls = KeepDropDice(rawRolls);
@@ -28,7 +29,7 @@ public record DiceRollNode(
 		var theoreticalMaximum = keptRolls.Count * (sides == 0 ? 1 : sides);
 		var theoreticalAverage = CalculateTheoreticalAverage(keptRolls);
 
-		return new Roll(
+		return new RollOutcome(
 			actualTotal,
 			theoreticalMinimum,
 			theoreticalMaximum,

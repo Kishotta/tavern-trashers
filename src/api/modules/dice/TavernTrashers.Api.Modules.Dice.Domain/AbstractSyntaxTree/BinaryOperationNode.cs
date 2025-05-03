@@ -1,5 +1,6 @@
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
+using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
 
 namespace TavernTrashers.Api.Modules.Dice.Domain.AbstractSyntaxTree;
 
@@ -12,12 +13,12 @@ public record BinaryOperationNode(
 	IExpressionNode rightNode)
 	: IExpressionNode
 {
-	public Result<Roll> Evaluate(IDiceEngine diceEngine) =>
+	public Result<RollOutcome> Evaluate(IDiceEngine diceEngine) =>
 		leftNode
 		   .Evaluate(diceEngine)
 		   .Then(left => rightNode
 			   .Evaluate(diceEngine)
-			   .Transform<Roll, Result<Roll>>(right =>
+			   .Transform<RollOutcome, Result<RollOutcome>>(right =>
 				{
 					try
 					{
@@ -92,7 +93,7 @@ public record BinaryOperationNode(
 									$"Invalid operator '{@operator}' used in expression.");
 						}
 
-						return new Roll(
+						return new RollOutcome(
 							total,
 							minimum,
 							maximum,

@@ -1,4 +1,5 @@
 using TavernTrashers.Api.Common.Domain.Results;
+using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
 
 namespace TavernTrashers.Api.Modules.Dice.Domain.AbstractSyntaxTree;
 
@@ -9,5 +10,5 @@ public class NumberNode(int value)
 	: IExpressionNode
 {
 	public int Value { get; } = value;
-	public Result<Roll> Evaluate(IDiceEngine diceEngine) => Roll.Constant(Value);
+	public Result<RollOutcome> Evaluate(IDiceEngine diceEngine) => RollOutcome.Constant(Value);
 }
