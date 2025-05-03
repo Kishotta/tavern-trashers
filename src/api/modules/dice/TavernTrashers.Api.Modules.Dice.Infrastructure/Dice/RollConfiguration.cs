@@ -9,6 +9,9 @@ internal sealed class RollConfiguration : IEntityTypeConfiguration<Roll>
 	public void Configure(EntityTypeBuilder<Roll> builder)
 	{
 		builder.HasKey(roll => roll.Id);
+		builder.HasOne(roll => roll.Parent)
+		   .WithMany(roll => roll.Children)
+		   .OnDelete(DeleteBehavior.Restrict);
 		builder.Property(roll => roll.Expression).IsRequired();
 		builder.Property(roll => roll.RawRolls).IsRequired().HasColumnType("integer[]");
 		builder.Property(roll => roll.KeptRolls).IsRequired().HasColumnType("integer[]");

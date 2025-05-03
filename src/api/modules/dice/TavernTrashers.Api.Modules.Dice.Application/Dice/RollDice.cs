@@ -3,6 +3,7 @@ using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
 using TavernTrashers.Api.Modules.Dice.Application.Abstractions.Data;
+using TavernTrashers.Api.Modules.Dice.Domain.DiceEngine;
 using TavernTrashers.Api.Modules.Dice.Domain.RecursiveDescentParser;
 using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
 

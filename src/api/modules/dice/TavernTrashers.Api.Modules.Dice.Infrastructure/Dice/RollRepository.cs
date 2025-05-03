@@ -13,6 +13,8 @@ internal sealed class RollRepository(DiceDbContext dbContext) : IRollRepository
 	public async Task<Result<Roll>> GetAsync(Guid rollId, CancellationToken cancellationToken = default) =>
 		await dbContext
 		   .Rolls
+		   .Include(roll => roll.Parent)
+		   .Include(roll => roll.Children)
 		   .SingleOrDefaultAsync(roll => roll.Id == rollId, cancellationToken)
 		   .ToResultAsync(RollErrors.NotFound(rollId));
 
@@ -21,6 +23,8 @@ internal sealed class RollRepository(DiceDbContext dbContext) : IRollRepository
 		CancellationToken cancellationToken = default) =>
 		await dbContext
 		   .Rolls
+		   .Include(roll => roll.Parent)
+		   .Include(roll => roll.Children)
 		   .Where(roll => roll.ContextJson == context)
 		   .ToListAsync(cancellationToken);
 }

@@ -1,19 +1,15 @@
 using TavernTrashers.Api.Common.Domain.Entities;
-using TavernTrashers.Api.Common.Domain.Results;
 
 namespace TavernTrashers.Api.Modules.Dice.Domain.Rolls;
 
-public static class RollErrors
-{
-	public static Error NotFound(Guid rollId) =>
-		Error.NotFound(
-			"Rolls.NotFound",
-			$"Roll with ID '{rollId}' not found.");
-}
-
 public sealed class Roll : Entity
 {
+	private readonly List<Roll> _children = [];
 	private Roll() { }
+
+	public Roll? Parent { get; private set; }
+	public IReadOnlyCollection<Roll> Children => _children.AsReadOnly();
+
 	public string Expression { get; private set; } = string.Empty;
 	public int Total { get; private set; }
 	public int Minimum { get; private set; }
@@ -39,6 +35,26 @@ public sealed class Roll : Entity
 			KeptRolls   = rollOutcome.KeptRolls,
 			RolledAtUtc = rolledAtUtc,
 			ContextJson = contextJson,
+		};
+
+		return rollEntry;
+	}
+
+	public static Roll Reroll(Roll original, RollOutcome rollOutcome, DateTime rolledAtUtc)
+	{
+		var rollEntry = new Roll
+		{
+			Id          = Guid.NewGuid(),
+			Parent      = original,
+			Expression  = original.Expression,
+			Total       = rollOutcome.Total,
+			Minimum     = rollOutcome.Minimum,
+			Maximum     = rollOutcome.Maximum,
+			Average     = rollOutcome.Average,
+			RawRolls    = rollOutcome.RawRolls,
+			KeptRolls   = rollOutcome.KeptRolls,
+			RolledAtUtc = rolledAtUtc,
+			ContextJson = original.ContextJson,
 		};
 
 		return rollEntry;

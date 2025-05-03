@@ -1,4 +1,4 @@
-namespace TavernTrashers.Api.Modules.Dice.Domain.Rolls;
+namespace TavernTrashers.Api.Modules.Dice.Domain.DiceEngine;
 
 public interface IDiceEngine
 {
