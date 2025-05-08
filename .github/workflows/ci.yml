@@ -33,17 +33,17 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Setup .NET SDK
-              uses actions/setup-dotnet@v3
+              uses: actions/setup-dotnet@v3
               with:
-                dotnet-version: 9.0.x
+                  dotnet-version: 9.0.x
 
             - name: Cache NuGet packages
               uses: actions/cache@v3
               with:
-                path: ~/.nuget/packages
-                key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.sln', '**/*.csproj') }}
-                restore-keys: |
-                    ${{ runner.os }}-nuget-
+                  path: ~/.nuget/packages
+                  key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.sln', '**/*.csproj') }}
+                  restore-keys: |
+                      ${{ runner.os }}-nuget-
 
             - name: Restore dependencies
               run: dotnet restore ./src/TavernTrashers.sln
@@ -53,16 +53,16 @@ jobs:
 
             - name: Run tests
               run: |
-                # Runs all projects ending in *Tests under solution
-                dotnet test ./src/TavernTrashers.sln \
-                  --no-build \
-                  --configuration Release \
-                  --logger "trx;LogFileName=TestResults.trx" \
-                  --verbosity normal
+                  # Runs all projects ending in *Tests under solution
+                  dotnet test ./src/TavernTrashers.sln \
+                    --no-build \
+                    --configuration Release \
+                    --logger "trx;LogFileName=TestResults.trx" \
+                    --verbosity normal
 
             - name: Publish test results
               if: always()
               uses: actions/upload-artifact@v3
               with:
-                name: test_results
-                path: '**/test_results.trx'
+                  name: test_results
+                  path: "**/test_results.trx"
