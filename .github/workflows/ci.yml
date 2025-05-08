@@ -57,7 +57,7 @@ jobs:
                   dotnet test ./src/TavernTrashers.sln \
                     --no-build \
                     --configuration Release \
-                    --logger "trx;LogFileName=TestResults.trx" \
+                    --logger "trx;LogFileName=test_results.trx" \
                     --verbosity normal
 
             - name: Publish test results
