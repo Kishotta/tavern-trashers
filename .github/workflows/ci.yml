@@ -33,12 +33,12 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Setup .NET SDK
-              uses: actions/setup-dotnet@v3
+              uses: actions/setup-dotnet@v4
               with:
                   dotnet-version: 9.0.x
 
             - name: Cache NuGet packages
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: ~/.nuget/packages
                   key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.sln', '**/*.csproj') }}
@@ -62,7 +62,7 @@ jobs:
 
             - name: Publish test results
               if: always()
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: test_results
                   path: "**/test_results.trx"
