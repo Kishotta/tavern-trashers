@@ -1,4 +1,5 @@
 using System.Data;
+using System.Diagnostics;
 using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -23,6 +24,15 @@ public abstract class ProcessInboxJobBase(
 
 	public async Task Execute(IJobExecutionContext context)
 	{
+		var activity = Activity.Current;
+		if (activity is not null)
+		{
+			// Turn off the "Recorded" bit so exporters ignore this job's traces
+			activity.ActivityTraceFlags &= ~ActivityTraceFlags.Recorded;
+			// And avoid any enrichment overhead
+			activity.IsAllDataRequested = false;
+		}
+
 		logger.LogTrace("{Module} - Beginning to process inbox messages", Module.Name);
 
 		await using var connection  = await dbConnectionFactory.OpenConnectionAsync();
