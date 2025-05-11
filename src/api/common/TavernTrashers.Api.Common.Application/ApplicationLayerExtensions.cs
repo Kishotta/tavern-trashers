@@ -8,14 +8,19 @@ namespace TavernTrashers.Api.Common.Application;
 public static class ApplicationLayerExtensions
 {
 	public static IServiceCollection ConfigureApplicationLayer(
-		this IServiceCollection services, 
+		this IServiceCollection services,
+		IEnumerable<IModuleApplicationLayer> modules) =>
+		RegisterMediatrRequestsAndHandlers(services, modules);
+
+	private static IServiceCollection RegisterMediatrRequestsAndHandlers(
+		IServiceCollection services,
 		IEnumerable<IModuleApplicationLayer> modules)
 	{
 		// All MediatR handlers must be registered at the same time
 		var moduleApplicationAssemblies = modules
 		   .Select(module => module.ApplicationAssembly)
 		   .ToArray();
-		
+
 		services.AddMediatR(config =>
 		{
 			config.RegisterServicesFromAssemblies(moduleApplicationAssemblies);

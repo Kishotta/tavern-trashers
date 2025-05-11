@@ -1,5 +1,4 @@
 using Scalar.AspNetCore;
-using TavernTrashers.Api.Common.Presentation;
 using TavernTrashers.Api.Common.Presentation.Endpoints;
 using TavernTrashers.Api.Extensions;
 using TavernTrashers.ServiceDefaults;
@@ -22,6 +21,8 @@ builder.Services
 		   .AllowAnyOrigin()));
 
 var app = builder.Build();
+
+app.MapMcp();
 
 app.UseCors();
 
