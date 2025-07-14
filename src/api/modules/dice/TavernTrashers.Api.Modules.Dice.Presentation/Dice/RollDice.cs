@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using ModelContextProtocol.Server;
+using TavernTrashers.Api.Common.Domain.Results.Extensions;
 using TavernTrashers.Api.Common.Presentation.Endpoints;
 using TavernTrashers.Api.Modules.Dice.Application.Dice;
 
@@ -75,11 +76,10 @@ public static class RollDiceTool
 	public static async Task<string> RollDice(
 		ISender sender,
 		[Description("The dice expression to evaluate.")]
-		string expression)
-	{
-		var result = await sender.Send(new RollDiceCommand(expression));
-		return result.IsSuccess
-			? JsonSerializer.Serialize(result.Value)
-			: JsonSerializer.Serialize(result.Error);
-	}
+		string expression) =>
+		await sender
+		   .Send(new RollDiceCommand(expression))
+		   .MatchAsync(
+				roll => JsonSerializer.Serialize(roll),
+				result => JsonSerializer.Serialize(result.Error));
 }

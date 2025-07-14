@@ -1,11 +1,12 @@
+using FluentValidation;
 using TavernTrashers.Api.Common.Application.Clock;
+using TavernTrashers.Api.Common.Application.Data;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
 using TavernTrashers.Api.Modules.Dice.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Dice.Domain.AbstractSyntaxTree;
 using TavernTrashers.Api.Modules.Dice.Domain.DiceEngine;
-using TavernTrashers.Api.Modules.Dice.Domain.RecursiveDescentParser;
 using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
 
 namespace TavernTrashers.Api.Modules.Dice.Application.Dice;
@@ -13,6 +14,21 @@ namespace TavernTrashers.Api.Modules.Dice.Application.Dice;
 public sealed record RerollDiceCommand(
 	Guid RollId,
 	IReadOnlyList<int> DiceIndices) : ICommand<RollResponse>;
+
+internal sealed class RerollDiceCommandValidator : AbstractValidator<RerollDiceCommand>
+{
+	public RerollDiceCommandValidator()
+	{
+		RuleFor(command => command.RollId).NotEmpty();
+		RuleFor(command => command.DiceIndices)
+		   .NotEmpty()
+		   .WithMessage("At least one dice index must be specified.")
+		   .Must(BeValidArrayIndices)
+		   .WithMessage("All dice indices must be non-negative.");
+	}
+
+	private static bool BeValidArrayIndices(IReadOnlyList<int> indices) => indices.All(index => index >= 0);
+}
 
 internal sealed class RerollDiceCommandHandler(
 	IRollRepository rollRepository,
@@ -22,38 +38,29 @@ internal sealed class RerollDiceCommandHandler(
 	: ICommandHandler<RerollDiceCommand, RollResponse>
 {
 	public async Task<Result<RollResponse>> Handle(RerollDiceCommand command, CancellationToken cancellationToken) =>
-		await rollRepository.GetAsync(command.RollId, cancellationToken)
-		   .ThenAsync(ParseExpression)
-		   .ThenAsync(ReevaluateExpression(command))
-		   .ThenAsync(CreateReroll())
-		   .DoAsync(async roll =>
-			{
-				rollRepository.Add(roll);
-
-				await unitOfWork.SaveChangesAsync(cancellationToken);
-			})
+		await rollRepository
+		   .GetAsync(command.RollId, cancellationToken)
+		   .ThenAsync(originalRoll =>
+				originalRoll.DiceExpression
+				   .Then(originalDiceExpression => ReevaluateOriginalExpression(originalRoll, originalDiceExpression, command))
+				   .Then(newOutcome => CreateRerollEntity(newOutcome, originalRoll)))
+		   .DoAsync(rollRepository.Add)
+		   .SaveChangesAsync(unitOfWork, cancellationToken)
 		   .TransformAsync(roll => (RollResponse)roll);
 
-	private static Result<(Roll Original, IExpressionNode Ast)> ParseExpression(Roll original) =>
-		new DiceParser(original.Expression).ParseExpression()
-		   .Transform(ast => (Original: original, Ast: ast));
-
-	private Func<(Roll Original, IExpressionNode Ast), Result<(RollOutcome Outcome, Roll Original)>>
-		ReevaluateExpression(RerollDiceCommand command) =>
-		tuple =>
-		{
-			var rerollDiceEngine = new RerollDiceEngine(
-				tuple.Original.RawRolls.ToList(),
+	private Result<RollOutcome> ReevaluateOriginalExpression(
+		Roll originalRoll,
+		IExpressionNode originalDiceExpression,
+		RerollDiceCommand command) =>
+		originalDiceExpression
+		   .Evaluate(new RerollDiceEngine(
+				originalRoll.RawRolls.ToList(),
 				command.DiceIndices,
-				fallbackDiceEngine);
-			return tuple.Ast.Evaluate(rerollDiceEngine)
-			   .Transform(outcome => (Outcome: outcome, tuple.Original));
-		};
+				fallbackDiceEngine));
 
-	private Func<(RollOutcome Outcome, Roll Original), Roll> CreateReroll() =>
-		tuple => Roll.Reroll(
-			tuple.Original,
-			tuple.Outcome,
-			dateTimeProvider.UtcNow
-		);
+	private Result<Roll> CreateRerollEntity(RollOutcome newOutcome, Roll originalRoll) =>
+		Roll.Reroll(
+			originalRoll,
+			newOutcome,
+			dateTimeProvider.UtcNow);
 }

@@ -1,4 +1,7 @@
 using TavernTrashers.Api.Common.Domain.Entities;
+using TavernTrashers.Api.Common.Domain.Results;
+using TavernTrashers.Api.Modules.Dice.Domain.AbstractSyntaxTree;
+using TavernTrashers.Api.Modules.Dice.Domain.RecursiveDescentParser;
 
 namespace TavernTrashers.Api.Modules.Dice.Domain.Rolls;
 
@@ -11,6 +14,7 @@ public sealed class Roll : Entity
 	public IReadOnlyCollection<Roll> Children => _children.AsReadOnly();
 
 	public string Expression { get; private set; } = string.Empty;
+	public Result<IExpressionNode> DiceExpression => new DiceParser(Expression).ParseExpression();
 	public int Total { get; private set; }
 	public int Minimum { get; private set; }
 	public int Maximum { get; private set; }
