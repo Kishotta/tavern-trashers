@@ -99,7 +99,7 @@ public class DiceParser(string input)
 
 		// sides
 		int sides;
-		if (PeekChar() == 'f' || PeekChar() == 'F')
+		if (PeekChar() == 'f')
 		{
 			sides = 0;
 			Advance();
@@ -161,7 +161,7 @@ public class DiceParser(string input)
 	private char PeekChar()
 	{
 		SkipWhitespace();
-		return _position < input.Length ? input[_position] : '\0';
+		return _position < input.Length ? char.ToLowerInvariant(input[_position]) : '\0';
 	}
 
 	private bool PeekIsDigit()
@@ -184,7 +184,7 @@ public class DiceParser(string input)
 	private bool Match(char c)
 	{
 		SkipWhitespace();
-		return PeekChar() == c && Advance() >= 0;
+		return char.ToLowerInvariant(PeekChar()) == char.ToLowerInvariant(c) && Advance() >= 0;
 	}
 
 	private Result Expect(char c) =>

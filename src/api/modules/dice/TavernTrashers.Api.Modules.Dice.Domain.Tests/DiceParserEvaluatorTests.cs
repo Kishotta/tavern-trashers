@@ -181,7 +181,7 @@ public class DiceParserEvaluatorTests
 		var astRes = parser.ParseExpression();
 		astRes.IsSuccess.ShouldBeTrue();
 		// Provide a fate die result of 0 (not max)
-		var stub = new StubEngine(new[] { new DieResult(0, "f") });
+		var stub = new StubEngine([new(0, "f")]);
 
 		var outcome = astRes.Value.Evaluate(stub).Value;
 
@@ -189,10 +189,28 @@ public class DiceParserEvaluatorTests
 		outcome.KeptRolls.ShouldBeEquivalentTo(new List<DieResult> { new(0, "f") });
 
 		// Provide a fate die result of -1 (not max)
-		stub    = new(new[] { new DieResult(-1, "f") });
+		stub    = new([new(-1, "f")]);
 		outcome = astRes.Value.Evaluate(stub).Value;
 		outcome.RawRolls.ShouldBeEquivalentTo(new List<DieResult> { new(-1, "f") });
 		outcome.KeptRolls.ShouldBeEquivalentTo(new List<DieResult> { new(-1, "f") });
+	}
+
+	[Theory]
+	[InlineData("2D6KH1", 6, "6", 1, "6")]
+	[InlineData("2d6kh1", 6, "6", 1, "6")]
+	[InlineData("2D6Kl1", 1, "6", 1, "6")]
+	[InlineData("2d6kl1", 1, "6", 1, "6")]
+	public void Parser_Is_Case_Insensitive(string expression, int expectedValue, string expectedSize, int? expectedValue2, string expectedSize2)
+	{
+		var parser = new DiceParser(expression);
+		var astRes = parser.ParseExpression();
+		astRes.IsSuccess.ShouldBeTrue();
+		var stubRolls = new List<DieResult> { new(expectedValue, expectedSize) };
+		if (expectedValue2.HasValue)
+			stubRolls.Add(new(expectedValue2.Value, expectedSize2));
+		var stub = new StubEngine(stubRolls);
+		var outcome = astRes.Value.Evaluate(stub).Value;
+		outcome.RawRolls.ShouldBeEquivalentTo(stubRolls);
 	}
 
 	private class StubEngine(IEnumerable<DieResult> rolls) : IDiceEngine
