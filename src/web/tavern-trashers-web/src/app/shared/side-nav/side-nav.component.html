@@ -13,38 +13,27 @@
   <nav class="mt-8">
     <ul role="list" class="flex flex-col items-center space-y-1">
       <li>
-        <!-- Current: "bg-gray-800 text-white", Default: "text-gray-400 hover:text-white hover:bg-gray-800" -->
-        <a
+        <tt-side-nav-link
           routerLink="/"
-          class="group flex gap-x-3 rounded-md bg-gray-800 p-3 text-sm/6 font-semibold text-white"
-        >
-          <div class="size-6 shrink-0">
-            <i class="fa-light fa-house fa-fw fa-xl"></i>
-          </div>
-          <span class="sr-only">Dashboard</span>
-        </a>
+          [routerLinkActiveOptions]="{ exact: true }"
+          label="Dashboard"
+          iconClass="fa-light fa-house fa-fw fa-xl"
+        ></tt-side-nav-link>
       </li>
+
       <li>
-        <a
+        <tt-side-nav-link
           routerLink="/campaigns"
-          class="group flex gap-x-3 rounded-md p-3 text-sm/6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white"
-        >
-          <div class="size-6 shrink-0">
-            <i class="fa-light fa-books fa-fw fa-xl"></i>
-          </div>
-          <span class="sr-only">Campaigns</span>
-        </a>
+          label="Campaigns"
+          iconClass="fa-light fa-books fa-fw fa-xl"
+        ></tt-side-nav-link>
       </li>
       <li>
-        <a
+        <tt-side-nav-link
           routerLink="/rolls"
-          class="group flex gap-x-3 rounded-md p-3 text-sm/6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white"
-        >
-          <div class="size-6 shrink-0">
-            <i class="fa-light fa-dice-d20 fa-fw fa-xl"></i>
-          </div>
-          <span class="sr-only">Rolls</span>
-        </a>
+          label="Rolls"
+          iconClass="fa-light fa-dice-d20 fa-fw fa-xl"
+        ></tt-side-nav-link>
       </li>
     </ul>
   </nav>
