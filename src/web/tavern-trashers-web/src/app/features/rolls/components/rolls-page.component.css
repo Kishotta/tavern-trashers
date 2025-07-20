@@ -1,0 +1,17 @@
+.rolls-page {
+  padding: 2rem;
+}
+
+.rolls-page h1 {
+  margin-bottom: 1.5rem;
+}
+
+.rolls-page ul {
+  list-style: none;
+  padding: 0;
+}
+
+.rolls-page li {
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}

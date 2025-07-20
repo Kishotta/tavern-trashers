@@ -19,6 +19,8 @@ import { authReducer } from './features/auth/store/auth.reducer';
 import { campaignsReducer } from './features/campaigns/store/campaigns.reducer';
 import { CampaignsEffects } from './features/campaigns/store/campaigns.effects';
 import { layoutReducer } from './state/layout/layout.reducer';
+import { rollsReducer } from './features/rolls/store/rolls.reducer';
+import { RollsEffects } from './features/rolls/store/rolls.effects';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
@@ -36,7 +38,8 @@ export const appConfig: ApplicationConfig = {
     provideState({ name: 'auth', reducer: authReducer }),
     provideState({ name: 'campaigns', reducer: campaignsReducer }),
     provideState({ name: 'layout', reducer: layoutReducer }),
-    provideEffects([AuthEffects, CampaignsEffects]),
+    provideState({ name: 'rolls', reducer: rollsReducer }),
+    provideEffects([AuthEffects, CampaignsEffects, RollsEffects]),
     provideStoreDevtools({
       maxAge: 25, // Retains last 25 states
       logOnly: !isDevMode(), // Restrict extension to log-only mode

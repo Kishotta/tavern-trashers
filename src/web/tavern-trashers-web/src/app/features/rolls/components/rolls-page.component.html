@@ -1,0 +1,52 @@
+<section class="rolls-page">
+  <h1>All Dice Rolls</h1>
+  @if (rolls$ | async; as rolls) {
+  <ul>
+    @if (rolls.length === 0) {
+    <li>No rolls found.</li>
+    } @else { @for (roll of rolls; track roll.id) {
+    <li class="mb-6">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          @for (token of parseDiceExpression(roll.expression); track $index) {
+          @if (token.type === 'die') { @for (i of counter(token.count); track i)
+          {
+          <div class="relative">
+            <i
+              class="fa-light fa-dice-d{{
+                token.size.toLowerCase()
+              }} fa-fw fa-2xl"
+              [ngClass]="{
+                'opacity-50 grayscale': !isKept(
+                  roll.rawRolls[rawRollIndex(roll.rawRolls, token, i)],
+                  roll.keptRolls
+                )
+              }"
+            ></i>
+            <div
+              class="absolute inset-0 flex w-full h-full items-center justify-center"
+            >
+              <span class="font-normal text-xl">
+                {{
+                  roll.rawRolls[rawRollIndex(roll.rawRolls, token, i)]?.value ??
+                    "?"
+                }}
+              </span>
+            </div>
+          </div>
+          } } @else if (token.type === 'number') {
+          <span class="font-mono text-lg">{{ token.value }}</span>
+          } @else if (token.type === 'operator') {
+          <span class="font-mono text-lg">{{ token.op }}</span>
+          } }
+          <span>=</span>
+          <span class="font-bold text-lg">{{ roll.total }}</span>
+        </div>
+      </div>
+    </li>
+    } }
+  </ul>
+  } @else {
+  <p>Loading rolls...</p>
+  }
+</section>

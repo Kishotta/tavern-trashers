@@ -28,4 +28,11 @@ export const routes: Routes = [
         (m) => m.campaignRoutes
       ),
   },
+  {
+    path: 'rolls',
+    loadComponent: () =>
+      import('./features/rolls/components/rolls-page.component').then(
+        (m) => m.RollsPageComponent
+      ),
+  },
 ];
