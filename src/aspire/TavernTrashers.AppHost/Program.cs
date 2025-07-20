@@ -49,7 +49,7 @@ var gateway = builder.AddProject<TavernTrashers_Gateway>("gateway")
    .WaitFor(identity)
    .WithExternalHttpEndpoints();
 
-builder.AddNpmApp("web", "../../Web/tavern-trashers-web")
+builder.AddNpmApp("web", "../../web/tavern-trashers-web")
    .WithReference(gateway)
    .WaitFor(gateway)
    .WithReference(identity)
