@@ -25,10 +25,10 @@ public record DiceRollNode(
 		var rawRolls  = RollDice(diceEngine);
 		var keptRolls = KeepDropDice(rawRolls);
 
-		var actualTotal        = keptRolls.Sum();
+		var actualTotal = keptRolls.Sum(dice => dice.Value);
 		var theoreticalMinimum = keptRolls.Count * (sides == 0 ? -1 : 1);
 		var theoreticalMaximum = keptRolls.Count * (sides == 0 ? 1 : sides);
-		var theoreticalAverage = CalculateTheoreticalAverage(keptRolls);
+		var theoreticalAverage = CalculateTheoreticalAverage(keptRolls.Count);
 
 		return new RollOutcome(
 			actualTotal,
@@ -40,33 +40,41 @@ public record DiceRollNode(
 		);
 	}
 
-	private List<int> RollDice(IDiceEngine diceEngine)
+	private List<DieResult> RollDice(IDiceEngine diceEngine)
 	{
-		var rawRolls = new List<int>();
+		var rawRolls = new List<DieResult>();
 		for (var i = 0; i < count; i++)
 		{
 			var roll = diceEngine.Roll(sides);
 			rawRolls.Add(roll);
-			// handle explode
+			
 #pragma warning disable S127
-			if (explode && roll == sides) i--; // roll again
+			i = CheckForExplodingDice(roll, i);
 #pragma warning restore S127
 		}
 
 		return rawRolls;
 	}
 
-	private List<int> KeepDropDice(List<int> raw) =>
+	private int CheckForExplodingDice(DieResult roll, int index)
+	{
+		var explosionValue = sides == 0 ? 1 : sides; // fate dice max is 1, otherwise use dice size
+		return explode && roll.Value == explosionValue
+			? index - 1 
+			: index;
+	}
+
+	private List<DieResult> KeepDropDice(List<DieResult> raw) =>
 		mode switch
 		{
-			KeepDropMode.KeepHighest => raw.OrderByDescending(x => x).Take(modeCount).ToList(),
-			KeepDropMode.KeepLowest  => raw.OrderBy(x => x).Take(modeCount).ToList(),
-			KeepDropMode.DropHighest => raw.OrderByDescending(x => x).Skip(modeCount).ToList(),
-			KeepDropMode.DropLowest  => raw.OrderBy(x => x).Skip(modeCount).ToList(),
+			KeepDropMode.KeepHighest => raw.OrderByDescending(x => x.Value).Take(modeCount).ToList(),
+			KeepDropMode.KeepLowest  => raw.OrderBy(x => x.Value).Take(modeCount).ToList(),
+			KeepDropMode.DropHighest => raw.OrderByDescending(x => x.Value).Skip(modeCount).ToList(),
+			KeepDropMode.DropLowest  => raw.OrderBy(x => x.Value).Skip(modeCount).ToList(),
 			_                        => raw,
 		};
 
-	private double CalculateTheoreticalAverage(List<int> kept)
+	private double CalculateTheoreticalAverage(int keptCount)
 	{
 		// rough average: sum of each die's expected value
 		var perDieAverage = sides switch
@@ -78,7 +86,7 @@ public record DiceRollNode(
 		return mode switch
 		{
 			KeepDropMode.None => count * perDieAverage,
-			_                 => kept.Count * perDieAverage,
+			_                 => keptCount * perDieAverage,
 		};
 	}
 }

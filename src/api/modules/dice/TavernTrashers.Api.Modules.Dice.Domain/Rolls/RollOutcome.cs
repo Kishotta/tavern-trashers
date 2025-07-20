@@ -5,8 +5,8 @@ public record RollOutcome(
 	int Minimum,
 	int Maximum,
 	double Average,
-	IReadOnlyList<int> RawRolls,
-	IReadOnlyList<int> KeptRolls)
+	IReadOnlyList<DieResult> RawRolls,
+	IReadOnlyList<DieResult> KeptRolls)
 {
 	public static RollOutcome Constant(int value) =>
 		new(value,

@@ -1,3 +1,5 @@
+using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
+
 namespace TavernTrashers.Api.Modules.Dice.Domain.DiceEngine;
 
 public interface IDiceEngine
@@ -10,5 +12,5 @@ public interface IDiceEngine
 	/// </remarks>
 	/// <param name="sides"></param>
 	/// <returns></returns>
-	int Roll(int sides);
+	DieResult Roll(int sides);
 }

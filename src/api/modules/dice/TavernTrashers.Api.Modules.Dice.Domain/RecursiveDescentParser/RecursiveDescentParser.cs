@@ -99,7 +99,7 @@ public class DiceParser(string input)
 
 		// sides
 		int sides;
-		if (PeekChar() == 'F')
+		if (PeekChar() == 'f' || PeekChar() == 'F')
 		{
 			sides = 0;
 			Advance();

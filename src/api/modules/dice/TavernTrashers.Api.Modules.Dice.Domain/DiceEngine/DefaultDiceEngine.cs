@@ -1,3 +1,5 @@
+using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
+
 namespace TavernTrashers.Api.Modules.Dice.Domain.DiceEngine;
 
 public class DefaultDiceEngine(int? seed = null) : IDiceEngine
@@ -6,8 +8,8 @@ public class DefaultDiceEngine(int? seed = null) : IDiceEngine
 		? new(seed.Value)
 		: new Random();
 
-	public int Roll(int sides) =>
+	public DieResult Roll(int sides) =>
 		sides == 0
-			? _rng.Next(0, 3) - 1      // Fate: map 0,1,2 → –1,0,1
-			: _rng.Next(1, sides + 1); // standard 1..sides
+			? new(_rng.Next(0, 3) - 1, "f")                   // Fate: map 0,1,2 → –1,0,1
+			: new(_rng.Next(1, sides + 1), sides.ToString()); // standard 1..sides
 }

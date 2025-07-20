@@ -1,20 +1,22 @@
+using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
+
 namespace TavernTrashers.Api.Modules.Dice.Domain.DiceEngine;
 
 public class RerollDiceEngine(
-	IList<int> originalRawRolls,
+	IList<DieResult> originalRawRolls,
 	IEnumerable<int> rerollDiceIndices,
 	IDiceEngine fallback) : IDiceEngine
 {
 	private int _callIndex;
 
-	public int Roll(int sides)
+	public DieResult Roll(int sides)
 	{
 		if (_callIndex >= originalRawRolls.Count)
 			return fallback.Roll(sides);
 
-		var idx = _callIndex++;
-		return rerollDiceIndices.Contains(idx)
+		var diceIndex = _callIndex++;
+		return rerollDiceIndices.Contains(diceIndex)
 			? fallback.Roll(sides)
-			: originalRawRolls[idx];
+			: originalRawRolls[diceIndex];
 	}
 }

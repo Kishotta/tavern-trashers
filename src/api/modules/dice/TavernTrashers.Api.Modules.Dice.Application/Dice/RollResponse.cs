@@ -9,8 +9,8 @@ public sealed record RollResponse(
 	int Minimum,
 	int Maximum,
 	double Average,
-	IReadOnlyList<int> RawRolls,
-	IReadOnlyList<int> KeptRolls,
+	IReadOnlyList<DieResult> RawRolls,
+	IReadOnlyList<DieResult> KeptRolls,
 	DateTime RolledAtUtc)
 {
 	public IReadOnlyCollection<RollResponse> Children { get; init; } = new List<RollResponse>();

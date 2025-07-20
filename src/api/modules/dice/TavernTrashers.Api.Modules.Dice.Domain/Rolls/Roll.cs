@@ -22,8 +22,8 @@ public sealed class Roll : Entity
 	public DateTime RolledAtUtc { get; private set; }
 	public string ContextJson { get; private set; } = "{}";
 
-	public IReadOnlyList<int> RawRolls { get; private set; } = [];
-	public IReadOnlyList<int> KeptRolls { get; private set; } = [];
+	public IReadOnlyList<DieResult> RawRolls { get; private set; } = [];
+	public IReadOnlyList<DieResult> KeptRolls { get; private set; } = [];
 
 	public static Roll Create(string expression, RollOutcome rollOutcome, DateTime rolledAtUtc, string contextJson)
 	{
