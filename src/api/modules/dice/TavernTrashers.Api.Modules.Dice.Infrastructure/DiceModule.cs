@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TavernTrashers.Api.Common.Infrastructure.Database;
+using TavernTrashers.Api.Common.SourceGenerators;
 using TavernTrashers.Api.Modules.Dice.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Dice.Domain.DiceEngine;
 using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
@@ -13,17 +14,16 @@ using Module = TavernTrashers.Api.Common.Infrastructure.Modules.Module;
 
 namespace TavernTrashers.Api.Modules.Dice.Infrastructure;
 
+[GenerateModuleBoilerplate(DiceModuleName, DiceModuleSchema)]
 public class DiceModule : Module
 {
-	public override string Name => "Dice";
-	public override string Schema => "dice";
+	private const string DiceModuleName = "Dice";
+	private const string DiceModuleSchema = "dice";
+	public override string Name => DiceModuleName;
+	public override string Schema => DiceModuleSchema;
 
 	public override Assembly ApplicationAssembly => Application.AssemblyReference.Assembly;
 	public override Assembly PresentationAssembly => Presentation.AssemblyReference.Assembly;
-
-	public override Type IdempotentDomainEventHandlerType => typeof(IdempotentDomainEventHandler<>);
-	public override Type IdempotentIntegrationEventHandlerType => typeof(IdempotentIntegrationEventHandler<>);
-	public override Type IntegrationEventConsumerType => typeof(IntegrationEventConsumer<>);
 
 	protected override void AddDatabase(IHostApplicationBuilder builder) =>
 		builder.Services

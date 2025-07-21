@@ -2,6 +2,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\common\TavernTrashers.Api.Common.Infrastructure\TavernTrashers.Api.Common.Infrastructure.csproj"/>
+        <ProjectReference Include="..\..\..\common\TavernTrashers.Api.Common.SourceGenerators\TavernTrashers.Api.Common.SourceGenerators.csproj" OutputItemType="Analyzer"/>
         <ProjectReference Include="..\TavernTrashers.Api.Modules.Campaigns.Application\TavernTrashers.Api.Modules.Campaigns.Application.csproj"/>
         <ProjectReference Include="..\TavernTrashers.Api.Modules.Campaigns.Presentation\TavernTrashers.Api.Modules.Campaigns.Presentation.csproj"/>
     </ItemGroup>

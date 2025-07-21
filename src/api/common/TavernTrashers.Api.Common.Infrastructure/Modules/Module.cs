@@ -1,6 +1,8 @@
 using System.Reflection;
 using MassTransit;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using TavernTrashers.Api.Common.Application.EventBus;
 using TavernTrashers.Api.Common.Infrastructure.Inbox;
@@ -11,13 +13,28 @@ namespace TavernTrashers.Api.Common.Infrastructure.Modules;
 
 public abstract class Module : IModule
 {
-	public abstract Type IntegrationEventConsumerType { get; }
 	public abstract string Name { get; }
 	public abstract string Schema { get; }
 	public abstract Assembly ApplicationAssembly { get; }
 	public abstract Assembly PresentationAssembly { get; }
-	public abstract Type IdempotentDomainEventHandlerType { get; }
-	public abstract Type IdempotentIntegrationEventHandlerType { get; }
+
+	public Type IdempotentDomainEventHandlerType =>
+		GetType()
+		   .Assembly
+		   .GetTypes()
+		   .Single(t => t.Name.Contains($"{Name}IdempotentDomainEventHandler"));
+
+	private Type IntegrationEventConsumerType =>
+		GetType()
+		   .Assembly
+		   .GetTypes()
+		   .Single(t => t.Name.Contains($"{Name}IntegrationEventConsumer"));
+	
+	public Type IdempotentIntegrationEventHandlerType =>
+		GetType()
+		   .Assembly
+		   .GetTypes()
+		   .Single(t => t.Name.Contains($"{Name}IdempotentIntegrationEventHandler"));
 
 	public void AddModule(IHostApplicationBuilder builder)
 	{

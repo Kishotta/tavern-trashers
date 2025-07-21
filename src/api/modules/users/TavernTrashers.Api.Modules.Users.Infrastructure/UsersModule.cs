@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using TavernTrashers.Api.Common.Application.Authorization;
 using TavernTrashers.Api.Common.Infrastructure.Database;
+using TavernTrashers.Api.Common.SourceGenerators;
 using TavernTrashers.Api.Modules.Users.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Users.Application.Abstractions.Identity;
 using TavernTrashers.Api.Modules.Users.Domain.Users;
@@ -17,17 +18,16 @@ using Module = TavernTrashers.Api.Common.Infrastructure.Modules.Module;
 
 namespace TavernTrashers.Api.Modules.Users.Infrastructure;
 
+[GenerateModuleBoilerplate(UsersModuleName, UsersModuleSchema)]
 public class UsersModule : Module
 {
-	public override string Name => "Users";
-	public override string Schema => "users";
+	private const string UsersModuleName = "Users";
+	private const string UsersModuleSchema = "users";
+	public override string Name => UsersModuleName;
+	public override string Schema => UsersModuleSchema;
 
 	public override Assembly ApplicationAssembly => Application.AssemblyReference.Assembly;
 	public override Assembly PresentationAssembly => Presentation.AssemblyReference.Assembly;
-
-	public override Type IdempotentDomainEventHandlerType => typeof(IdempotentDomainEventHandler<>);
-	public override Type IdempotentIntegrationEventHandlerType => typeof(IdempotentIntegrationEventHandler<>);
-	public override Type IntegrationEventConsumerType => typeof(IntegrationEventConsumer<>);
 
 	protected override void AddDatabase(IHostApplicationBuilder builder) =>
 		builder.Services
