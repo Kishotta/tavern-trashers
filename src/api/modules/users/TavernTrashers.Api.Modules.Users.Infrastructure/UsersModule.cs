@@ -18,13 +18,13 @@ using Module = TavernTrashers.Api.Common.Infrastructure.Modules.Module;
 
 namespace TavernTrashers.Api.Modules.Users.Infrastructure;
 
-[GenerateModuleBoilerplate(UsersModuleName, UsersModuleSchema)]
+[GenerateModuleBoilerplate(ModuleName, ModuleSchema)]
 public class UsersModule : Module
 {
-	private const string UsersModuleName = "Users";
-	private const string UsersModuleSchema = "users";
-	public override string Name => UsersModuleName;
-	public override string Schema => UsersModuleSchema;
+	public const string ModuleName = "Users";
+	public const string ModuleSchema = "users";
+	public override string Name => ModuleName;
+	public override string Schema => ModuleSchema;
 
 	public override Assembly ApplicationAssembly => Application.AssemblyReference.Assembly;
 	public override Assembly PresentationAssembly => Presentation.AssemblyReference.Assembly;

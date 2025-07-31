@@ -15,13 +15,13 @@ using Module = TavernTrashers.Api.Common.Infrastructure.Modules.Module;
 
 namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure;
 
-[GenerateModuleBoilerplate(CampaignsModuleName, CampaignsModuleSchema)]
+[GenerateModuleBoilerplate(ModuleName, ModuleSchema)]
 public class CampaignsModule : Module
 {
-	private const string CampaignsModuleName = "Campaigns";
-	private const string CampaignsModuleSchema = "campaigns";
-	public override string Name => CampaignsModuleName;
-	public override string Schema => CampaignsModuleSchema;
+	public const string ModuleName = "Campaigns";
+	public const string ModuleSchema = "campaigns";
+	public override string Name => ModuleName;
+	public override string Schema => ModuleSchema;
 
 	public override Assembly ApplicationAssembly => Application.AssemblyReference.Assembly;
 	public override Assembly PresentationAssembly => Presentation.AssemblyReference.Assembly;

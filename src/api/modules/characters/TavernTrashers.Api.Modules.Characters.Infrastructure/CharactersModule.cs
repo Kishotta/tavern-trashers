@@ -3,22 +3,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TavernTrashers.Api.Common.Infrastructure.Database;
 using TavernTrashers.Api.Common.SourceGenerators;
-using TavernTrashers.Api.Modules.Dice.Application.Abstractions.Data;
-using TavernTrashers.Api.Modules.Dice.Domain.DiceEngine;
-using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
-using TavernTrashers.Api.Modules.Dice.Infrastructure.Database;
-using TavernTrashers.Api.Modules.Dice.Infrastructure.Dice;
-using TavernTrashers.Api.Modules.Dice.Infrastructure.Inbox;
-using TavernTrashers.Api.Modules.Dice.Infrastructure.Outbox;
+using TavernTrashers.Api.Modules.Characters.Application.Abstractions.Data;
+using TavernTrashers.Api.Modules.Characters.Infrastructure.Database;
+using TavernTrashers.Api.Modules.Characters.Infrastructure.Inbox;
+using TavernTrashers.Api.Modules.Characters.Infrastructure.Outbox;
 using Module = TavernTrashers.Api.Common.Infrastructure.Modules.Module;
 
-namespace TavernTrashers.Api.Modules.Dice.Infrastructure;
+namespace TavernTrashers.Api.Modules.Characters.Infrastructure;
 
 [GenerateModuleBoilerplate(ModuleName, ModuleSchema)]
-public class DiceModule : Module
+public class CharactersModule : Module
 {
-	public const string ModuleName = "Dice";
-	public const string ModuleSchema = "dice";
+	public const string ModuleName = "Characters";
+	public const string ModuleSchema = "characters";
 	public override string Name => ModuleName;
 	public override string Schema => ModuleSchema;
 
@@ -27,15 +24,12 @@ public class DiceModule : Module
 
 	protected override void AddDatabase(IHostApplicationBuilder builder) =>
 		builder.Services
-		   .AddDbContext<DiceDbContext>(Postgres.StandardOptions(builder.Configuration, Schema))
-		   .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<DiceDbContext>())
-		   .AddScoped<IRollRepository, RollRepository>();
+		   .AddDbContext<CharactersDbContext>(Postgres.StandardOptions(builder.Configuration, Schema))
+		   .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<CharactersDbContext>());
 
 	protected override void ConfigureServices(IHostApplicationBuilder builder)
 	{
 		ConfigureOutbox<OutboxOptions, ProcessOutboxJob, ConfigureProcessOutboxJob>(builder);
 		ConfigureInbox<InboxOptions, ProcessInboxJob, ConfigureProcessInboxJob>(builder);
-
-		builder.Services.AddSingleton<IDiceEngine, DefaultDiceEngine>();
 	}
 }
