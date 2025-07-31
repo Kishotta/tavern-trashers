@@ -1,0 +1,11 @@
+<Project>
+    <PropertyGroup>
+        <ManagePackegeVersionsCentrally>true</ManagePackegeVersionsCentrally>
+    </PropertyGroup>
+    <ItemGroup>
+        <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="*">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </GlobalPackageReference>
+    </ItemGroup>
+</Project>
