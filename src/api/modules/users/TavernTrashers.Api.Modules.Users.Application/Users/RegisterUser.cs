@@ -5,7 +5,6 @@ using TavernTrashers.Api.Common.Application.Exceptions;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
-using TavernTrashers.Api.Modules.Users.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Users.Application.Abstractions.Identity;
 using TavernTrashers.Api.Modules.Users.Domain.Users;
 using TavernTrashers.Api.Modules.Users.IntegrationEvents;
@@ -20,8 +19,7 @@ public sealed record RegisterUserCommand(
 
 internal sealed class RegisterUserCommandHandler(
 	IIdentityProviderService identityProvider,
-	IUserRepository userRepository,
-	IUnitOfWork unitOfWork)
+	IUserRepository userRepository)
 	: ICommandHandler<RegisterUserCommand, AuthToken>
 {
 	public async Task<Result<AuthToken>> Handle(
@@ -29,12 +27,7 @@ internal sealed class RegisterUserCommandHandler(
 		CancellationToken cancellationToken) =>
 		await RegisterUserWithIdpAsync(request, cancellationToken)
 		   .ThenAsync(identityId => CreateUserEntityAsync(identityId, request))
-		   .DoAsync(async user =>
-			{
-				userRepository.Insert(user);
-
-				await unitOfWork.SaveChangesAsync(cancellationToken);
-			})
+		   .DoAsync(userRepository.Insert)
 		   .ThenAsync(user => identityProvider.GetUserAuthTokenAsync(
 				user.Email,
 				request.Password,

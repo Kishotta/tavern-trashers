@@ -3,7 +3,6 @@ using TavernTrashers.Api.Common.Application.EventBus;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
-using TavernTrashers.Api.Modules.Users.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Users.Domain.Users;
 using TavernTrashers.Api.Modules.Users.IntegrationEvents;
 
@@ -14,21 +13,14 @@ public sealed record ChangeUserNameCommand(
 	string FirstName,
 	string LastName) : ICommand<UserResponse>;
 
-internal sealed class ChangeUserNameCommandHandler(
-	IUserRepository userRepository,
-	IUnitOfWork unitOfWork) : ICommandHandler<ChangeUserNameCommand, UserResponse>
+internal sealed class ChangeUserNameCommandHandler(IUserRepository userRepository) : ICommandHandler<ChangeUserNameCommand, UserResponse>
 {
 	public async Task<Result<UserResponse>> Handle(
 		ChangeUserNameCommand request,
 		CancellationToken cancellationToken) =>
 		await userRepository
 		   .GetAsync(request.UserId, cancellationToken)
-		   .DoAsync(async user =>
-			{
-				user.ChangeName(request.FirstName, request.LastName);
-
-				await unitOfWork.SaveChangesAsync(cancellationToken);
-			})
+		   .DoAsync(user => user.ChangeName(request.FirstName, request.LastName))
 		   .TransformAsync(user => (UserResponse)user);
 }
 

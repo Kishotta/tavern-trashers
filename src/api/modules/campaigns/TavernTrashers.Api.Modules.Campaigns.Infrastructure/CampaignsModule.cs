@@ -1,9 +1,8 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TavernTrashers.Api.Common.Infrastructure.Database;
+using TavernTrashers.Api.Common.Infrastructure.Modules;
 using TavernTrashers.Api.Common.SourceGenerators;
-using TavernTrashers.Api.Modules.Campaigns.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns;
 using TavernTrashers.Api.Modules.Campaigns.Domain.Members;
 using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Campaigns;
@@ -27,9 +26,8 @@ public class CampaignsModule : Module
 	public override Assembly PresentationAssembly => Presentation.AssemblyReference.Assembly;
 
 	protected override void AddDatabase(IHostApplicationBuilder builder) =>
-		builder.Services
-		   .AddDbContext<CampaignsDbContext>(Postgres.StandardOptions(builder.Configuration, Schema))
-		   .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<CampaignsDbContext>())
+		builder
+		   .AddStandardModuleDatabase<CampaignsDbContext>(Name, Schema)
 		   .AddScoped<ICampaignRepository, CampaignRepository>()
 		   .AddScoped<IMemberRepository, MemberRepository>();
 

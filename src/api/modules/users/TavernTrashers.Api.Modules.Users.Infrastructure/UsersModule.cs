@@ -3,9 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using TavernTrashers.Api.Common.Application.Authorization;
-using TavernTrashers.Api.Common.Infrastructure.Database;
+using TavernTrashers.Api.Common.Infrastructure.Modules;
 using TavernTrashers.Api.Common.SourceGenerators;
-using TavernTrashers.Api.Modules.Users.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Users.Application.Abstractions.Identity;
 using TavernTrashers.Api.Modules.Users.Domain.Users;
 using TavernTrashers.Api.Modules.Users.Infrastructure.Authorization;
@@ -30,9 +29,8 @@ public class UsersModule : Module
 	public override Assembly PresentationAssembly => Presentation.AssemblyReference.Assembly;
 
 	protected override void AddDatabase(IHostApplicationBuilder builder) =>
-		builder.Services
-		   .AddDbContext<UsersDbContext>(Postgres.StandardOptions(builder.Configuration, Schema))
-		   .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<UsersDbContext>())
+		builder
+		   .AddStandardModuleDatabase<UsersDbContext>(Name, Schema)
 		   .AddScoped<IUserRepository, UserRepository>();
 
 	protected override void ConfigureServices(IHostApplicationBuilder builder)

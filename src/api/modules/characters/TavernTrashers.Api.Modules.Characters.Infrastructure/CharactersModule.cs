@@ -1,9 +1,7 @@
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TavernTrashers.Api.Common.Infrastructure.Database;
+using TavernTrashers.Api.Common.Infrastructure.Modules;
 using TavernTrashers.Api.Common.SourceGenerators;
-using TavernTrashers.Api.Modules.Characters.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Characters.Infrastructure.Database;
 using TavernTrashers.Api.Modules.Characters.Infrastructure.Inbox;
 using TavernTrashers.Api.Modules.Characters.Infrastructure.Outbox;
@@ -23,9 +21,8 @@ public class CharactersModule : Module
 	public override Assembly PresentationAssembly => Presentation.AssemblyReference.Assembly;
 
 	protected override void AddDatabase(IHostApplicationBuilder builder) =>
-		builder.Services
-		   .AddDbContext<CharactersDbContext>(Postgres.StandardOptions(builder.Configuration, Schema))
-		   .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<CharactersDbContext>());
+		builder
+		   .AddStandardModuleDatabase<CharactersDbContext>(Name, Schema);
 
 	protected override void ConfigureServices(IHostApplicationBuilder builder)
 	{

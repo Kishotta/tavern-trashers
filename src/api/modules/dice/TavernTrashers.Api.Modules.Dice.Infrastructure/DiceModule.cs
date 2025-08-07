@@ -1,9 +1,8 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TavernTrashers.Api.Common.Infrastructure.Database;
+using TavernTrashers.Api.Common.Infrastructure.Modules;
 using TavernTrashers.Api.Common.SourceGenerators;
-using TavernTrashers.Api.Modules.Dice.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Dice.Domain.DiceEngine;
 using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
 using TavernTrashers.Api.Modules.Dice.Infrastructure.Database;
@@ -26,9 +25,8 @@ public class DiceModule : Module
 	public override Assembly PresentationAssembly => Presentation.AssemblyReference.Assembly;
 
 	protected override void AddDatabase(IHostApplicationBuilder builder) =>
-		builder.Services
-		   .AddDbContext<DiceDbContext>(Postgres.StandardOptions(builder.Configuration, Schema))
-		   .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<DiceDbContext>())
+		builder
+		   .AddStandardModuleDatabase<DiceDbContext>(Name, Schema)
 		   .AddScoped<IRollRepository, RollRepository>();
 
 	protected override void ConfigureServices(IHostApplicationBuilder builder)

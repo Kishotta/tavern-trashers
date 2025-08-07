@@ -1,10 +1,8 @@
 using FluentValidation;
 using TavernTrashers.Api.Common.Application.Clock;
-using TavernTrashers.Api.Common.Application.Data;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
-using TavernTrashers.Api.Modules.Dice.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Dice.Domain.DiceEngine;
 using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
 
@@ -23,18 +21,18 @@ internal sealed class RollDiceCommandValidator : AbstractValidator<RollDiceComma
 internal sealed class RollDiceCommandHandler(
 	IDiceEngine diceEngine,
 	IDateTimeProvider dateTimeProvider,
-	IRollRepository rollRepository,
-	IUnitOfWork unitOfWork)
+	IRollRepository rollRepository)
 	: ICommandHandler<RollDiceCommand, RollResponse>
 {
 	public async Task<Result<RollResponse>> Handle(RollDiceCommand command, CancellationToken cancellationToken) =>
-		await command.Expression
-		   .ParseDiceExpression()
-		   .Then(expression => expression.Evaluate(diceEngine))
-		   .Then(outcome => CreateRollEntity(command.Expression, outcome))
-		   .Do(rollRepository.Add)
-		   .SaveChangesAsync(unitOfWork, cancellationToken)
-		   .TransformAsync(roll => (RollResponse)roll);
+		await Task.FromResult(
+			command.Expression
+			   .ParseDiceExpression()
+			   .Then(expression => expression.Evaluate(diceEngine))
+			   .Then(outcome => CreateRollEntity(command.Expression, outcome))
+			   .Do(rollRepository.Add)
+			   .Transform(roll => (RollResponse)roll)
+		);
 
 	private Result<Roll> CreateRollEntity(string expression, RollOutcome outcome) =>
 		Roll.Create(

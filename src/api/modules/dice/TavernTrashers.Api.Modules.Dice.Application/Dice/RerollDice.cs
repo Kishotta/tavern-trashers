@@ -1,10 +1,8 @@
 using FluentValidation;
 using TavernTrashers.Api.Common.Application.Clock;
-using TavernTrashers.Api.Common.Application.Data;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
-using TavernTrashers.Api.Modules.Dice.Application.Abstractions.Data;
 using TavernTrashers.Api.Modules.Dice.Domain.AbstractSyntaxTree;
 using TavernTrashers.Api.Modules.Dice.Domain.DiceEngine;
 using TavernTrashers.Api.Modules.Dice.Domain.Rolls;
@@ -33,8 +31,7 @@ internal sealed class RerollDiceCommandValidator : AbstractValidator<RerollDiceC
 internal sealed class RerollDiceCommandHandler(
 	IRollRepository rollRepository,
 	IDiceEngine fallbackDiceEngine,
-	IDateTimeProvider dateTimeProvider,
-	IUnitOfWork unitOfWork)
+	IDateTimeProvider dateTimeProvider)
 	: ICommandHandler<RerollDiceCommand, RollResponse>
 {
 	public async Task<Result<RollResponse>> Handle(RerollDiceCommand command, CancellationToken cancellationToken) =>
@@ -45,7 +42,6 @@ internal sealed class RerollDiceCommandHandler(
 				   .Then(originalDiceExpression => ReevaluateOriginalExpression(originalRoll, originalDiceExpression, command))
 				   .Then(newOutcome => CreateRerollEntity(newOutcome, originalRoll)))
 		   .DoAsync(rollRepository.Add)
-		   .SaveChangesAsync(unitOfWork, cancellationToken)
 		   .TransformAsync(roll => (RollResponse)roll);
 
 	private Result<RollOutcome> ReevaluateOriginalExpression(

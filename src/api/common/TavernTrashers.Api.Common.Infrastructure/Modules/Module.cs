@@ -1,8 +1,6 @@
 using System.Reflection;
 using MassTransit;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using TavernTrashers.Api.Common.Application.EventBus;
 using TavernTrashers.Api.Common.Infrastructure.Inbox;
@@ -13,6 +11,12 @@ namespace TavernTrashers.Api.Common.Infrastructure.Modules;
 
 public abstract class Module : IModule
 {
+	private Type IntegrationEventConsumerType =>
+		GetType()
+		   .Assembly
+		   .GetTypes()
+		   .Single(t => t.Name.Contains($"{Name}IntegrationEventConsumer"));
+
 	public abstract string Name { get; }
 	public abstract string Schema { get; }
 	public abstract Assembly ApplicationAssembly { get; }
@@ -24,12 +28,6 @@ public abstract class Module : IModule
 		   .GetTypes()
 		   .Single(t => t.Name.Contains($"{Name}IdempotentDomainEventHandler"));
 
-	private Type IntegrationEventConsumerType =>
-		GetType()
-		   .Assembly
-		   .GetTypes()
-		   .Single(t => t.Name.Contains($"{Name}IntegrationEventConsumer"));
-	
 	public Type IdempotentIntegrationEventHandlerType =>
 		GetType()
 		   .Assembly
@@ -69,6 +67,7 @@ public abstract class Module : IModule
 		};
 
 	protected abstract void AddDatabase(IHostApplicationBuilder builder);
+
 	protected abstract void ConfigureServices(IHostApplicationBuilder builder);
 
 	protected void ConfigureOutbox<TOutboxOptions, TProcessOutboxJob, TConfigureProcessOutboxJob>(
