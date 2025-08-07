@@ -41,7 +41,6 @@ internal sealed class RerollDiceCommandHandler(
 				originalRoll.DiceExpression
 				   .Then(originalDiceExpression => ReevaluateOriginalExpression(originalRoll, originalDiceExpression, command))
 				   .Then(newOutcome => CreateRerollEntity(newOutcome, originalRoll)))
-		   .DoAsync(rollRepository.Add)
 		   .TransformAsync(roll => (RollResponse)roll);
 
 	private Result<RollOutcome> ReevaluateOriginalExpression(
@@ -56,7 +55,8 @@ internal sealed class RerollDiceCommandHandler(
 
 	private Result<Roll> CreateRerollEntity(RollOutcome newOutcome, Roll originalRoll) =>
 		Roll.Reroll(
-			originalRoll,
-			newOutcome,
-			dateTimeProvider.UtcNow);
+				originalRoll,
+				newOutcome,
+				dateTimeProvider.UtcNow)
+		   .Do(rollRepository.Add);
 }

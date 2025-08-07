@@ -27,7 +27,6 @@ internal sealed class RegisterUserCommandHandler(
 		CancellationToken cancellationToken) =>
 		await RegisterUserWithIdpAsync(request, cancellationToken)
 		   .ThenAsync(identityId => CreateUserEntityAsync(identityId, request))
-		   .DoAsync(userRepository.Insert)
 		   .ThenAsync(user => identityProvider.GetUserAuthTokenAsync(
 				user.Email,
 				request.Password,
@@ -43,14 +42,15 @@ internal sealed class RegisterUserCommandHandler(
 				request.FirstName,
 				request.LastName), cancellationToken);
 
-	private static User CreateUserEntityAsync(
+	private Result<User> CreateUserEntityAsync(
 		string identityId,
 		RegisterUserCommand request) =>
 		User.Create(
-			request.Email,
-			request.FirstName,
-			request.LastName,
-			identityId);
+				request.Email,
+				request.FirstName,
+				request.LastName,
+				identityId)
+		   .Do(userRepository.Insert);
 }
 
 internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>

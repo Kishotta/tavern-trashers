@@ -1,5 +1,6 @@
 using TavernTrashers.Api.Common.Domain.Auditing;
 using TavernTrashers.Api.Common.Domain.Entities;
+using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Modules.Users.Domain.Permissions;
 
 namespace TavernTrashers.Api.Modules.Users.Domain.Users;
@@ -17,7 +18,7 @@ public sealed class User : Entity
     
 	private User() { }
     
-	public static User Create(
+	public static Result<User> Create(
 		string email,
 		string firstName,
 		string lastName,

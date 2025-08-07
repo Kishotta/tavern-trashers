@@ -30,14 +30,14 @@ internal sealed class RollDiceCommandHandler(
 			   .ParseDiceExpression()
 			   .Then(expression => expression.Evaluate(diceEngine))
 			   .Then(outcome => CreateRollEntity(command.Expression, outcome))
-			   .Do(rollRepository.Add)
 			   .Transform(roll => (RollResponse)roll)
 		);
 
 	private Result<Roll> CreateRollEntity(string expression, RollOutcome outcome) =>
 		Roll.Create(
-			expression,
-			outcome,
-			dateTimeProvider.UtcNow,
-			"{}");
+				expression,
+				outcome,
+				dateTimeProvider.UtcNow,
+				"{}")
+		   .Do(rollRepository.Add);
 }

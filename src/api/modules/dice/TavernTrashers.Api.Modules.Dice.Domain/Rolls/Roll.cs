@@ -25,7 +25,7 @@ public sealed class Roll : Entity
 	public IReadOnlyList<DieResult> RawRolls { get; private set; } = [];
 	public IReadOnlyList<DieResult> KeptRolls { get; private set; } = [];
 
-	public static Roll Create(string expression, RollOutcome rollOutcome, DateTime rolledAtUtc, string contextJson)
+	public static Result<Roll> Create(string expression, RollOutcome rollOutcome, DateTime rolledAtUtc, string contextJson)
 	{
 		var rollEntry = new Roll
 		{
@@ -44,7 +44,7 @@ public sealed class Roll : Entity
 		return rollEntry;
 	}
 
-	public static Roll Reroll(Roll original, RollOutcome rollOutcome, DateTime rolledAtUtc)
+	public static Result<Roll> Reroll(Roll original, RollOutcome rollOutcome, DateTime rolledAtUtc)
 	{
 		var rollEntry = new Roll
 		{
