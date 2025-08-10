@@ -1,6 +1,6 @@
 namespace TavernTrashers.Api.Common.Application.Data;
 
-public interface IUnitOfWorkBase
+public interface IUnitOfWork
 {
 	Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

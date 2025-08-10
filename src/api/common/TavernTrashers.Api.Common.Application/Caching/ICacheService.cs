@@ -1,3 +1,5 @@
+using TavernTrashers.Api.Common.Application.Messaging;
+
 namespace TavernTrashers.Api.Common.Application.Caching;
 
 public interface ICacheService
@@ -12,3 +14,19 @@ public interface ICacheService
     
     Task RemoveAsync(string key, CancellationToken cancellationToken = default);
 }
+
+public interface ICacheKeyProvider
+{
+    string CacheKey { get; }
+}
+
+public interface ICacheDurationProvider
+{
+    TimeSpan CacheDuration { get; }
+}
+
+public interface ICacheQuery<TResponse> : IQuery<TResponse>, ICacheKeyProvider, ICacheDurationProvider;
+
+public interface ICacheInvalidationCommand : ICommand, ICacheKeyProvider;
+
+public interface ICacheInvalidationCommand<TResponse> : ICommand<TResponse>, ICacheKeyProvider;

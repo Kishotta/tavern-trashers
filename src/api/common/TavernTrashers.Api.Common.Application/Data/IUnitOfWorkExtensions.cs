@@ -6,7 +6,7 @@ public static class IUnitOfWorkExtensions
 {
 	public static async Task<Result> SaveChangesAsync(
 		this Result result,
-		IUnitOfWorkBase unitOfWork,
+		IUnitOfWork unitOfWork,
 		CancellationToken cancellationToken = default)
 	{
 		if (result.IsSuccess)
@@ -19,7 +19,7 @@ public static class IUnitOfWorkExtensions
 	
 	public static async Task<Result<TValue>> SaveChangesAsync<TValue>(
 		this Result<TValue> result,
-		IUnitOfWorkBase unitOfWork,
+		IUnitOfWork unitOfWork,
 		CancellationToken cancellationToken = default)
 	{
 		if (result.IsSuccess)
@@ -32,7 +32,7 @@ public static class IUnitOfWorkExtensions
 	
 	public static async Task<Result> SaveChangesAsync(
 		this Task<Result> resultTask,
-		IUnitOfWorkBase unitOfWork,
+		IUnitOfWork unitOfWork,
 		CancellationToken cancellationToken = default)
 	{
 		var result = await resultTask.ConfigureAwait(false);
@@ -47,7 +47,7 @@ public static class IUnitOfWorkExtensions
 	
 	public static async Task<Result<TValue>> SaveChangesAsync<TValue>(
 		this Task<Result<TValue>> resultTask,
-		IUnitOfWorkBase unitOfWork,
+		IUnitOfWork unitOfWork,
 		CancellationToken cancellationToken = default)
 	{
 		var result = await resultTask.ConfigureAwait(false);

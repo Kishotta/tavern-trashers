@@ -19,7 +19,7 @@ internal sealed class UnitOfWorkSaveChangesPipelineBehavior<TRequest, TResponse>
 			return response;
 
 		var moduleName = request.GetModuleName();
-		var unitOfWork = serviceProvider.GetRequiredKeyedService<IUnitOfWorkBase>(moduleName);
+		var unitOfWork = serviceProvider.GetRequiredKeyedService<IUnitOfWork>(moduleName);
 
 		await unitOfWork.SaveChangesAsync(cancellationToken);
 

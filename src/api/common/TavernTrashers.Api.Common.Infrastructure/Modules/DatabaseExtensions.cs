@@ -15,6 +15,6 @@ public static class DatabaseExtensions
 		builder
 		   .Services
 		   .AddDbContextPool<TDbContext>(Postgres.StandardOptions(builder.Configuration, moduleSchema))
-		   .AddKeyedScoped<IUnitOfWorkBase>(moduleName, (serviceProvider, _) =>
+		   .AddKeyedScoped<IUnitOfWork>(moduleName, (serviceProvider, _) =>
 				serviceProvider.GetRequiredService<TDbContext>());
 }

@@ -6,7 +6,7 @@ namespace TavernTrashers.Api.Common.Infrastructure.Modules;
 
 public abstract class ModuleDbContext<TModuleDbContext>(
 	string moduleSchema,
-	DbContextOptions<TModuleDbContext> options) : DbContext(options), IUnitOfWorkBase
+	DbContextOptions<TModuleDbContext> options) : DbContext(options), IUnitOfWork
 	where TModuleDbContext : ModuleDbContext<TModuleDbContext>
 {
 	protected abstract Assembly InfrastructureAssembly { get; }
