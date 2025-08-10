@@ -14,7 +14,7 @@ public static class DatabaseExtensions
 		where TDbContext : ModuleDbContext<TDbContext> =>
 		builder
 		   .Services
-		   .AddDbContext<TDbContext>(Postgres.StandardOptions(builder.Configuration, moduleSchema))
+		   .AddDbContextPool<TDbContext>(Postgres.StandardOptions(builder.Configuration, moduleSchema))
 		   .AddKeyedScoped<IUnitOfWorkBase>(moduleName, (serviceProvider, _) =>
 				serviceProvider.GetRequiredService<TDbContext>());
 }
