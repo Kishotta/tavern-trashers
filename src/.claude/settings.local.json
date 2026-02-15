@@ -3,7 +3,9 @@
     "allow": [
       "Bash(dotnet build:*)",
       "Bash(dotnet test:*)",
-      "Read(C:\\Users\\Kisho\\Projects\\tavern-trashers/**)"
+      "Read(C:\\Users\\Kisho\\Projects\\tavern-trashers/**)",
+      "Bash(dotnet package search:*)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []

@@ -14,9 +14,10 @@ public class DiceRollingService(IDiceEngine diceEngine) : IDiceRollingService
 
 	public Result<int> RollInitiative(int modifier = 0)
 	{
+		var sign = modifier >= 0 ? "+" : "-";
 		var expression = modifier == 0
-			? "d20" 
-			: $"d20{(modifier >= 0 ? "+" : "-")}{modifier}";
+			? "d20"
+			: $"d20{sign}{modifier}";
 		
 		return RollDice(expression)
 		   .Transform(rollOutcome => rollOutcome.Total);
