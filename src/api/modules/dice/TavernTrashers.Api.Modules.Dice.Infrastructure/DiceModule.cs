@@ -9,6 +9,7 @@ using TavernTrashers.Api.Modules.Dice.Infrastructure.Database;
 using TavernTrashers.Api.Modules.Dice.Infrastructure.Dice;
 using TavernTrashers.Api.Modules.Dice.Infrastructure.Inbox;
 using TavernTrashers.Api.Modules.Dice.Infrastructure.Outbox;
+using TavernTrashers.Api.Modules.Dice.PublicApi;
 using Module = TavernTrashers.Api.Common.Infrastructure.Modules.Module;
 
 namespace TavernTrashers.Api.Modules.Dice.Infrastructure;
@@ -35,5 +36,6 @@ public class DiceModule : Module
 		ConfigureInbox<InboxOptions, ProcessInboxJob, ConfigureProcessInboxJob>(builder);
 
 		builder.Services.AddSingleton<IDiceEngine, DefaultDiceEngine>();
+		builder.Services.AddScoped<IDiceRollingService, DiceRollingService>();
 	}
 }

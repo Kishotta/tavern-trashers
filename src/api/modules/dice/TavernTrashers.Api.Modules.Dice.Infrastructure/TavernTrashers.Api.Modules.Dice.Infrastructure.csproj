@@ -4,5 +4,6 @@
         <ProjectReference Include="..\..\..\common\TavernTrashers.Api.Common.SourceGenerators\TavernTrashers.Api.Common.SourceGenerators.csproj" OutputItemType="Analyzer"/>
         <ProjectReference Include="..\TavernTrashers.Api.Modules.Dice.Application\TavernTrashers.Api.Modules.Dice.Application.csproj"/>
         <ProjectReference Include="..\TavernTrashers.Api.Modules.Dice.Presentation\TavernTrashers.Api.Modules.Dice.Presentation.csproj"/>
+        <ProjectReference Include="..\TavernTrashers.Api.Modules.Dice.PublicApi\TavernTrashers.Api.Modules.Dice.PublicApi.csproj"/>
     </ItemGroup>
 </Project>

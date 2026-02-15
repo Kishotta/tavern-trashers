@@ -21,6 +21,7 @@
         <ProjectReference Include="..\modules\campaigns\TavernTrashers.Api.Modules.Campaigns.Domain\TavernTrashers.Api.Modules.Campaigns.Domain.csproj"/>
         <ProjectReference Include="..\modules\campaigns\TavernTrashers.Api.Modules.Campaigns.Infrastructure\TavernTrashers.Api.Modules.Campaigns.Infrastructure.csproj"/>
         <ProjectReference Include="..\modules\dice\TavernTrashers.Api.Modules.Dice.Infrastructure\TavernTrashers.Api.Modules.Dice.Infrastructure.csproj"/>
+        <ProjectReference Include="..\modules\encounters\TavernTrashers.Api.Modules.Encounters.Infrastructure\TavernTrashers.Api.Modules.Encounters.Infrastructure.csproj" />
         <ProjectReference Include="..\modules\users\TavernTrashers.Api.Modules.Users.Infrastructure\TavernTrashers.Api.Modules.Users.Infrastructure.csproj"/>
     </ItemGroup>
 
