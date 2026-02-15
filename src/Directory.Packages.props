@@ -1,11 +1,72 @@
 <Project>
     <PropertyGroup>
-        <ManagePackegeVersionsCentrally>true</ManagePackegeVersionsCentrally>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     </PropertyGroup>
     <ItemGroup>
         <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="*">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </GlobalPackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <!-- Aspire packages -->
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="10.0.0" />
+        <PackageReference Include="Aspire.Hosting.Keycloak" Version="10.0.0" />
+        <PackageReference Include="Aspire.Hosting.NodeJs" Version="10.0.0" />
+        <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="10.0.0" />
+        <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="10.0.0" />
+        <PackageReference Include="Aspire.Hosting.Redis" Version="10.0.0" />
+        <PackageReference Include="Aspire.Keycloak.Authentication" Version="10.0.0" />
+        <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+        <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="10.0.0" />
+
+        <!-- HealthChecks -->
+        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="10.0.0" />
+        <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="10.0.0" />
+
+        <!-- Database -->
+        <PackageReference Include="Dapper" Version="2.1.66" />
+        <PackageReference Include="EFCore.NamingConventions" Version="10.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0" />
+        <PackageReference Include="Npgsql.OpenTelemetry" Version="10.0.0" />
+
+        <!-- MassTransit -->
+        <PackageReference Include="MassTransit" Version="8.5.1" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.1" />
+        <PackageReference Include="MassTransit.Redis" Version="8.5.1" />
+
+        <!-- MediatR -->
+        <PackageReference Include="MediatR" Version="14.0.0" />
+        <PackageReference Include="MediatR.Contracts" Version="3.0.0" />
+
+        <!-- Microsoft Extensions -->
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.ServiceDiscovery" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="10.0.0" />
+
+        <!-- OpenTelemetry -->
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.11.0-beta.1" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Quartz" Version="1.12.0-beta.1" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.12.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.11.0-beta.1" />
+
+        <!-- Other -->
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.14.0" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.6.5" />
+        <PackageReference Include="Scrutor" Version="6.1.0" />
+        <PackageReference Include="Serilog" Version="4.3.0" />
+        <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
     </ItemGroup>
 </Project>

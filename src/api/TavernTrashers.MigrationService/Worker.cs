@@ -2,7 +2,6 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
-using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
 using TavernTrashers.Api.Modules.Dice.Infrastructure.Database;
 using TavernTrashers.Api.Modules.Users.Infrastructure.Database;
 
@@ -24,7 +23,6 @@ public class Worker(
 			using var scope = serviceProvider.CreateScope();
 			DbContext[] dbContexts =
 			[
-				scope.ServiceProvider.GetRequiredService<CampaignsDbContext>(),
 				scope.ServiceProvider.GetRequiredService<DiceDbContext>(),
 				scope.ServiceProvider.GetRequiredService<UsersDbContext>(),
 			];
