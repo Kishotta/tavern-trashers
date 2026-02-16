@@ -1,4 +1,5 @@
 using TavernTrashers.Api.Common.Infrastructure.Modules;
+using TavernTrashers.Api.Modules.Characters.Infrastructure;
 using TavernTrashers.Api.Modules.Dice.Infrastructure;
 using TavernTrashers.Api.Modules.Users.Infrastructure;
 
@@ -8,6 +9,7 @@ public static class ModuleRepository
 {
 	public static readonly IEnumerable<IModule> Modules =
 	[
+		new CharactersModule(),
 		new DiceModule(),
 		new UsersModule(),
 	];

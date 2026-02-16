@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\common\TavernTrashers.Api.Common.Infrastructure\TavernTrashers.Api.Common.Infrastructure.csproj"/>
+        <ProjectReference Include="..\..\..\common\TavernTrashers.Api.Common.SourceGenerators\TavernTrashers.Api.Common.SourceGenerators.csproj" OutputItemType="Analyzer"/>
+        <ProjectReference Include="..\TavernTrashers.Api.Modules.Characters.Application\TavernTrashers.Api.Modules.Characters.Application.csproj"/>
+        <ProjectReference Include="..\TavernTrashers.Api.Modules.Characters.Presentation\TavernTrashers.Api.Modules.Characters.Presentation.csproj"/>
+    </ItemGroup>
+</Project>

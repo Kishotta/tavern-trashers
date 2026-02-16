@@ -56,6 +56,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Common.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Modules.Dice.PublicApi", "api\modules\dice\TavernTrashers.Api.Modules.Dice.PublicApi\TavernTrashers.Api.Modules.Dice.PublicApi.csproj", "{22D83B62-BAA8-423A-AC80-BA29F5190811}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Modules.Characters.Domain", "api\modules\characters\TavernTrashers.Api.Modules.Characters.Domain\TavernTrashers.Api.Modules.Characters.Domain.csproj", "{7ACEF542-12CF-4A0D-9CAA-BA7ED6FC06B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Characters", "Characters", "{017F97BC-97CF-4232-8234-DA83683B98C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Modules.Characters.Application", "api\modules\characters\TavernTrashers.Api.Modules.Characters.Application\TavernTrashers.Api.Modules.Characters.Application.csproj", "{CC0EA052-D464-47BE-9E78-0B0A93B0A679}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Modules.Characters.Infrastructure", "api\modules\characters\TavernTrashers.Api.Modules.Characters.Infrastructure\TavernTrashers.Api.Modules.Characters.Infrastructure.csproj", "{B93BB132-3242-4FC2-96C9-DC6F833702A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TavernTrashers.Api.Modules.Characters.Presentation", "api\modules\characters\TavernTrashers.Api.Modules.Characters.Presentation\TavernTrashers.Api.Modules.Characters.Presentation.csproj", "{2668E80F-B152-4126-8BFA-787B7BD2DE63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -150,6 +160,22 @@ Global
 		{22D83B62-BAA8-423A-AC80-BA29F5190811}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22D83B62-BAA8-423A-AC80-BA29F5190811}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22D83B62-BAA8-423A-AC80-BA29F5190811}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ACEF542-12CF-4A0D-9CAA-BA7ED6FC06B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ACEF542-12CF-4A0D-9CAA-BA7ED6FC06B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ACEF542-12CF-4A0D-9CAA-BA7ED6FC06B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ACEF542-12CF-4A0D-9CAA-BA7ED6FC06B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC0EA052-D464-47BE-9E78-0B0A93B0A679}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC0EA052-D464-47BE-9E78-0B0A93B0A679}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC0EA052-D464-47BE-9E78-0B0A93B0A679}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC0EA052-D464-47BE-9E78-0B0A93B0A679}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B93BB132-3242-4FC2-96C9-DC6F833702A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B93BB132-3242-4FC2-96C9-DC6F833702A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B93BB132-3242-4FC2-96C9-DC6F833702A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B93BB132-3242-4FC2-96C9-DC6F833702A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2668E80F-B152-4126-8BFA-787B7BD2DE63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2668E80F-B152-4126-8BFA-787B7BD2DE63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2668E80F-B152-4126-8BFA-787B7BD2DE63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2668E80F-B152-4126-8BFA-787B7BD2DE63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -181,5 +207,10 @@ Global
 		{DEF1E4B4-29F1-4004-B8D7-DA00BC2A3671} = {348D770D-B6C0-4D6E-9039-C35630209945}
 		{633FD6C4-C59E-4CC7-95E7-8357D4E57393} = {348D770D-B6C0-4D6E-9039-C35630209945}
 		{22D83B62-BAA8-423A-AC80-BA29F5190811} = {79252DCF-F430-49F5-9442-E2F45A55E68A}
+		{017F97BC-97CF-4232-8234-DA83683B98C0} = {7C5A081C-622E-4498-AEA3-2232BA31823D}
+		{7ACEF542-12CF-4A0D-9CAA-BA7ED6FC06B3} = {017F97BC-97CF-4232-8234-DA83683B98C0}
+		{CC0EA052-D464-47BE-9E78-0B0A93B0A679} = {017F97BC-97CF-4232-8234-DA83683B98C0}
+		{B93BB132-3242-4FC2-96C9-DC6F833702A8} = {017F97BC-97CF-4232-8234-DA83683B98C0}
+		{2668E80F-B152-4126-8BFA-787B7BD2DE63} = {017F97BC-97CF-4232-8234-DA83683B98C0}
 	EndGlobalSection
 EndGlobal

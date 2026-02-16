@@ -1,0 +1,12 @@
+{
+  "Characters": {
+    "Inbox": {
+      "IntervalInMilliseconds": 60000,
+      "BatchSize": 10
+    },
+    "Outbox": {
+      "IntervalInMilliseconds": 60000,
+      "BatchSize": 10
+    }
+  }
+}
