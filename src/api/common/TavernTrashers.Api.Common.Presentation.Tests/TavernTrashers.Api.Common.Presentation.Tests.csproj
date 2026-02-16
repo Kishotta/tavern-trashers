@@ -8,13 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Bogus"/>
         <PackageReference Include="coverlet.collector">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
-        <PackageReference Include="Shouldly"/>
         <PackageReference Include="xunit"/>
         <PackageReference Include="xunit.runner.visualstudio">
             <PrivateAssets>all</PrivateAssets>
@@ -27,7 +25,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\TavernTrashers.Api.Common.Domain\TavernTrashers.Api.Common.Domain.csproj"/>
+        <ProjectReference Include="..\TavernTrashers.Api.Common.Domain.Tests\TavernTrashers.Api.Common.Domain.Tests.csproj"/>
+        <ProjectReference Include="..\TavernTrashers.Api.Common.Presentation\TavernTrashers.Api.Common.Presentation.csproj"/>
     </ItemGroup>
 
 </Project>
