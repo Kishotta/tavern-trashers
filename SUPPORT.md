@@ -74,17 +74,13 @@ We prioritize:
 
 ## Response Times
 
-This is a community-driven project. Response times vary based on:
+This is a community-driven project maintained on a best-effort basis. Response times vary based on:
 
 - Maintainer availability
 - Issue complexity and priority
 - Community involvement
 
-**Typical response times:**
-- Security issues: Within 48 hours
-- Critical bugs: Within 1 week
-- General questions: Best effort basis
-- Feature requests: Reviewed periodically
+We cannot guarantee specific response times, but we prioritize issues based on severity and impact.
 
 ## Self-Help Resources
 

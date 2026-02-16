@@ -25,10 +25,10 @@ We take the security of Tavern Trashers seriously. If you discover a security vu
 
 ### What to Expect
 
-- **Acknowledgment**: We will acknowledge receipt of your vulnerability report within 48 hours
-- **Investigation**: We will investigate and validate the issue within 5 business days
+- **Acknowledgment**: We will make our best effort to acknowledge receipt of your vulnerability report
+- **Investigation**: We will investigate and validate the issue
 - **Updates**: We will keep you informed of our progress
-- **Resolution**: We will work to resolve critical vulnerabilities as quickly as possible
+- **Resolution**: We will work to resolve critical vulnerabilities
 - **Credit**: With your permission, we will credit you in the security advisory and release notes
 
 ### Security Best Practices
