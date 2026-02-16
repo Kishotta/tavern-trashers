@@ -1,0 +1,47 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Api/">
+    <Project Path="api/TavernTrashers.Api/TavernTrashers.Api.csproj" />
+    <Project Path="api/TavernTrashers.Gateway/TavernTrashers.Gateway.csproj" />
+    <Project Path="api/TavernTrashers.MigrationService/TavernTrashers.MigrationService.csproj" />
+  </Folder>
+  <Folder Name="/Api/Common/">
+    <Project Path="api/common/TavernTrashers.Api.Common.Application/TavernTrashers.Api.Common.Application.csproj" />
+    <Project Path="api/common/TavernTrashers.Api.Common.Domain.Tests/TavernTrashers.Api.Common.Domain.Tests.csproj" />
+    <Project Path="api/common/TavernTrashers.Api.Common.Domain/TavernTrashers.Api.Common.Domain.csproj" />
+    <Project Path="api/common/TavernTrashers.Api.Common.Infrastructure.Tests/TavernTrashers.Api.Common.Infrastructure.Tests.csproj" />
+    <Project Path="api/common/TavernTrashers.Api.Common.Infrastructure/TavernTrashers.Api.Common.Infrastructure.csproj" />
+    <Project Path="api/common/TavernTrashers.Api.Common.Presentation/TavernTrashers.Api.Common.Presentation.csproj" />
+    <Project Path="api/common/TavernTrashers.Api.Common.SourceGenerators/TavernTrashers.Api.Common.SourceGenerators.csproj" />
+  </Folder>
+  <Folder Name="/Api/Modules/" />
+  <Folder Name="/Api/Modules/Characters/">
+    <Project Path="api/modules/characters/TavernTrashers.Api.Modules.Characters.Application/TavernTrashers.Api.Modules.Characters.Application.csproj" />
+    <Project Path="api/modules/characters/TavernTrashers.Api.Modules.Characters.Domain/TavernTrashers.Api.Modules.Characters.Domain.csproj" />
+    <Project Path="api/modules/characters/TavernTrashers.Api.Modules.Characters.Infrastructure/TavernTrashers.Api.Modules.Characters.Infrastructure.csproj" />
+    <Project Path="api/modules/characters/TavernTrashers.Api.Modules.Characters.Presentation/TavernTrashers.Api.Modules.Characters.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/Api/Modules/Dice/">
+    <Project Path="api/modules/dice/TavernTrashers.Api.Modules.Dice.Application/TavernTrashers.Api.Modules.Dice.Application.csproj" />
+    <Project Path="api/modules/dice/TavernTrashers.Api.Modules.Dice.Domain.Tests/TavernTrashers.Api.Modules.Dice.Domain.Tests.csproj" />
+    <Project Path="api/modules/dice/TavernTrashers.Api.Modules.Dice.Domain/TavernTrashers.Api.Modules.Dice.Domain.csproj" />
+    <Project Path="api/modules/dice/TavernTrashers.Api.Modules.Dice.Infrastructure/TavernTrashers.Api.Modules.Dice.Infrastructure.csproj" />
+    <Project Path="api/modules/dice/TavernTrashers.Api.Modules.Dice.Presentation/TavernTrashers.Api.Modules.Dice.Presentation.csproj" />
+    <Project Path="api/modules/dice/TavernTrashers.Api.Modules.Dice.PublicApi/TavernTrashers.Api.Modules.Dice.PublicApi.csproj" />
+  </Folder>
+  <Folder Name="/Api/Modules/Users/">
+    <Project Path="api/modules/users/TavernTrashers.Api.Modules.Users.Application/TavernTrashers.Api.Modules.Users.Application.csproj" />
+    <Project Path="api/modules/users/TavernTrashers.Api.Modules.Users.Domain/TavernTrashers.Api.Modules.Users.Domain.csproj" />
+    <Project Path="api/modules/users/TavernTrashers.Api.Modules.Users.Infrastructure/TavernTrashers.Api.Modules.Users.Infrastructure.csproj" />
+    <Project Path="api/modules/users/TavernTrashers.Api.Modules.Users.IntegrationEvents/TavernTrashers.Api.Modules.Users.IntegrationEvents.csproj" />
+    <Project Path="api/modules/users/TavernTrashers.Api.Modules.Users.Presentation/TavernTrashers.Api.Modules.Users.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/Aspire/">
+    <Project Path="aspire/TavernTrashers.AppHost/TavernTrashers.AppHost.csproj" />
+    <Project Path="aspire/TavernTrashers.ServiceDefaults/TavernTrashers.ServiceDefaults.csproj" />
+  </Folder>
+</Solution>

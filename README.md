@@ -18,7 +18,7 @@ See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for a detailed overview of th
    git clone https://github.com/Kishotta/tavern-trashers.git
    ```
 2. **Backend:**
-   - Navigate to `src/` and open `TavernTrashers.sln` in Visual Studio or run with `dotnet run`.
+   - Navigate to `src/` and open `TavernTrashers.slnx` in Visual Studio or run with `dotnet run`.
 3. **Frontend:**
    - Navigate to `web/tavern-trashers/` and run `npm install && npm start`.
 

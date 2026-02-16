@@ -89,7 +89,7 @@ Examples:
 
 ### Run All Tests
 ```bash
-dotnet test src/TavernTrashers.sln
+dotnet test src/TavernTrashers.slnx
 ```
 
 ### Run Specific Test Project
