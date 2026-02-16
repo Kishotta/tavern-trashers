@@ -46,15 +46,15 @@ jobs:
                       ${{ runner.os }}-nuget-
 
             - name: Restore dependencies
-              run: dotnet restore ./src/TavernTrashers.sln
+              run: dotnet restore ./src/TavernTrashers.slnx
 
             - name: Build solution
-              run: dotnet build ./src/TavernTrashers.sln --configuration Release --no-restore
+              run: dotnet build ./src/TavernTrashers.slnx --configuration Release --no-restore
 
             - name: Run tests
               run: |
                   # Runs all projects ending in *Tests under solution
-                  dotnet test ./src/TavernTrashers.sln \
+                  dotnet test ./src/TavernTrashers.slnx \
                     --no-build \
                     --configuration Release \
                     --logger "trx;LogFileName=test_results.trx" \

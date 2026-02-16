@@ -5,10 +5,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Backend (.NET)
-- **Build entire solution:** `dotnet build src/TavernTrashers.sln`
+- **Build entire solution:** `dotnet build src/TavernTrashers.slnx`
 - **Run API directly:** `dotnet run --project src/api/TavernTrashers.Api`
 - **Run with Aspire (recommended):** `dotnet run --project src/aspire/TavernTrashers.AppHost`
-- **Run tests:** `dotnet test src/TavernTrashers.sln`
+- **Run tests:** `dotnet test src/TavernTrashers.slnx`
 - **Run specific test project:** `dotnet test src/api/modules/dice/TavernTrashers.Api.Modules.Dice.Domain.Tests`
 - **Database migrations:** Use `TavernTrashers.MigrationService` project (runs automatically with Aspire)
 
