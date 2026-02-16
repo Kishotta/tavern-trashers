@@ -25,6 +25,8 @@ public static class ApplicationLayerExtensions
 		{
 			config.RegisterServicesFromAssemblies(moduleApplicationAssemblies);
 
+			config.AddOpenBehavior(typeof(CachingPipelineBehavior<,>));
+			config.AddOpenBehavior(typeof(CacheInvalidationPipelineBehavior<,>));
 			config.AddOpenBehavior(typeof(ExceptionHandlingPipelineBehavior<,>));
 			config.AddOpenBehavior(typeof(RequestLoggingPipelineBehavior<,>));
 			config.AddOpenBehavior(typeof(ValidationPipelineBehavior<,>));

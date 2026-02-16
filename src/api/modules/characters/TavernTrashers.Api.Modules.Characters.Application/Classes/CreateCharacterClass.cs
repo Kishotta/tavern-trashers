@@ -1,14 +1,17 @@
 using FluentValidation;
+using TavernTrashers.Api.Common.Application.Caching;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
-using TavernTrashers.Api.Common.Domain.Results.Extensions;
 using TavernTrashers.Api.Modules.Characters.Domain.Classes;
 
 namespace TavernTrashers.Api.Modules.Characters.Application.Classes;
 
 public sealed record CreateCharacterClassCommand(
 	string Name,
-	List<ResourceDefinitionRequest> ResourceDefinitions) : ICommand<CharacterClassResponse>;
+	List<ResourceDefinitionRequest> ResourceDefinitions) : ICacheInvalidationCommand<CharacterClassResponse>
+{
+	public string[] CacheKeys => ["classes"];
+}
 
 public sealed record ResourceDefinitionRequest(
 	string Name,
@@ -43,7 +46,7 @@ internal sealed class CreateCharacterClassCommandHandler(ICharacterClassReposito
 		if (await characterClassRepository.ExistsAsync(command.Name, cancellationToken))
 			return CharacterClassErrors.DuplicateName(command.Name);
 
-		var classResult = CharacterClass.Create(command.Name, isHomebrew: true);
+		var classResult = CharacterClass.Create(command.Name, true);
 		if (classResult.IsFailure) return classResult.Error;
 
 		var characterClass = classResult.Value;

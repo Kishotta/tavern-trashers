@@ -4,7 +4,7 @@ using TavernTrashers.Api.Common.Domain.Results;
 
 namespace TavernTrashers.Api.Common.Application.Behaviors;
 
-internal sealed class CacheInvalidationPipelineBehavior<TRequest, TResponse>(ICacheService cache) 
+internal sealed class CacheInvalidationPipelineBehavior<TRequest, TResponse>(ICacheService cache)
 	: IPipelineBehavior<TRequest, TResponse>
 	where TRequest : ICacheInvalidationCommand
 	where TResponse : Result
@@ -13,10 +13,10 @@ internal sealed class CacheInvalidationPipelineBehavior<TRequest, TResponse>(ICa
 	{
 		var response = await next(cancellationToken);
 
-		if (response.IsSuccess)
-		{
-			await cache.RemoveAsync(request.CacheKey, cancellationToken);
-		}
+		if (!response.IsSuccess) return response;
+
+		foreach (var cacheKey in request.CacheKeys)
+			await cache.RemoveAsync(cacheKey, cancellationToken);
 
 		return response;
 	}

@@ -1,4 +1,4 @@
-using FluentValidation;
+using TavernTrashers.Api.Common.Application.Caching;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
@@ -13,7 +13,11 @@ public sealed record GetCharacterClassResourcesAtLevelResponse(
 
 public sealed record ResourceDefinitionCountResponse(string Name, int Amount);
 
-public sealed record GetCharacterClassResourcesAtLevelQuery(Guid ClassId, int Level) : IQuery<GetCharacterClassResourcesAtLevelResponse>;
+public sealed record GetCharacterClassResourcesAtLevelQuery(Guid ClassId, int Level) : ICachingQuery<GetCharacterClassResourcesAtLevelResponse>
+{
+	public string CacheKey => $"classes:{ClassId}:resources-at-level:{Level}";
+	public TimeSpan CacheDuration => TimeSpan.FromMinutes(30);
+}
 
 internal sealed class GetCharacterClassResourcesAtLevelQueryHandler(ICharacterClassRepository characterClassRepository)
 	: IQueryHandler<GetCharacterClassResourcesAtLevelQuery, GetCharacterClassResourcesAtLevelResponse>
