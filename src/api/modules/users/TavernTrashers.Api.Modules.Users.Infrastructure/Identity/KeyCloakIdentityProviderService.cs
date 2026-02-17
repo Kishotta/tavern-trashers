@@ -6,7 +6,7 @@ using TavernTrashers.Api.Modules.Users.Application.Abstractions.Identity;
 namespace TavernTrashers.Api.Modules.Users.Infrastructure.Identity;
 
 internal sealed class KeyCloakIdentityProviderService(
-    KeyCloakClient keyCloakClient,
+    IKeyCloakClient keyCloakClient,
     KeyCloakTokenClient keyCloakTokenClient,
     ILogger<KeyCloakIdentityProviderService> logger)
     : IIdentityProviderService
