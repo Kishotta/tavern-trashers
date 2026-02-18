@@ -16,11 +16,16 @@ internal sealed class CacheService(IDistributedCache cache) : ICacheService
             : Deserialize<T>(bytes);
     }
 
-    public Task SetAsync<T>(string key, T value, TimeSpan? expiration = null, CancellationToken cancellationToken = default)
+    public Task SetAsync<T>(
+        string key,
+        T value,
+        TimeSpan? expiration = null,
+        CacheExpirationType expirationType = CacheExpirationType.Absolute,
+        CancellationToken cancellationToken = default)
     {
         var bytes = Serialize(value);
 
-        return cache.SetAsync(key, bytes, CacheOptions.Create(expiration), cancellationToken);
+        return cache.SetAsync(key, bytes, CacheOptions.Create(expiration, expirationType), cancellationToken);
     }
 
     public Task RemoveAsync(string key, CancellationToken cancellationToken = default) => 

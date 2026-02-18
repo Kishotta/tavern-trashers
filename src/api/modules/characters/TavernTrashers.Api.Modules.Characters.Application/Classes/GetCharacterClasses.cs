@@ -10,6 +10,7 @@ public sealed record GetCharacterClassesQuery : ICachingQuery<IReadOnlyCollectio
 {
 	public string CacheKey => "classes";
 	public TimeSpan CacheDuration => TimeSpan.FromMinutes(30);
+	public CacheExpirationType CacheExpirationType => CacheExpirationType.Absolute;
 }
 
 internal sealed class GetCharacterClassesQueryHandler(ICharacterClassRepository characterClassRepository)

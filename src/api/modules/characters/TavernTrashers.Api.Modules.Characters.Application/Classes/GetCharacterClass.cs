@@ -10,6 +10,7 @@ public sealed record GetCharacterClassQuery(Guid ClassId) : ICachingQuery<Charac
 {
 	public string CacheKey => $"classes:{ClassId}";
 	public TimeSpan CacheDuration => TimeSpan.FromMinutes(30);
+	public CacheExpirationType CacheExpirationType => CacheExpirationType.Absolute;
 }
 
 internal sealed class GetCharacterClassQueryHandler(ICharacterClassRepository characterClassRepository)

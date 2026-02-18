@@ -1,5 +1,6 @@
 using Dapper;
 using TavernTrashers.Api.Common.Application.Authorization;
+using TavernTrashers.Api.Common.Application.Caching;
 using TavernTrashers.Api.Common.Application.Data;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
@@ -8,7 +9,12 @@ using TavernTrashers.Api.Modules.Users.Domain.Users;
 
 namespace TavernTrashers.Api.Modules.Users.Application.Users;
 
-public sealed record GetUserPermissionsQuery(string IdentityId) : IQuery<PermissionResponse>;
+public sealed record GetUserPermissionsQuery(string IdentityId) : ICachingQuery<PermissionResponse>
+{
+	public string CacheKey => $"user-permissions:{IdentityId}";
+	public TimeSpan CacheDuration => TimeSpan.FromMinutes(15);
+	public CacheExpirationType CacheExpirationType => CacheExpirationType.Sliding;
+}
 
 internal sealed class GetUserPermissionsQueryHandler(IDbConnectionFactory dbConnectionFactory)
 	: IQueryHandler<GetUserPermissionsQuery, PermissionResponse>
