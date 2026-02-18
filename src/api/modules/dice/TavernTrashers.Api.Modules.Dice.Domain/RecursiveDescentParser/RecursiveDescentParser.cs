@@ -4,9 +4,21 @@ using TavernTrashers.Api.Modules.Dice.Domain.AbstractSyntaxTree;
 
 namespace TavernTrashers.Api.Modules.Dice.Domain.RecursiveDescentParser;
 
-public class DiceParser(string input)
+public class DiceParser
 {
+	private readonly ReadOnlyMemory<char> _input;
 	private int _position;
+
+	public DiceParser(string input)
+		: this(input.AsMemory())
+	{
+	}
+
+	public DiceParser(ReadOnlyMemory<char> input)
+	{
+		_input = input;
+		_position = 0;
+	}
 
 	public Result<IExpressionNode> ParseExpression() =>
 		ParseTerm()
@@ -16,7 +28,7 @@ public class DiceParser(string input)
 	{
 		if (!Match('+') && !Match('-')) return left.ToResult();
 
-		var @operator = input[_position - 1];
+		var @operator = _input.Span[_position - 1];
 		return ParseTerm()
 		   .Then(right => ParseExpressionRest(
 				new BinaryOperationNode(left, @operator, right)));
@@ -30,7 +42,7 @@ public class DiceParser(string input)
 	{
 		if (Match('*') || Match('/'))
 		{
-			var @operator = input[_position - 1];
+			var @operator = _input.Span[_position - 1];
 			return ParseFactor()
 			   .Then(right => ParseTermRest(
 					new BinaryOperationNode(left, @operator, right)));
@@ -74,11 +86,11 @@ public class DiceParser(string input)
 				"DiceExpression.InvalidFormat",
 				$"Expected a number at position {_position}");
 
-		var text = input[start.._position];
-		return int.TryParse(text, out var number)
+		var span = _input.Span[start.._position];
+		return int.TryParse(span, out var number)
 			? new NumberNode(number)
 			: Error.Validation("DiceExpression.InvalidFormat",
-				$"Invalid number '{text}' at position {start}");
+				$"Invalid number '{span.ToString()}' at position {start}");
 	}
 
 	private Result<DiceRollNode> ParseDiceRoll()
@@ -161,7 +173,8 @@ public class DiceParser(string input)
 	private char PeekChar()
 	{
 		SkipWhitespace();
-		return _position < input.Length ? char.ToLowerInvariant(input[_position]) : '\0';
+		var span = _input.Span;
+		return _position < span.Length ? char.ToLowerInvariant(span[_position]) : '\0';
 	}
 
 	private bool PeekIsDigit()
@@ -171,13 +184,14 @@ public class DiceParser(string input)
 	}
 
 	private int Advance() =>
-		_position < input.Length
+		_position < _input.Length
 			? _position++
 			: -1;
 
 	private void SkipWhitespace()
 	{
-		while (_position < input.Length && char.IsWhiteSpace(input[_position]))
+		var span = _input.Span;
+		while (_position < span.Length && char.IsWhiteSpace(span[_position]))
 			_position++;
 	}
 
