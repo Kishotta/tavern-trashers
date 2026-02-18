@@ -4,9 +4,38 @@ using TavernTrashers.Api.Modules.Dice.Domain.AbstractSyntaxTree;
 
 namespace TavernTrashers.Api.Modules.Dice.Domain.RecursiveDescentParser;
 
-public class DiceParser(string input)
+/// <summary>
+/// Recursive descent parser for dice notation expressions.
+/// Optimized for performance using ReadOnlySpan&lt;char&gt; to eliminate string allocations during parsing.
+/// </summary>
+/// <remarks>
+/// Supports expressions like: "2d6", "4d6kh3", "d20+5", "2d6!+1d8-3", etc.
+/// The parser uses ReadOnlyMemory&lt;char&gt; internally to enable zero-allocation parsing from memory slices.
+/// </remarks>
+public class DiceParser
 {
+	private readonly ReadOnlyMemory<char> _input;
 	private int _position;
+
+	/// <summary>
+	/// Creates a new DiceParser for the given string expression.
+	/// </summary>
+	/// <param name="input">The dice expression to parse (e.g., "2d6+5")</param>
+	public DiceParser(string input)
+		: this(input.AsMemory())
+	{
+	}
+
+	/// <summary>
+	/// Creates a new DiceParser for the given memory slice.
+	/// This enables zero-allocation parsing from a substring or memory buffer.
+	/// </summary>
+	/// <param name="input">The memory containing the dice expression to parse</param>
+	public DiceParser(ReadOnlyMemory<char> input)
+	{
+		_input = input;
+		_position = 0;
+	}
 
 	public Result<IExpressionNode> ParseExpression() =>
 		ParseTerm()
@@ -16,7 +45,7 @@ public class DiceParser(string input)
 	{
 		if (!Match('+') && !Match('-')) return left.ToResult();
 
-		var @operator = input[_position - 1];
+		var @operator = _input.Span[_position - 1];
 		return ParseTerm()
 		   .Then(right => ParseExpressionRest(
 				new BinaryOperationNode(left, @operator, right)));
@@ -30,7 +59,7 @@ public class DiceParser(string input)
 	{
 		if (Match('*') || Match('/'))
 		{
-			var @operator = input[_position - 1];
+			var @operator = _input.Span[_position - 1];
 			return ParseFactor()
 			   .Then(right => ParseTermRest(
 					new BinaryOperationNode(left, @operator, right)));
@@ -74,11 +103,11 @@ public class DiceParser(string input)
 				"DiceExpression.InvalidFormat",
 				$"Expected a number at position {_position}");
 
-		var text = input[start.._position];
-		return int.TryParse(text, out var number)
+		var span = _input.Span[start.._position];
+		return int.TryParse(span, out var number)
 			? new NumberNode(number)
 			: Error.Validation("DiceExpression.InvalidFormat",
-				$"Invalid number '{text}' at position {start}");
+				$"Invalid number '{span.ToString()}' at position {start}");
 	}
 
 	private Result<DiceRollNode> ParseDiceRoll()
@@ -161,7 +190,8 @@ public class DiceParser(string input)
 	private char PeekChar()
 	{
 		SkipWhitespace();
-		return _position < input.Length ? char.ToLowerInvariant(input[_position]) : '\0';
+		var span = _input.Span;
+		return _position < span.Length ? char.ToLowerInvariant(span[_position]) : '\0';
 	}
 
 	private bool PeekIsDigit()
@@ -171,13 +201,14 @@ public class DiceParser(string input)
 	}
 
 	private int Advance() =>
-		_position < input.Length
+		_position < _input.Length
 			? _position++
 			: -1;
 
 	private void SkipWhitespace()
 	{
-		while (_position < input.Length && char.IsWhiteSpace(input[_position]))
+		var span = _input.Span;
+		while (_position < span.Length && char.IsWhiteSpace(span[_position]))
 			_position++;
 	}
 
