@@ -29,7 +29,7 @@ internal sealed class CachingPipelineBehavior<TRequest, TResponse>(
 
 		var response = await next(cancellationToken);
 		if (response.IsSuccess)
-			await cache.SetAsync(cacheKey, response, request.CacheDuration, cancellationToken);
+			await cache.SetAsync(cacheKey, response, request.CacheDuration, request.CacheExpirationType, cancellationToken);
 
 		return response;
 	}

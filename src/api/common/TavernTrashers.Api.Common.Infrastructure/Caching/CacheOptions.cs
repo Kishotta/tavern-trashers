@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Caching.Distributed;
+using TavernTrashers.Api.Common.Application.Caching;
 
 namespace TavernTrashers.Api.Common.Infrastructure.Caching;
 
@@ -9,8 +10,24 @@ public static class CacheOptions
         AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2)
     };
 
-    public static DistributedCacheEntryOptions Create(TimeSpan? expiration) =>
-        expiration is not null
-            ? new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = expiration }
-            : DefaultExpiration;
+    public static DistributedCacheEntryOptions Create(
+        TimeSpan? expiration,
+        CacheExpirationType expirationType = CacheExpirationType.Absolute)
+    {
+        if (expiration is null)
+            return DefaultExpiration;
+
+        return expirationType switch
+        {
+            CacheExpirationType.Sliding => new DistributedCacheEntryOptions 
+            { 
+                SlidingExpiration = expiration 
+            },
+            CacheExpirationType.Absolute => new DistributedCacheEntryOptions 
+            { 
+                AbsoluteExpirationRelativeToNow = expiration 
+            },
+            _ => DefaultExpiration
+        };
+    }
 }

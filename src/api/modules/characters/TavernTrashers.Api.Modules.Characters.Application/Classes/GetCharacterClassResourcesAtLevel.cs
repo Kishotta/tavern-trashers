@@ -17,6 +17,7 @@ public sealed record GetCharacterClassResourcesAtLevelQuery(Guid ClassId, int Le
 {
 	public string CacheKey => $"classes:{ClassId}:resources-at-level:{Level}";
 	public TimeSpan CacheDuration => TimeSpan.FromMinutes(30);
+	public CacheExpirationType CacheExpirationType => CacheExpirationType.Absolute;
 }
 
 internal sealed class GetCharacterClassResourcesAtLevelQueryHandler(ICharacterClassRepository characterClassRepository)
