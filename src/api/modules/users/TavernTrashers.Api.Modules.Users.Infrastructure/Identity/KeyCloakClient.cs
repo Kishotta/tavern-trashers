@@ -1,10 +1,11 @@
 using System.Net.Http.Json;
+using TavernTrashers.Api.Modules.Users.Application.Abstractions.Identity;
 
 namespace TavernTrashers.Api.Modules.Users.Infrastructure.Identity;
 
-internal sealed class KeyCloakClient(HttpClient httpClient)
+internal sealed class KeyCloakClient(HttpClient httpClient) : IKeyCloakClient
 {
-    internal async Task<string> RegisterUserAsync(
+    public async Task<string> RegisterUserAsync(
         UserRepresentation user, 
         CancellationToken cancellationToken = default)
     {
