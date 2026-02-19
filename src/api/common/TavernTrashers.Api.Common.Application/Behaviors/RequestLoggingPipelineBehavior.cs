@@ -6,7 +6,7 @@ using TavernTrashers.Api.Common.Domain.Results;
 
 namespace TavernTrashers.Api.Common.Application.Behaviors;
 
-internal sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>(ILogger<RequestLoggingPipelineBehavior<TRequest, TResponse>> logger)
+internal sealed partial class RequestLoggingPipelineBehavior<TRequest, TResponse>(ILogger<RequestLoggingPipelineBehavior<TRequest, TResponse>> logger)
 	: IPipelineBehavior<TRequest, TResponse>
 	where TRequest : IBaseRequest
 	where TResponse : Result
@@ -21,12 +21,12 @@ internal sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>(ILogge
 
 		using (LogContext.PushProperty("Module", moduleName))
 		{
-			logger.LogInformation("Processing request {RequestName}", requestName);
+			LogProcessingRequest(requestName);
 
 			var result = await next(cancellationToken);
 
 			if (result.IsSuccess)
-				logger.LogInformation("Completed request {RequestName}", requestName);
+				LogCompletedProcessingRequest(requestName);
 			else
 				using (LogContext.PushProperty("Error", result.Error, true))
 				{
@@ -36,4 +36,10 @@ internal sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>(ILogge
 			return result;
 		}
 	}
+
+	[LoggerMessage(LogLevel.Information, "Processing request {RequestName}")]
+	partial void LogProcessingRequest(string requestName);
+
+	[LoggerMessage(LogLevel.Information, "Processing request {RequestName}")]
+	partial void LogCompletedProcessingRequest(string requestName);
 }

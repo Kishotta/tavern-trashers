@@ -1,4 +1,5 @@
 using Scalar.AspNetCore;
+using Serilog;
 using TavernTrashers.Api.Common.Presentation.Endpoints;
 using TavernTrashers.Api.Extensions;
 using TavernTrashers.ServiceDefaults;
@@ -7,7 +8,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
+builder.Host.UseSerilog((context, services, configuration) => configuration
+   .ReadFrom.Configuration(context.Configuration)
+   .ReadFrom.Services(services)
+   .Enrich.FromLogContext());
+
 builder.Services.AddExceptionHandling();
+
+builder.Host.UseSerilog((context, services, configuration) => configuration
+   .ReadFrom.Configuration(context.Configuration)
+   .ReadFrom.Services(services)
+   .Enrich.FromLogContext());
 
 builder.AddModules();
 

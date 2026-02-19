@@ -9,8 +9,7 @@ namespace TavernTrashers.Api.Modules.Characters.Application.Classes;
 public sealed record GetCharacterClassesQuery : ICachingQuery<IReadOnlyCollection<CharacterClassResponse>>
 {
 	public string CacheKey => "classes";
-	public TimeSpan CacheDuration => TimeSpan.FromMinutes(30);
-	public CacheExpirationType CacheExpirationType => CacheExpirationType.Absolute;
+	public CacheExpirationType CacheExpirationType => CacheExpirationType.Sliding;
 }
 
 internal sealed class GetCharacterClassesQueryHandler(ICharacterClassRepository characterClassRepository)

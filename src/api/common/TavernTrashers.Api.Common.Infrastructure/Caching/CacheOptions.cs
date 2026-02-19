@@ -7,7 +7,7 @@ public static class CacheOptions
 {
     public static DistributedCacheEntryOptions DefaultExpiration => new()
     {
-        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2)
+        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2),
     };
 
     public static DistributedCacheEntryOptions Create(
@@ -19,15 +19,15 @@ public static class CacheOptions
 
         return expirationType switch
         {
-            CacheExpirationType.Sliding => new DistributedCacheEntryOptions 
+            CacheExpirationType.Sliding => new()
             { 
-                SlidingExpiration = expiration 
+                SlidingExpiration = expiration,
             },
-            CacheExpirationType.Absolute => new DistributedCacheEntryOptions 
+            CacheExpirationType.Absolute => new()
             { 
-                AbsoluteExpirationRelativeToNow = expiration 
+                AbsoluteExpirationRelativeToNow = expiration,
             },
-            _ => DefaultExpiration
+            _ => DefaultExpiration,
         };
     }
 }
