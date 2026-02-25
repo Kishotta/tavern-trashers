@@ -55,19 +55,23 @@ Test individual components in isolation.
 
 ### Integration Tests
 
-Test components working together.
+Test components working together using the full application stack.
 
 **Characteristics**:
-- Slower than unit tests
-- May use test databases or in-memory providers
-- Test infrastructure integration
-- Verify component interactions
+- Start real infrastructure via Docker containers (PostgreSQL, Redis, RabbitMQ, Keycloak)
+- Use .NET Aspire tooling (`Aspire.Hosting.Testing`) to orchestrate the AppHost
+- Test HTTP endpoints end-to-end
+- Require Docker to be available
+- Marked with `[Trait("Category", "Integration")]`
+
+**Project**: `src/aspire/TavernTrashers.AppHost.Tests`
 
 **Examples**:
-- Repository operations
 - API endpoint behavior
-- Message handling
-- Authentication flow
+- Dice roll operations against a real database
+- Module-to-module communication
+
+**Setup**: Integration tests use `DistributedApplicationTestingBuilder` to start the full backend stack (excluding the Angular frontend via `--no-web`). An `AppHostFixture` manages the application lifecycle and waits for all resources to be healthy before tests run.
 
 ### End-to-End Tests
 
@@ -108,14 +112,19 @@ dotnet test src/api/modules/dice/TavernTrashers.Api.Modules.Dice.Domain.Tests
 
 # Common infrastructure tests
 dotnet test src/api/common/TavernTrashers.Api.Common.Infrastructure.Tests
+
+# Integration tests (requires Docker)
+dotnet test src/aspire/TavernTrashers.AppHost.Tests
 ```
 
 ### Filtered Tests
 
 ```bash
-# By category
-dotnet test --filter "Category=Unit"
-dotnet test --filter "Category=Integration"
+# Unit tests only (excludes integration tests)
+dotnet test src/TavernTrashers.slnx --filter "Category!=Integration"
+
+# Integration tests only
+dotnet test src/aspire/TavernTrashers.AppHost.Tests --filter "Category=Integration"
 
 # By test name
 dotnet test --filter "FullyQualifiedName~RollDice"
