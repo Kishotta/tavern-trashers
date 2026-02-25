@@ -51,12 +51,22 @@ jobs:
             - name: Build solution
               run: dotnet build ./src/TavernTrashers.slnx --configuration Release --no-restore
 
-            - name: Run tests
+            - name: Run unit tests
               run: |
-                  # Runs all projects ending in *Tests under solution
                   dotnet test ./src/TavernTrashers.slnx \
                     --no-build \
                     --configuration Release \
+                    --filter "Category!=Integration" \
+                    --logger "trx;LogFileName=test_results.trx" \
+                    --verbosity normal
+
+            - name: Run integration tests
+              timeout-minutes: 15
+              run: |
+                  dotnet test ./src/aspire/TavernTrashers.AppHost.Tests/TavernTrashers.AppHost.Tests.csproj \
+                    --no-build \
+                    --configuration Release \
+                    --filter "Category=Integration" \
                     --logger "trx;LogFileName=test_results.trx" \
                     --verbosity normal
 

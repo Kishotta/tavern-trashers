@@ -42,6 +42,7 @@
   </Folder>
   <Folder Name="/Aspire/">
     <Project Path="aspire/TavernTrashers.AppHost/TavernTrashers.AppHost.csproj" />
+    <Project Path="aspire/TavernTrashers.AppHost.Tests/TavernTrashers.AppHost.Tests.csproj" />
     <Project Path="aspire/TavernTrashers.ServiceDefaults/TavernTrashers.ServiceDefaults.csproj" />
   </Folder>
 </Solution>
