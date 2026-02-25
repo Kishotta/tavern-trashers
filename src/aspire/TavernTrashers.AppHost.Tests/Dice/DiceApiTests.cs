@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http.Json;
-using Aspire.Hosting.Testing;
 using Shouldly;
 
 namespace TavernTrashers.AppHost.Tests.Dice;
@@ -11,7 +10,7 @@ public class DiceApiTests(AppHostFixture fixture) : IClassFixture<AppHostFixture
 	[Fact]
 	public async Task GetRolls_ReturnsOk()
 	{
-		using var httpClient = fixture.App.CreateHttpClient("api");
+		using var httpClient = fixture.CreateHttpClient("api");
 
 		var response = await httpClient.GetAsync("/dice/rolls");
 
@@ -21,7 +20,7 @@ public class DiceApiTests(AppHostFixture fixture) : IClassFixture<AppHostFixture
 	[Fact]
 	public async Task RollDice_WithValidExpression_ReturnsOk()
 	{
-		using var httpClient = fixture.App.CreateHttpClient("api");
+		using var httpClient = fixture.CreateHttpClient("api");
 
 		var response = await httpClient.PostAsJsonAsync(
 			"/dice/rolls",
@@ -33,7 +32,7 @@ public class DiceApiTests(AppHostFixture fixture) : IClassFixture<AppHostFixture
 	[Fact]
 	public async Task RollDice_WithInvalidExpression_ReturnsBadRequest()
 	{
-		using var httpClient = fixture.App.CreateHttpClient("api");
+		using var httpClient = fixture.CreateHttpClient("api");
 
 		var response = await httpClient.PostAsJsonAsync(
 			"/dice/rolls",

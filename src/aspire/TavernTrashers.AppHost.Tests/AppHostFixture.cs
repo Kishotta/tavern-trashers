@@ -10,6 +10,17 @@ public class AppHostFixture : IAsyncLifetime
 
 	public DistributedApplication App => _app ?? throw new InvalidOperationException("App has not been initialized.");
 
+	/// <summary>
+	///     Creates an <see cref="HttpClient" /> for the given resource that bypasses SSL certificate
+	///     validation. This is necessary in CI where the Aspire dev certificate is not trusted.
+	/// </summary>
+	public HttpClient CreateHttpClient(string resourceName, string? endpointName = null)
+	{
+		var endpoint = App.GetEndpoint(resourceName, endpointName);
+		var handler  = new HttpClientHandler { ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator };
+		return new HttpClient(handler) { BaseAddress = endpoint };
+	}
+
 	public async Task InitializeAsync()
 	{
 		var appHost = await DistributedApplicationTestingBuilder
