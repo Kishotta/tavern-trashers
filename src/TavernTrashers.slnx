@@ -21,6 +21,7 @@
   <Folder Name="/Api/Modules/" />
   <Folder Name="/Api/Modules/Characters/">
     <Project Path="api/modules/characters/TavernTrashers.Api.Modules.Characters.Application/TavernTrashers.Api.Modules.Characters.Application.csproj" />
+    <Project Path="api/modules/characters/TavernTrashers.Api.Modules.Characters.Domain.Tests/TavernTrashers.Api.Modules.Characters.Domain.Tests.csproj" />
     <Project Path="api/modules/characters/TavernTrashers.Api.Modules.Characters.Domain/TavernTrashers.Api.Modules.Characters.Domain.csproj" />
     <Project Path="api/modules/characters/TavernTrashers.Api.Modules.Characters.Infrastructure/TavernTrashers.Api.Modules.Characters.Infrastructure.csproj" />
     <Project Path="api/modules/characters/TavernTrashers.Api.Modules.Characters.Presentation/TavernTrashers.Api.Modules.Characters.Presentation.csproj" />
