@@ -61,15 +61,15 @@ var gateway = builder.AddProject<TavernTrashers_Gateway>("gateway")
 
 if (!args.Contains("--no-web"))
 {
-	builder.AddNpmApp("web", "../../web/tavern-trashers-web")
-	   .WithEnvironment("COMPOSE_PROJECT_NAME", "tavern-trashers")
-	   .WithReference(gateway)
-	   .WaitFor(gateway)
-	   .WithReference(identity)
-	   .WaitFor(identity)
-	   .WithHttpEndpoint(env: "PORT", port: 4200)
-	   .WithExternalHttpEndpoints()
-	   .PublishAsDockerFile();
+   builder.AddNpmApp("web", "../../web/tavern-trashers-web")
+      .WithEnvironment("COMPOSE_PROJECT_NAME", "tavern-trashers")
+      .WithReference(gateway)
+      .WaitFor(gateway)
+      .WithReference(identity)
+      .WaitFor(identity)
+      .WithHttpEndpoint(env: "PORT", port: 4200)
+      .WithExternalHttpEndpoints()
+      .PublishAsDockerFile();
 }
 
 await builder.Build().RunAsync();
