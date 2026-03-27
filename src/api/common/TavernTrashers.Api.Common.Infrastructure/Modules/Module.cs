@@ -11,28 +11,14 @@ namespace TavernTrashers.Api.Common.Infrastructure.Modules;
 
 public abstract class Module : IModule
 {
-	private Type IntegrationEventConsumerType =>
-		GetType()
-		   .Assembly
-		   .GetTypes()
-		   .Single(t => t.Name.Contains($"{Name}IntegrationEventConsumer"));
-
 	public abstract string Name { get; }
 	public abstract string Schema { get; }
 	public abstract Assembly ApplicationAssembly { get; }
 	public abstract Assembly PresentationAssembly { get; }
 
-	public Type IdempotentDomainEventHandlerType =>
-		GetType()
-		   .Assembly
-		   .GetTypes()
-		   .Single(t => t.Name.Contains($"{Name}IdempotentDomainEventHandler"));
-
-	public Type IdempotentIntegrationEventHandlerType =>
-		GetType()
-		   .Assembly
-		   .GetTypes()
-		   .Single(t => t.Name.Contains($"{Name}IdempotentIntegrationEventHandler"));
+	public abstract Type IntegrationEventConsumerType { get; }
+	public abstract Type IdempotentDomainEventHandlerType { get; }
+	public abstract Type IdempotentIntegrationEventHandlerType { get; }
 
 	public void AddModule(IHostApplicationBuilder builder)
 	{

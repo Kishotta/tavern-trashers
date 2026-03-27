@@ -15,7 +15,7 @@ using Module = TavernTrashers.Api.Common.Infrastructure.Modules.Module;
 namespace TavernTrashers.Api.Modules.Dice.Infrastructure;
 
 [GenerateModuleBoilerplate(ModuleName, ModuleSchema)]
-public class DiceModule : Module
+public partial class DiceModule : Module
 {
 	public const string ModuleName = "Dice";
 	public const string ModuleSchema = "dice";
