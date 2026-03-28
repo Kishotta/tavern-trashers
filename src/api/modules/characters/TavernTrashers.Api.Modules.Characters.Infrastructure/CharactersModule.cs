@@ -15,7 +15,7 @@ using Module = TavernTrashers.Api.Common.Infrastructure.Modules.Module;
 namespace TavernTrashers.Api.Modules.Characters.Infrastructure;
 
 [GenerateModuleBoilerplate(ModuleName, ModuleSchema)]
-public class CharactersModule : Module
+public partial class CharactersModule : Module
 {
 	public const string ModuleName = "Characters";
 	public const string ModuleSchema = "characters";
