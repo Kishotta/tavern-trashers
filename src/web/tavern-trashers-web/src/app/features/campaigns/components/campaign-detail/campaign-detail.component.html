@@ -1,3 +1,15 @@
 @if(campaign$ | async; as campaign) {
 <tt-page-heading [title]="campaign.title" backButton> </tt-page-heading>
+
+<div class="p-4 space-y-6">
+  <section>
+    <h2 class="text-lg font-semibold text-gray-900 mb-3">Characters</h2>
+    <app-character-roster [campaignId]="campaign.id" />
+  </section>
+
+  <section>
+    <h2 class="text-lg font-semibold text-gray-900 mb-3">Add Character</h2>
+    <app-create-character-form [campaignId]="campaign.id" />
+  </section>
+</div>
 }

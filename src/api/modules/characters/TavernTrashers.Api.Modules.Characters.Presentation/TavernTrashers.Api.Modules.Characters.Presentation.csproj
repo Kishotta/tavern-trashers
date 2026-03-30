@@ -2,6 +2,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\common\TavernTrashers.Api.Common.Presentation\TavernTrashers.Api.Common.Presentation.csproj"/>
         <ProjectReference Include="..\TavernTrashers.Api.Modules.Characters.Application\TavernTrashers.Api.Modules.Characters.Application.csproj"/>
+        <ProjectReference Include="..\..\campaigns\TavernTrashers.Api.Modules.Campaigns.IntegrationEvents\TavernTrashers.Api.Modules.Campaigns.IntegrationEvents.csproj"/>
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Characters\"/>

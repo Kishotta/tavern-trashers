@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\common\TavernTrashers.Api.Common.Application\TavernTrashers.Api.Common.Application.csproj"/>
+        <ProjectReference Include="..\TavernTrashers.Api.Modules.Campaigns.Domain\TavernTrashers.Api.Modules.Campaigns.Domain.csproj"/>
+        <ProjectReference Include="..\TavernTrashers.Api.Modules.Campaigns.IntegrationEvents\TavernTrashers.Api.Modules.Campaigns.IntegrationEvents.csproj"/>
+    </ItemGroup>
+</Project>

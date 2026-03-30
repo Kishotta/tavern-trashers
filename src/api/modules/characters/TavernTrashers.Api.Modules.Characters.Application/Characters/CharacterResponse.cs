@@ -7,6 +7,9 @@ namespace TavernTrashers.Api.Modules.Characters.Application.Characters;
 public sealed record CharacterResponse(
 	Guid Id,
 	string Name,
+	int Level,
+	Guid OwnerId,
+	Guid CampaignId,
 	IReadOnlyCollection<ClassLevelResponse> ClassLevels,
 	IReadOnlyCollection<CharacterResourceResponse> Resources)
 {
@@ -14,6 +17,9 @@ public sealed record CharacterResponse(
 		new(
 			character.Id,
 			character.Name,
+			character.Level,
+			character.OwnerId,
+			character.CampaignId,
 			character.ClassLevels.Select(cl => (ClassLevelResponse)cl).ToList().AsReadOnly(),
 			character.Resources.Select(r => (CharacterResourceResponse)r).ToList().AsReadOnly());
 }

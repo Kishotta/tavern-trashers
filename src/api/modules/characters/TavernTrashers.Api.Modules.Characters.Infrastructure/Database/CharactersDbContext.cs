@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using TavernTrashers.Api.Common.Infrastructure.Modules;
+using TavernTrashers.Api.Modules.Characters.Domain.Campaigns;
 using TavernTrashers.Api.Modules.Characters.Domain.Characters;
 using TavernTrashers.Api.Modules.Characters.Domain.Classes;
 using TavernTrashers.Api.Modules.Characters.Domain.ClassLevels;
@@ -18,4 +19,5 @@ public class CharactersDbContext(DbContextOptions<CharactersDbContext> options)
 	internal DbSet<ClassLevel> ClassLevels => Set<ClassLevel>();
 	internal DbSet<CharacterResource> CharacterResources => Set<CharacterResource>();
 	internal DbSet<ResourceDefinition> ResourceDefinitions => Set<ResourceDefinition>();
+	internal DbSet<CampaignReadModel> CampaignReadModels => Set<CampaignReadModel>();
 }
