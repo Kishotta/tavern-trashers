@@ -5,7 +5,7 @@ using TavernTrashers.Api.Modules.Characters.Domain.Characters;
 
 namespace TavernTrashers.Api.Modules.Characters.Application.Characters;
 
-public sealed record GetCharactersQuery : IQuery<IReadOnlyCollection<CharacterResponse>>;
+public sealed record GetCharactersQuery(Guid CampaignId) : IQuery<IReadOnlyCollection<CharacterResponse>>;
 
 internal sealed class GetCharactersQueryHandler(ICharacterRepository characterRepository)
 	: IQueryHandler<GetCharactersQuery, IReadOnlyCollection<CharacterResponse>>
@@ -14,7 +14,7 @@ internal sealed class GetCharactersQueryHandler(ICharacterRepository characterRe
 		GetCharactersQuery query,
 		CancellationToken cancellationToken) =>
 		await characterRepository
-		   .GetAllAsync(cancellationToken)
+		   .GetByCampaignAsync(query.CampaignId, cancellationToken)
 		   .TransformAsync(characters => characters
 			   .Select(character => (CharacterResponse)character)
 			   .ToList()

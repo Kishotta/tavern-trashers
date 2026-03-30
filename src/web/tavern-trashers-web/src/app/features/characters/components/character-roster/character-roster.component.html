@@ -1,0 +1,20 @@
+@if (loading$ | async) {
+  <p class="text-sm text-gray-500 py-4 text-center">Loading characters...</p>
+} @else {
+  @if (characters$ | async; as characters) {
+    @if (characters.length === 0) {
+      <p class="text-sm text-gray-500 py-4 text-center">No characters yet. Create one below!</p>
+    } @else {
+      <ul class="divide-y divide-gray-200">
+        @for (character of characters; track character.id) {
+          <li class="flex items-center justify-between py-3 px-2">
+            <div>
+              <p class="text-sm font-semibold text-gray-900">{{ character.name }}</p>
+              <p class="text-xs text-gray-500">Level {{ character.level }}</p>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  }
+}

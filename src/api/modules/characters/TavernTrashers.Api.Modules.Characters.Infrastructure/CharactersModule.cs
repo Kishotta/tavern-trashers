@@ -3,8 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TavernTrashers.Api.Common.Infrastructure.Modules;
 using TavernTrashers.Api.Common.SourceGenerators;
+using TavernTrashers.Api.Modules.Characters.Domain.Campaigns;
 using TavernTrashers.Api.Modules.Characters.Domain.Characters;
 using TavernTrashers.Api.Modules.Characters.Domain.Classes;
+using TavernTrashers.Api.Modules.Characters.Infrastructure.Campaigns;
 using TavernTrashers.Api.Modules.Characters.Infrastructure.Characters;
 using TavernTrashers.Api.Modules.Characters.Infrastructure.Classes;
 using TavernTrashers.Api.Modules.Characters.Infrastructure.Database;
@@ -29,7 +31,8 @@ public partial class CharactersModule : Module
 		builder
 		   .AddStandardModuleDatabase<CharactersDbContext>(Name, Schema)
 		   .AddScoped<ICharacterRepository, CharacterRepository>()
-		   .AddScoped<ICharacterClassRepository, CharacterClassRepository>();
+		   .AddScoped<ICharacterClassRepository, CharacterClassRepository>()
+		   .AddScoped<ICampaignReadModelRepository, CampaignReadModelRepository>();
 
 	protected override void ConfigureServices(IHostApplicationBuilder builder)
 	{

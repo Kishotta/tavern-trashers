@@ -15,18 +15,27 @@ public sealed class Character : Entity
 	private Character() { }
 
 	public string Name { get; private set; } = string.Empty;
+	public int Level { get; private set; } = 1;
+	public Guid OwnerId { get; private set; }
+	public Guid CampaignId { get; private set; }
 	public IReadOnlyCollection<ClassLevel> ClassLevels => _classLevels.AsReadOnly();
 	public IReadOnlyCollection<CharacterResource> Resources => _resources.AsReadOnly();
 
-	public static Result<Character> Create(string name)
+	public static Result<Character> Create(string name, int level, Guid ownerId, Guid campaignId)
 	{
 		if (string.IsNullOrWhiteSpace(name))
 			return CharacterErrors.InvalidName();
 
+		if (level is < 1 or > 20)
+			return CharacterErrors.InvalidLevel(level);
+
 		return new Character
 		{
-			Id   = Guid.NewGuid(),
-			Name = name.Trim(),
+			Id         = Guid.NewGuid(),
+			Name       = name.Trim(),
+			Level      = level,
+			OwnerId    = ownerId,
+			CampaignId = campaignId,
 		};
 	}
 

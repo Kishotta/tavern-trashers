@@ -188,16 +188,50 @@ namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migratio
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<Guid>("CampaignId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("campaign_id");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer")
+                        .HasColumnName("level");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("owner_id");
+
                     b.HasKey("Id")
                         .HasName("pk_characters");
 
+                    b.HasIndex("CampaignId")
+                        .HasDatabaseName("ix_characters_campaign_id");
+
                     b.ToTable("characters", "characters");
+                });
+
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Characters.Domain.Campaigns.CampaignReadModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("pk_campaign_read_models");
+
+                    b.ToTable("campaign_read_models", "characters");
                 });
 
             modelBuilder.Entity("TavernTrashers.Api.Modules.Characters.Domain.ClassLevels.ClassLevel", b =>

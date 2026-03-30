@@ -27,12 +27,18 @@ internal sealed class UpdateCampaignCommandHandler(ICampaignRepository campaignR
 {
     public async Task<Result<CampaignResponse>> Handle(
         UpdateCampaignCommand command,
-        CancellationToken cancellationToken) =>
-        await campaignRepository
-           .GetAsync(command.CampaignId, cancellationToken)
-           .ThenAsync(campaign => campaign.Update(command.Title, command.Description))
-           .ThenAsync(_ => campaignRepository.GetAsync(command.CampaignId, cancellationToken))
-           .TransformAsync(campaign => (CampaignResponse)campaign);
+        CancellationToken cancellationToken)
+    {
+        var campaignResult = await campaignRepository.GetAsync(command.CampaignId, cancellationToken);
+        if (campaignResult.IsFailure)
+            return campaignResult.Error;
+
+        var updateResult = campaignResult.Value.Update(command.Title, command.Description);
+        if (updateResult.IsFailure)
+            return updateResult.Error;
+
+        return (CampaignResponse)campaignResult.Value;
+    }
 }
 
 internal sealed class CampaignUpdatedDomainEventHandler(

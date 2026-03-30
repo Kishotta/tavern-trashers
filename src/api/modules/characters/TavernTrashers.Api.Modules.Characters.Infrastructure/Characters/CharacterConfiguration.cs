@@ -10,6 +10,9 @@ internal sealed class CharacterConfiguration : IEntityTypeConfiguration<Characte
 	{
 		builder.HasKey(c => c.Id);
 		builder.Property(c => c.Name).IsRequired().HasMaxLength(100);
+		builder.Property(c => c.Level).IsRequired();
+		builder.Property(c => c.OwnerId).IsRequired();
+		builder.Property(c => c.CampaignId).IsRequired();
 
 		builder.HasMany(c => c.ClassLevels)
 		   .WithOne()

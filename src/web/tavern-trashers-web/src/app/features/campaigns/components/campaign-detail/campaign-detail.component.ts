@@ -7,10 +7,12 @@ import { selectCampaign } from '../../store/campaigns.actions';
 import { Campaign } from '../../store/campaigns.reducer';
 import { selectSelectedCampaign } from '../../store/campaigns.selectors';
 import { PageHeadingComponent } from "../../../../common/page/components/page-heading/page-heading.component";
+import { CharacterRosterComponent } from "../../../characters/components/character-roster/character-roster.component";
+import { CreateCharacterFormComponent } from "../../../characters/components/create-character-form/create-character-form.component";
 
 @Component({
   selector: 'app-campaign-detail',
-  imports: [AsyncPipe, RouterLink, PageHeadingComponent],
+  imports: [AsyncPipe, RouterLink, PageHeadingComponent, CharacterRosterComponent, CreateCharacterFormComponent],
   templateUrl: './campaign-detail.component.html',
   styleUrl: './campaign-detail.component.css',
 })
