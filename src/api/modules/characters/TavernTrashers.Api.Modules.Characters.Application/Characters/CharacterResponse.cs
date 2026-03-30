@@ -11,7 +11,8 @@ public sealed record CharacterResponse(
 	Guid OwnerId,
 	Guid CampaignId,
 	IReadOnlyCollection<ClassLevelResponse> ClassLevels,
-	IReadOnlyCollection<CharacterResourceResponse> Resources)
+	IReadOnlyCollection<CharacterResourceResponse> Resources,
+	IReadOnlyCollection<GenericResourceResponse> GenericResources)
 {
 	public static implicit operator CharacterResponse(Character character) =>
 		new(
@@ -21,7 +22,12 @@ public sealed record CharacterResponse(
 			character.OwnerId,
 			character.CampaignId,
 			character.ClassLevels.Select(cl => (ClassLevelResponse)cl).ToList().AsReadOnly(),
-			character.Resources.Select(r => (CharacterResourceResponse)r).ToList().AsReadOnly());
+			character.Resources.Select(r => (CharacterResourceResponse)r).ToList().AsReadOnly(),
+			character.GenericResources
+			   .Where(r => r.MaxAmount > 0)
+			   .Select(r => (GenericResourceResponse)r)
+			   .ToList()
+			   .AsReadOnly());
 }
 
 public sealed record ClassLevelResponse(
@@ -52,4 +58,24 @@ public sealed record CharacterResourceResponse(
 			resource.ResourceDefinition?.Name ?? string.Empty,
 			resource.CurrentAmount,
 			resource.MaxAmount);
+}
+
+public sealed record GenericResourceResponse(
+	Guid Id,
+	string Name,
+	string? SourceCategory,
+	int CurrentAmount,
+	int MaxAmount,
+	ResourceDirection Direction,
+	ResetTrigger ResetTriggers)
+{
+	public static implicit operator GenericResourceResponse(GenericResource resource) =>
+		new(
+			resource.Id,
+			resource.Name,
+			resource.SourceCategory,
+			resource.CurrentAmount,
+			resource.MaxAmount,
+			resource.Direction,
+			resource.ResetTriggers);
 }

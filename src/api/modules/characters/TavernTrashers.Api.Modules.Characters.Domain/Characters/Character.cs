@@ -12,6 +12,7 @@ public sealed class Character : Entity
 {
 	private readonly List<ClassLevel> _classLevels = [];
 	private readonly List<CharacterResource> _resources = [];
+	private readonly List<GenericResource> _genericResources = [];
 	private Character() { }
 
 	public string Name { get; private set; } = string.Empty;
@@ -20,6 +21,7 @@ public sealed class Character : Entity
 	public Guid CampaignId { get; private set; }
 	public IReadOnlyCollection<ClassLevel> ClassLevels => _classLevels.AsReadOnly();
 	public IReadOnlyCollection<CharacterResource> Resources => _resources.AsReadOnly();
+	public IReadOnlyCollection<GenericResource> GenericResources => _genericResources.AsReadOnly();
 
 	public static Result<Character> Create(string name, int level, Guid ownerId, Guid campaignId)
 	{
@@ -29,7 +31,7 @@ public sealed class Character : Entity
 		if (level is < 1 or > 20)
 			return CharacterErrors.InvalidLevel(level);
 
-		return new Character
+		var character = new Character
 		{
 			Id         = Guid.NewGuid(),
 			Name       = name.Trim(),
@@ -37,6 +39,64 @@ public sealed class Character : Entity
 			OwnerId    = ownerId,
 			CampaignId = campaignId,
 		};
+
+		character._genericResources.AddRange(DefaultGenericResourceFactory.CreateDefaults(character.Id));
+
+		return character;
+	}
+
+	public Result AddGenericResource(
+		string name,
+		int maxAmount,
+		ResourceDirection direction,
+		ResetTrigger resetTriggers,
+		string? sourceCategory = null)
+	{
+		var resourceResult = GenericResource.Create(Id, name, maxAmount, direction, resetTriggers, sourceCategory);
+		if (resourceResult.IsFailure) return resourceResult.Error;
+
+		_genericResources.Add(resourceResult.Value);
+		return Result.Success();
+	}
+
+	public Result RemoveGenericResource(Guid resourceId)
+	{
+		var resource = _genericResources.SingleOrDefault(r => r.Id == resourceId);
+		if (resource is null) return GenericResourceErrors.NotFound(resourceId);
+
+		_genericResources.Remove(resource);
+		return Result.Success();
+	}
+
+	public Result UseGenericResource(Guid resourceId)
+	{
+		var resource = _genericResources.SingleOrDefault(r => r.Id == resourceId);
+		if (resource is null) return GenericResourceErrors.NotFound(resourceId);
+
+		return resource.Use();
+	}
+
+	public Result ApplyGenericResource(Guid resourceId)
+	{
+		var resource = _genericResources.SingleOrDefault(r => r.Id == resourceId);
+		if (resource is null) return GenericResourceErrors.NotFound(resourceId);
+
+		return resource.Apply();
+	}
+
+	public Result RestoreGenericResource(Guid resourceId)
+	{
+		var resource = _genericResources.SingleOrDefault(r => r.Id == resourceId);
+		if (resource is null) return GenericResourceErrors.NotFound(resourceId);
+
+		resource.Restore();
+		return Result.Success();
+	}
+
+	public void BulkRestoreGenericResources(ResetTrigger trigger)
+	{
+		foreach (var resource in _genericResources.Where(r => r.ResetTriggers.HasFlag(trigger)))
+			resource.Restore();
 	}
 
 	public void ChangeName(string name) => Name = name.Trim();

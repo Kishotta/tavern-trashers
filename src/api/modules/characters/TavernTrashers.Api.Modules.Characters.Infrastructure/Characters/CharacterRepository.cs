@@ -21,6 +21,7 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 		   .ThenInclude(rd => rd.Allowances)
 		   .Include(c => c.Resources)
 		   .ThenInclude(r => r.ResourceDefinition)
+		   .Include(c => c.GenericResources)
 		   .SingleOrDefaultAsync(c => c.Id == characterId, cancellationToken)
 		   .ToResultAsync(CharacterErrors.NotFound(characterId));
 
@@ -32,6 +33,7 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 		   .ThenInclude(cl => cl.CharacterClass)
 		   .Include(c => c.Resources)
 		   .ThenInclude(r => r.ResourceDefinition)
+		   .Include(c => c.GenericResources)
 		   .ToListAsync(cancellationToken);
 
 	public async Task<IReadOnlyCollection<Character>> GetForCampaignAsync(Guid campaignId, CancellationToken cancellationToken = default) =>
@@ -43,5 +45,13 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 		   .ThenInclude(cl => cl.CharacterClass)
 		   .Include(c => c.Resources)
 		   .ThenInclude(r => r.ResourceDefinition)
+		   .Include(c => c.GenericResources)
+		   .ToListAsync(cancellationToken);
+
+	public async Task<IReadOnlyCollection<Character>> GetForCampaignTrackedAsync(Guid campaignId, CancellationToken cancellationToken = default) =>
+		await dbContext
+		   .Characters
+		   .Where(c => c.CampaignId == campaignId)
+		   .Include(c => c.GenericResources)
 		   .ToListAsync(cancellationToken);
 }

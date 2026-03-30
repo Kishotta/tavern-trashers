@@ -18,6 +18,7 @@ public class CharactersDbContext(DbContextOptions<CharactersDbContext> options)
 	internal DbSet<CharacterClass> CharacterClasses => Set<CharacterClass>();
 	internal DbSet<ClassLevel> ClassLevels => Set<ClassLevel>();
 	internal DbSet<CharacterResource> CharacterResources => Set<CharacterResource>();
+	internal DbSet<GenericResource> GenericResources => Set<GenericResource>();
 	internal DbSet<ResourceDefinition> ResourceDefinitions => Set<ResourceDefinition>();
 	internal DbSet<CampaignReadModel> CampaignReadModels => Set<CampaignReadModel>();
 }

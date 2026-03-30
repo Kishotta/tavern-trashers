@@ -329,6 +329,53 @@ namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migratio
                     b.ToTable("character_resources", "characters");
                 });
 
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Characters.Domain.Resources.GenericResource", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CharacterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("character_id");
+
+                    b.Property<int>("CurrentAmount")
+                        .HasColumnType("integer")
+                        .HasColumnName("current_amount");
+
+                    b.Property<int>("Direction")
+                        .HasColumnType("integer")
+                        .HasColumnName("direction");
+
+                    b.Property<int>("MaxAmount")
+                        .HasColumnType("integer")
+                        .HasColumnName("max_amount");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("ResetTriggers")
+                        .HasColumnType("integer")
+                        .HasColumnName("reset_triggers");
+
+                    b.Property<string>("SourceCategory")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("source_category");
+
+                    b.HasKey("Id")
+                        .HasName("pk_character_generic_resources");
+
+                    b.HasIndex("CharacterId")
+                        .HasDatabaseName("ix_character_generic_resources_character_id");
+
+                    b.ToTable("character_generic_resources", "characters");
+                });
+
             modelBuilder.Entity("TavernTrashers.Api.Modules.Characters.Domain.Resources.ResourceDefinition", b =>
                 {
                     b.Property<Guid>("Id")
@@ -393,6 +440,16 @@ namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migratio
                     b.Navigation("ResourceDefinition");
                 });
 
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Characters.Domain.Resources.GenericResource", b =>
+                {
+                    b.HasOne("TavernTrashers.Api.Modules.Characters.Domain.Characters.Character", null)
+                        .WithMany("GenericResources")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_character_generic_resources_characters_character_id");
+                });
+
             modelBuilder.Entity("TavernTrashers.Api.Modules.Characters.Domain.Resources.ResourceDefinition", b =>
                 {
                     b.HasOne("TavernTrashers.Api.Modules.Characters.Domain.Classes.CharacterClass", null)
@@ -435,6 +492,8 @@ namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migratio
             modelBuilder.Entity("TavernTrashers.Api.Modules.Characters.Domain.Characters.Character", b =>
                 {
                     b.Navigation("ClassLevels");
+
+                    b.Navigation("GenericResources");
 
                     b.Navigation("Resources");
                 });
