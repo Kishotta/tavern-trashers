@@ -14,12 +14,19 @@ internal sealed class CharacterConfiguration : IEntityTypeConfiguration<Characte
 		builder.Property(c => c.OwnerId).IsRequired();
 		builder.Property(c => c.CampaignId).IsRequired();
 
+		builder.HasIndex(c => c.CampaignId);
+
 		builder.HasMany(c => c.ClassLevels)
 		   .WithOne()
 		   .HasForeignKey(cl => cl.CharacterId)
 		   .OnDelete(DeleteBehavior.Cascade);
 
 		builder.HasMany(c => c.Resources)
+		   .WithOne()
+		   .HasForeignKey(r => r.CharacterId)
+		   .OnDelete(DeleteBehavior.Cascade);
+
+		builder.HasMany(c => c.GenericResources)
 		   .WithOne()
 		   .HasForeignKey(r => r.CharacterId)
 		   .OnDelete(DeleteBehavior.Cascade);

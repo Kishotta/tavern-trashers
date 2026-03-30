@@ -52,4 +52,43 @@ public class CharacterTests
 		Assert.True(result.IsSuccess);
 		Assert.Equal(level, result.Value.Level);
 	}
+
+	[Fact]
+	public void Create_AutoPopulatesDefaultResources()
+	{
+		var result = Character.Create("Thorin", 1, OwnerId, CampaignId);
+
+		Assert.True(result.IsSuccess);
+		var resources = result.Value.GenericResources;
+		Assert.Equal(5, resources.Count);
+		Assert.Contains(resources, r => r.Name == "Action");
+		Assert.Contains(resources, r => r.Name == "Bonus Action");
+		Assert.Contains(resources, r => r.Name == "Reaction");
+		Assert.Contains(resources, r => r.Name == "Heroic Inspiration");
+		Assert.Contains(resources, r => r.Name == "Exhaustion");
+	}
+
+	[Fact]
+	public void Create_DefaultActionResource_IsSpendingWithPerRoundReset()
+	{
+		var result = Character.Create("Bilbo", 1, OwnerId, CampaignId);
+		var action = result.Value.GenericResources.Single(r => r.Name == "Action");
+
+		Assert.Equal(1, action.MaxUses);
+		Assert.Equal(1, action.CurrentUses);
+		Assert.Equal(Domain.Resources.ResourceDirection.Spending, action.Direction);
+		Assert.True(action.HasResetTrigger(Domain.Resources.ResetTrigger.PerRound));
+	}
+
+	[Fact]
+	public void Create_DefaultExhaustionResource_IsAccumulatingWithLongRestReset()
+	{
+		var result = Character.Create("Bilbo", 1, OwnerId, CampaignId);
+		var exhaustion = result.Value.GenericResources.Single(r => r.Name == "Exhaustion");
+
+		Assert.Equal(6, exhaustion.MaxUses);
+		Assert.Equal(0, exhaustion.CurrentUses);
+		Assert.Equal(Domain.Resources.ResourceDirection.Accumulating, exhaustion.Direction);
+		Assert.True(exhaustion.HasResetTrigger(Domain.Resources.ResetTrigger.LongRest));
+	}
 }
