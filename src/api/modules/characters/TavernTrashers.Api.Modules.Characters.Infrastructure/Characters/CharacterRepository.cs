@@ -34,7 +34,7 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 		   .ThenInclude(r => r.ResourceDefinition)
 		   .ToListAsync(cancellationToken);
 
-	public async Task<IReadOnlyCollection<Character>> GetByCampaignAsync(Guid campaignId, CancellationToken cancellationToken = default) =>
+	public async Task<IReadOnlyCollection<Character>> GetForCampaignAsync(Guid campaignId, CancellationToken cancellationToken = default) =>
 		await dbContext
 		   .Characters
 		   .AsNoTracking()

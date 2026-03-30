@@ -10,7 +10,7 @@ namespace TavernTrashers.Api.Modules.Characters.Presentation.Characters;
 public class GetCharacters : IEndpoint
 {
 	public void MapEndpoint(IEndpointRouteBuilder app) =>
-		app.MapGet("/characters", async (Guid campaignId, ISender sender) =>
+		app.MapGet("/campaigns/{campaignId:guid}/characters", async (Guid campaignId, ISender sender) =>
 				await sender
 				   .Send(new GetCharactersQuery(campaignId))
 				   .OkAsync())

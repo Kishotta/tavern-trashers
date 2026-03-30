@@ -36,7 +36,7 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasColumnType("character varying(2000)")
                         .HasColumnName("description");
 
-                    b.Property<Guid>("DmUserId")
+                    b.Property<Guid>("DungeonMasterUserId")
                         .HasColumnType("uuid")
                         .HasColumnName("dm_user_id");
 

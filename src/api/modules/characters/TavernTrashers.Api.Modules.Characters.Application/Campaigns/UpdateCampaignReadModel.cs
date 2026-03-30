@@ -11,14 +11,14 @@ internal sealed class UpdateCampaignReadModelCommandHandler(ICampaignReadModelRe
 {
 	public async Task<Result> Handle(UpdateCampaignReadModelCommand command, CancellationToken cancellationToken)
 	{
-		var campaign = await campaignReadModelRepository.GetAsync(command.CampaignId, cancellationToken);
-		if (campaign is null)
+		var result = await campaignReadModelRepository.GetAsync(command.CampaignId, cancellationToken);
+		if (result.IsFailure)
 		{
 			campaignReadModelRepository.Add(CampaignReadModel.Create(command.CampaignId, command.Title));
 			return Result.Success();
 		}
 
-		campaign.UpdateTitle(command.Title);
+		result.Value.UpdateTitle(command.Title);
 		return Result.Success();
 	}
 }

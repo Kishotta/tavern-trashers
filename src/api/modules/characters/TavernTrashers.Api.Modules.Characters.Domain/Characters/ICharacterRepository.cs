@@ -9,5 +9,5 @@ public interface ICharacterRepository
 
 	Task<Result<Character>> GetAsync(Guid characterId, CancellationToken cancellationToken = default);
 	Task<IReadOnlyCollection<Character>> GetAllAsync(CancellationToken cancellationToken = default);
-	Task<IReadOnlyCollection<Character>> GetByCampaignAsync(Guid campaignId, CancellationToken cancellationToken = default);
+	Task<IReadOnlyCollection<Character>> GetForCampaignAsync(Guid campaignId, CancellationToken cancellationToken = default);
 }

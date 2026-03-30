@@ -11,7 +11,7 @@ using TavernTrashers.Api.Modules.Campaigns.IntegrationEvents;
 
 namespace TavernTrashers.Api.Modules.Campaigns.Application.Campaigns;
 
-public sealed record CreateCampaignCommand(string Title, string Description, Guid DmUserId) : ICommand<CampaignResponse>;
+public sealed record CreateCampaignCommand(string Title, string Description, Guid DungeonMasterUserId) : ICommand<CampaignResponse>;
 
 internal sealed class CreateCampaignCommandValidator : AbstractValidator<CreateCampaignCommand>
 {
@@ -29,7 +29,7 @@ internal sealed class CreateCampaignCommandHandler(ICampaignRepository campaignR
         CreateCampaignCommand command,
         CancellationToken cancellationToken) =>
         await Task.FromResult(
-            Campaign.Create(command.Title, command.Description, command.DmUserId)
+            Campaign.Create(command.Title, command.Description, command.DungeonMasterUserId)
                .Do(campaignRepository.Add)
                .Transform(campaign => (CampaignResponse)campaign));
 }

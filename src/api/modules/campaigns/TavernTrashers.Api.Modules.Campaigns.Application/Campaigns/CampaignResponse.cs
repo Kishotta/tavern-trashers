@@ -6,8 +6,8 @@ public sealed record CampaignResponse(
     Guid Id,
     string Title,
     string Description,
-    Guid DmUserId)
+    Guid DungeonMasterUserId)
 {
     public static implicit operator CampaignResponse(Campaign campaign) =>
-        new(campaign.Id, campaign.Title, campaign.Description, campaign.DmUserId);
+        new(campaign.Id, campaign.Title, campaign.Description, campaign.DungeonMasterUserId);
 }

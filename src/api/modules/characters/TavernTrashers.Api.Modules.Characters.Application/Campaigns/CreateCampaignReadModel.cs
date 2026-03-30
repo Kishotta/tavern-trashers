@@ -12,7 +12,7 @@ internal sealed class CreateCampaignReadModelCommandHandler(ICampaignReadModelRe
 	public async Task<Result> Handle(CreateCampaignReadModelCommand command, CancellationToken cancellationToken)
 	{
 		var existing = await campaignReadModelRepository.GetAsync(command.CampaignId, cancellationToken);
-		if (existing is not null)
+		if (existing.IsSuccess)
 			return Result.Success();
 
 		var campaign = CampaignReadModel.Create(command.CampaignId, command.Title);

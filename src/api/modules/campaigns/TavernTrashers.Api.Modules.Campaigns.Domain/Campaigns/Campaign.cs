@@ -12,9 +12,9 @@ public sealed class Campaign : Entity
 
     public string Title { get; private set; } = string.Empty;
     public string Description { get; private set; } = string.Empty;
-    public Guid DmUserId { get; private set; }
+    public Guid DungeonMasterUserId { get; private set; }
 
-    public static Result<Campaign> Create(string title, string description, Guid dmUserId)
+    public static Result<Campaign> Create(string title, string description, Guid dungeonMasterUserId)
     {
         if (string.IsNullOrWhiteSpace(title))
             return CampaignErrors.InvalidTitle();
@@ -24,7 +24,7 @@ public sealed class Campaign : Entity
             Id = Guid.NewGuid(),
             Title = title.Trim(),
             Description = description.Trim(),
-            DmUserId = dmUserId,
+            DungeonMasterUserId = dungeonMasterUserId,
         };
 
         campaign.RaiseDomainEvent(new CampaignCreatedDomainEvent(campaign.Id, campaign.Title));

@@ -14,7 +14,7 @@ internal sealed class GetCharactersQueryHandler(ICharacterRepository characterRe
 		GetCharactersQuery query,
 		CancellationToken cancellationToken) =>
 		await characterRepository
-		   .GetByCampaignAsync(query.CampaignId, cancellationToken)
+		   .GetForCampaignAsync(query.CampaignId, cancellationToken)
 		   .TransformAsync(characters => characters
 			   .Select(character => (CharacterResponse)character)
 			   .ToList()

@@ -22,10 +22,10 @@ internal sealed class CampaignRepository(CampaignsDbContext dbContext) : ICampai
            .AsNoTracking()
            .ToListAsync(cancellationToken);
 
-    public async Task<IReadOnlyCollection<Campaign>> GetByDmAsync(Guid dmUserId, CancellationToken cancellationToken = default) =>
+    public async Task<IReadOnlyCollection<Campaign>> GetByDungeonMasterAsync(Guid dungeonMasterUserId, CancellationToken cancellationToken = default) =>
         await dbContext
            .Campaigns
            .AsNoTracking()
-           .Where(c => c.DmUserId == dmUserId)
+           .Where(c => c.DungeonMasterUserId == dungeonMasterUserId)
            .ToListAsync(cancellationToken);
 }

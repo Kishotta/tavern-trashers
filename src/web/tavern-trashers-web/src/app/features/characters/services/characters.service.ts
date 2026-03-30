@@ -10,7 +10,7 @@ export class CharactersService {
   constructor(private http: HttpClient) {}
 
   getCharactersByCampaign(campaignId: string): Observable<Character[]> {
-    return this.http.get<Character[]>(`/api/characters?campaignId=${campaignId}`);
+    return this.http.get<Character[]>(`/api/campaigns/${campaignId}/characters`);
   }
 
   createCharacter(request: CreateCharacterRequest): Observable<Character> {
