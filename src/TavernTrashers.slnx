@@ -19,6 +19,13 @@
     <Project Path="api/common/TavernTrashers.Api.Common.SourceGenerators/TavernTrashers.Api.Common.SourceGenerators.csproj" />
   </Folder>
   <Folder Name="/Api/Modules/" />
+  <Folder Name="/Api/Modules/Campaigns/">
+    <Project Path="api/modules/campaigns/TavernTrashers.Api.Modules.Campaigns.Application/TavernTrashers.Api.Modules.Campaigns.Application.csproj" />
+    <Project Path="api/modules/campaigns/TavernTrashers.Api.Modules.Campaigns.Domain/TavernTrashers.Api.Modules.Campaigns.Domain.csproj" />
+    <Project Path="api/modules/campaigns/TavernTrashers.Api.Modules.Campaigns.Infrastructure/TavernTrashers.Api.Modules.Campaigns.Infrastructure.csproj" />
+    <Project Path="api/modules/campaigns/TavernTrashers.Api.Modules.Campaigns.IntegrationEvents/TavernTrashers.Api.Modules.Campaigns.IntegrationEvents.csproj" />
+    <Project Path="api/modules/campaigns/TavernTrashers.Api.Modules.Campaigns.Presentation/TavernTrashers.Api.Modules.Campaigns.Presentation.csproj" />
+  </Folder>
   <Folder Name="/Api/Modules/Characters/">
     <Project Path="api/modules/characters/TavernTrashers.Api.Modules.Characters.Application/TavernTrashers.Api.Modules.Characters.Application.csproj" />
     <Project Path="api/modules/characters/TavernTrashers.Api.Modules.Characters.Domain/TavernTrashers.Api.Modules.Characters.Domain.csproj" />
