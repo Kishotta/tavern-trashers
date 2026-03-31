@@ -10,7 +10,7 @@ public sealed record CharacterResponse(
 	int Level,
 	Guid OwnerId,
 	Guid CampaignId,
-	HpTrackerResponse? HpTracker,
+	HitPointsResponse? HitPoints,
 	IReadOnlyCollection<ClassLevelResponse> ClassLevels,
 	IReadOnlyCollection<CharacterResourceResponse> Resources,
 	IReadOnlyCollection<GenericResourceResponse> GenericResources)
@@ -22,7 +22,7 @@ public sealed record CharacterResponse(
 			character.Level,
 			character.OwnerId,
 			character.CampaignId,
-			character.HpTracker is not null ? (HpTrackerResponse)character.HpTracker : null,
+			character.HitPoints is not null ? (HitPointsResponse)character.HitPoints : null,
 			character.ClassLevels.Select(cl => (ClassLevelResponse)cl).ToList().AsReadOnly(),
 			character.Resources.Select(r => (CharacterResourceResponse)r).ToList().AsReadOnly(),
 			character.GenericResources
@@ -82,20 +82,20 @@ public sealed record GenericResourceResponse(
 			resource.GetResetTriggers());
 }
 
-public sealed record HpTrackerResponse(
+public sealed record HitPointsResponse(
 	Guid Id,
-	int BaseMaxHp,
-	int CurrentHp,
-	int TemporaryHp,
-	int MaxHpReduction,
-	int EffectiveMaxHp)
+	int BaseMaxHitPoints,
+	int CurrentHitPoints,
+	int TemporaryHitPoints,
+	int MaxHitPointReduction,
+	int EffectiveMaxHitPoints)
 {
-	public static implicit operator HpTrackerResponse(HpTracker tracker) =>
+	public static implicit operator HitPointsResponse(HitPoints hitPoints) =>
 		new(
-			tracker.Id,
-			tracker.BaseMaxHp,
-			tracker.CurrentHp,
-			tracker.TemporaryHp,
-			tracker.MaxHpReduction,
-			tracker.EffectiveMaxHp);
+			hitPoints.Id,
+			hitPoints.BaseMaxHitPoints,
+			hitPoints.CurrentHitPoints,
+			hitPoints.TemporaryHitPoints,
+			hitPoints.MaxHitPointReduction,
+			hitPoints.EffectiveMaxHitPoints);
 }

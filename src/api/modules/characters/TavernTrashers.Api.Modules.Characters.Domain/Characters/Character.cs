@@ -19,7 +19,7 @@ public sealed class Character : Entity
 	public int Level { get; private set; } = 1;
 	public Guid OwnerId { get; private set; }
 	public Guid CampaignId { get; private set; }
-	public HpTracker? HpTracker { get; private set; }
+	public HitPoints? HitPoints { get; private set; }
 	public IReadOnlyCollection<ClassLevel> ClassLevels => _classLevels.AsReadOnly();
 	public IReadOnlyCollection<CharacterResource> Resources => _resources.AsReadOnly();
 	public IReadOnlyCollection<GenericResource> GenericResources => _genericResources.AsReadOnly();
@@ -139,91 +139,95 @@ public sealed class Character : Entity
 			resource.Restore();
 	}
 
-	public Result InitializeHpTracker(int baseMaxHp)
+	public Result InitializeHitPoints(int baseMaxHitPoints)
 	{
-		var result = HpTracker.Create(Id, baseMaxHp);
+		var result = HitPoints.Create(Id, baseMaxHitPoints);
 
 		if (result.IsSuccess)
-			HpTracker = result.Value;
+			HitPoints = result.Value;
 
 		return result;
 	}
 
-	public Result SetBaseMaxHp(int baseMaxHp)
+	public Result SetBaseMaxHitPoints(int baseMaxHitPoints)
 	{
-		if (HpTracker is null)
-			return InitializeHpTracker(baseMaxHp);
+		if (HitPoints is null)
+			return InitializeHitPoints(baseMaxHitPoints);
 
-		return HpTracker.SetBaseMaxHp(baseMaxHp);
+		return HitPoints.SetBaseMaxHitPoints(baseMaxHitPoints);
 	}
 
 	public Result TakeDamage(int amount)
 	{
-		if (HpTracker is null)
-			return HpTrackerErrors.NotFound(Id);
+		if (HitPoints is null)
+			return HitPointsErrors.NotFound(Id);
 
-		return HpTracker.TakeDamage(amount);
+		return HitPoints.TakeDamage(amount);
 	}
 
 	public Result Heal(int amount)
 	{
-		if (HpTracker is null)
-			return HpTrackerErrors.NotFound(Id);
+		if (HitPoints is null)
+			return HitPointsErrors.NotFound(Id);
 
-		return HpTracker.Heal(amount);
+		return HitPoints.Heal(amount);
 	}
 
-	public Result SetTemporaryHp(int amount)
+	public Result SetTemporaryHitPoints(int amount)
 	{
-		if (HpTracker is null)
-			return HpTrackerErrors.NotFound(Id);
+		if (HitPoints is null)
+			return HitPointsErrors.NotFound(Id);
 
-		return HpTracker.SetTemporaryHp(amount);
+		return HitPoints.SetTemporaryHitPoints(amount);
 	}
 
-	public Result ApplyMaxHpReduction(int reduction)
+	public Result ApplyMaxHitPointReduction(int reduction)
 	{
-		if (HpTracker is null)
-			return HpTrackerErrors.NotFound(Id);
+		if (HitPoints is null)
+			return HitPointsErrors.NotFound(Id);
 
-		return HpTracker.ApplyMaxHpReduction(reduction);
+		return HitPoints.ApplyMaxHitPointReduction(reduction);
 	}
 
-	public Result RemoveMaxHpReduction()
+	public Result RemoveMaxHitPointReduction()
 	{
-		if (HpTracker is null)
-			return HpTrackerErrors.NotFound(Id);
+		if (HitPoints is null)
+			return HitPointsErrors.NotFound(Id);
 
-		HpTracker.RemoveMaxHpReduction();
+		HitPoints.RemoveMaxHitPointReduction();
 		return Result.Success();
 	}
 
-	public Result SetHpFields(int? baseMaxHp, int? currentHp, int? temporaryHp, int? maxHpReduction)
+	public Result SetHitPointFields(
+		int? baseMaxHitPoints,
+		int? currentHitPoints,
+		int? temporaryHitPoints,
+		int? maxHitPointReduction)
 	{
-		if (HpTracker is null)
-			return HpTrackerErrors.NotFound(Id);
+		if (HitPoints is null)
+			return HitPointsErrors.NotFound(Id);
 
-		if (baseMaxHp.HasValue)
+		if (baseMaxHitPoints.HasValue)
 		{
-			var result = HpTracker.DirectSetBaseMaxHp(baseMaxHp.Value);
+			var result = HitPoints.DirectSetBaseMaxHitPoints(baseMaxHitPoints.Value);
 			if (result.IsFailure) return result;
 		}
 
-		if (maxHpReduction.HasValue)
+		if (maxHitPointReduction.HasValue)
 		{
-			var result = HpTracker.DirectSetMaxHpReduction(maxHpReduction.Value);
+			var result = HitPoints.DirectSetMaxHitPointReduction(maxHitPointReduction.Value);
 			if (result.IsFailure) return result;
 		}
 
-		if (currentHp.HasValue)
+		if (currentHitPoints.HasValue)
 		{
-			var result = HpTracker.DirectSetCurrentHp(currentHp.Value);
+			var result = HitPoints.DirectSetCurrentHitPoints(currentHitPoints.Value);
 			if (result.IsFailure) return result;
 		}
 
-		if (temporaryHp.HasValue)
+		if (temporaryHitPoints.HasValue)
 		{
-			var result = HpTracker.DirectSetTemporaryHp(temporaryHp.Value);
+			var result = HitPoints.DirectSetTemporaryHitPoints(temporaryHitPoints.Value);
 			if (result.IsFailure) return result;
 		}
 

@@ -8,26 +8,26 @@ using TavernTrashers.Api.Modules.Characters.Application.Characters;
 
 namespace TavernTrashers.Api.Modules.Characters.Presentation.Characters;
 
-public class ApplyMaxHpReduction : IEndpoint
+public class SetTemporaryHitPoints : IEndpoint
 {
 	public void MapEndpoint(IEndpointRouteBuilder app) =>
-		app.MapPost("/characters/{id:guid}/hp/max-hp-reduction", async (
+		app.MapPut("/characters/{id:guid}/hit-points/temporary", async (
 					Guid id,
-					ApplyMaxHpReductionRequest request,
+					SetTemporaryHitPointsRequest request,
 					ISender sender) =>
 				await sender
-				   .Send(new ApplyMaxHpReductionCommand(id, request.Reduction))
+				   .Send(new SetTemporaryHitPointsCommand(id, request.Amount))
 				   .OkAsync())
 		   .RequireAuthorization()
-		   .WithName(nameof(ApplyMaxHpReduction))
+		   .WithName(nameof(SetTemporaryHitPoints))
 		   .WithTags(Tags.Characters)
-		   .WithSummary("Apply Max HP Reduction")
-		   .WithDescription("Apply a max HP reduction to a character. Effective Max HP decreases accordingly.")
-		   .Accepts<ApplyMaxHpReductionRequest>("application/json")
-		   .Produces<HpTrackerResponse>(StatusCodes.Status200OK)
+		   .WithSummary("Set Temporary Hit Points")
+		   .WithDescription("Set temporary hit points for a character. If temporary hit points already exist, the higher value is kept.")
+		   .Accepts<SetTemporaryHitPointsRequest>("application/json")
+		   .Produces<HitPointsResponse>(StatusCodes.Status200OK)
 		   .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
 		   .Produces<ProblemDetails>(StatusCodes.Status401Unauthorized)
 		   .Produces<ProblemDetails>(StatusCodes.Status404NotFound);
 
-	internal sealed record ApplyMaxHpReductionRequest(int Reduction);
+	internal sealed record SetTemporaryHitPointsRequest(int Amount);
 }

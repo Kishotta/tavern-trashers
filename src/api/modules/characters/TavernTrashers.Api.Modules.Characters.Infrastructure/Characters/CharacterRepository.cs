@@ -15,7 +15,7 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 	public async Task<Result<Character>> GetAsync(Guid characterId, CancellationToken cancellationToken = default) =>
 		await dbContext
 		   .Characters
-		   .Include(c => c.HpTracker)
+		   .Include(c => c.HitPoints)
 		   .Include(c => c.ClassLevels)
 		   .ThenInclude(cl => cl.CharacterClass)
 		   .ThenInclude(cc => cc.ResourceDefinitions)
@@ -30,7 +30,7 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 		await dbContext
 		   .Characters
 		   .AsNoTracking()
-		   .Include(c => c.HpTracker)
+		   .Include(c => c.HitPoints)
 		   .Include(c => c.ClassLevels)
 		   .ThenInclude(cl => cl.CharacterClass)
 		   .Include(c => c.Resources)
@@ -42,7 +42,7 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 		await dbContext
 		   .Characters
 		   .Where(c => c.CampaignId == campaignId)
-		   .Include(c => c.HpTracker)
+		   .Include(c => c.HitPoints)
 		   .Include(c => c.ClassLevels)
 		   .ThenInclude(cl => cl.CharacterClass)
 		   .Include(c => c.Resources)
