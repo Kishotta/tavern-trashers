@@ -20,6 +20,7 @@ public sealed class Character : Entity
 	public Guid OwnerId { get; private set; }
 	public Guid CampaignId { get; private set; }
 	public HitPoints HitPoints { get; private set; } = null!;
+	public DeathSavingThrows DeathSavingThrows { get; private set; } = null!;
 	public IReadOnlyCollection<ClassLevel> ClassLevels => _classLevels.AsReadOnly();
 	public IReadOnlyCollection<CharacterResource> Resources => _resources.AsReadOnly();
 	public IReadOnlyCollection<GenericResource> GenericResources => _genericResources.AsReadOnly();
@@ -42,7 +43,8 @@ public sealed class Character : Entity
 		};
 
 		character._genericResources.AddRange(DefaultResourceFactory.CreateDefaultResources(character.Id));
-		character.HitPoints = HitPoints.CreateDefault(character.Id);
+		character.HitPoints           = HitPoints.CreateDefault(character.Id);
+		character.DeathSavingThrows   = DeathSavingThrows.CreateDefault(character.Id);
 
 		return character;
 	}
@@ -143,11 +145,34 @@ public sealed class Character : Entity
 	public Result SetBaseMaxHitPoints(int baseMaxHitPoints) =>
 		HitPoints.SetBaseMaxHitPoints(baseMaxHitPoints);
 
-	public Result TakeDamage(int amount) =>
-		HitPoints.TakeDamage(amount);
+	public Result TakeDamage(int amount)
+	{
+		// At 0 HP: nonzero damage auto-records 1 death saving throw failure (unless already at max)
+		if (HitPoints.CurrentHitPoints == 0 && amount > 0)
+		{
+			if (DeathSavingThrows.Failures < 3)
+				DeathSavingThrows.RecordFailure();
+			return Result.Success();
+		}
 
-	public Result Heal(int amount) =>
-		HitPoints.Heal(amount);
+		var previousHp = HitPoints.CurrentHitPoints;
+		var result     = HitPoints.TakeDamage(amount);
+		if (result.IsFailure) return result;
+
+		// Knocked from positive HP to 0: reset death saving throws
+		if (previousHp > 0 && HitPoints.CurrentHitPoints == 0)
+			DeathSavingThrows.Reset();
+
+		return result;
+	}
+
+	public Result Heal(int amount)
+	{
+		var result = HitPoints.Heal(amount);
+		if (result.IsSuccess && HitPoints.CurrentHitPoints > 0)
+			DeathSavingThrows.Reset();
+		return result;
+	}
 
 	public Result SetTemporaryHitPoints(int amount) =>
 		HitPoints.SetTemporaryHitPoints(amount);
@@ -191,8 +216,20 @@ public sealed class Character : Entity
 			if (result.IsFailure) return result;
 		}
 
+		if (HitPoints.CurrentHitPoints > 0)
+			DeathSavingThrows.Reset();
+
 		return Result.Success();
 	}
+
+	public Result RecordDeathSavingThrowSuccess() =>
+		DeathSavingThrows.RecordSuccess();
+
+	public Result RecordDeathSavingThrowFailure() =>
+		DeathSavingThrows.RecordFailure();
+
+	public void ResetDeathSavingThrows() =>
+		DeathSavingThrows.Reset();
 
 	private void RecalculateResources()
 	{

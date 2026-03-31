@@ -11,6 +11,7 @@ public sealed record CharacterResponse(
 	Guid OwnerId,
 	Guid CampaignId,
 	HitPointsResponse HitPoints,
+	DeathSavingThrowsResponse DeathSavingThrows,
 	IReadOnlyCollection<ClassLevelResponse> ClassLevels,
 	IReadOnlyCollection<CharacterResourceResponse> Resources,
 	IReadOnlyCollection<GenericResourceResponse> GenericResources)
@@ -23,6 +24,7 @@ public sealed record CharacterResponse(
 			character.OwnerId,
 			character.CampaignId,
 			(HitPointsResponse)character.HitPoints,
+			(DeathSavingThrowsResponse)character.DeathSavingThrows,
 			character.ClassLevels.Select(cl => (ClassLevelResponse)cl).ToList().AsReadOnly(),
 			character.Resources.Select(r => (CharacterResourceResponse)r).ToList().AsReadOnly(),
 			character.GenericResources
@@ -98,4 +100,16 @@ public sealed record HitPointsResponse(
 			hitPoints.TemporaryHitPoints,
 			hitPoints.MaxHitPointReduction,
 			hitPoints.EffectiveMaxHitPoints);
+}
+
+public sealed record DeathSavingThrowsResponse(
+	Guid Id,
+	int Successes,
+	int Failures)
+{
+	public static implicit operator DeathSavingThrowsResponse(DeathSavingThrows deathSavingThrows) =>
+		new(
+			deathSavingThrows.Id,
+			deathSavingThrows.Successes,
+			deathSavingThrows.Failures);
 }
