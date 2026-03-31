@@ -30,5 +30,10 @@ internal sealed class CharacterConfiguration : IEntityTypeConfiguration<Characte
 		   .WithOne()
 		   .HasForeignKey(r => r.CharacterId)
 		   .OnDelete(DeleteBehavior.Cascade);
+
+		builder.HasOne(c => c.HpTracker)
+		   .WithOne()
+		   .HasForeignKey<Domain.Resources.HpTracker>(h => h.CharacterId)
+		   .OnDelete(DeleteBehavior.Cascade);
 	}
 }

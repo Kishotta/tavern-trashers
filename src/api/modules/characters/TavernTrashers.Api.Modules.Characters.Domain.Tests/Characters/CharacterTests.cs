@@ -91,4 +91,57 @@ public class CharacterTests
 		Assert.Equal(Domain.Resources.ResourceDirection.Accumulating, exhaustion.Direction);
 		Assert.True(exhaustion.HasResetTrigger(Domain.Resources.ResetTrigger.LongRest));
 	}
+
+	[Fact]
+	public void Create_AutomaticallyCreatesHpTracker()
+	{
+		var result = Character.Create("Frodo", 1, OwnerId, CampaignId);
+
+		Assert.True(result.IsSuccess);
+		Assert.NotNull(result.Value.HpTracker);
+		Assert.Equal(0, result.Value.HpTracker.BaseMaxHp);
+		Assert.Equal(0, result.Value.HpTracker.CurrentHp);
+		Assert.Equal(0, result.Value.HpTracker.TemporaryHp);
+		Assert.Equal(0, result.Value.HpTracker.MaxHpReduction);
+		Assert.Equal(0, result.Value.HpTracker.EffectiveMaxHp);
+	}
+
+	[Fact]
+	public void SetBaseMaxHp_UpdatesHpTracker()
+	{
+		var character = Character.Create("Sam", 1, OwnerId, CampaignId).Value;
+
+		var result = character.SetBaseMaxHp(50);
+
+		Assert.True(result.IsSuccess);
+		Assert.Equal(50, character.HpTracker!.BaseMaxHp);
+		Assert.Equal(0, character.HpTracker!.CurrentHp); // Current HP doesn't auto-increase
+	}
+
+	[Fact]
+	public void TakeDamage_ReducesCurrentHp()
+	{
+		var character = Character.Create("Merry", 1, OwnerId, CampaignId).Value;
+		character.SetBaseMaxHp(50);
+		character.Heal(50); // Heal to full first
+
+		var result = character.TakeDamage(15);
+
+		Assert.True(result.IsSuccess);
+		Assert.Equal(35, character.HpTracker!.CurrentHp);
+	}
+
+	[Fact]
+	public void Heal_IncreasesCurrentHp()
+	{
+		var character = Character.Create("Pippin", 1, OwnerId, CampaignId).Value;
+		character.SetBaseMaxHp(50);
+		character.Heal(50); // Heal to full
+		character.TakeDamage(20);
+
+		var result = character.Heal(10);
+
+		Assert.True(result.IsSuccess);
+		Assert.Equal(40, character.HpTracker!.CurrentHp);
+	}
 }
