@@ -22,6 +22,12 @@ internal sealed class CharacterConfiguration : IEntityTypeConfiguration<Characte
 		   .IsRequired()
 		   .OnDelete(DeleteBehavior.Cascade);
 
+		builder.HasOne(c => c.DeathSavingThrows)
+		   .WithOne()
+		   .HasForeignKey<Domain.Resources.DeathSavingThrows>(d => d.CharacterId)
+		   .IsRequired()
+		   .OnDelete(DeleteBehavior.Cascade);
+
 		builder.HasMany(c => c.ClassLevels)
 		   .WithOne()
 		   .HasForeignKey(cl => cl.CharacterId)

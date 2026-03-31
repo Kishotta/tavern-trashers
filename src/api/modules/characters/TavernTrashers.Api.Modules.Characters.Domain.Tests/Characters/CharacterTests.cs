@@ -91,4 +91,84 @@ public class CharacterTests
 		Assert.Equal(Domain.Resources.ResourceDirection.Accumulating, exhaustion.Direction);
 		Assert.True(exhaustion.HasResetTrigger(Domain.Resources.ResetTrigger.LongRest));
 	}
+
+	[Fact]
+	public void Create_InitializesDeathSavingThrowsToZero()
+	{
+		var result = Character.Create("Gandalf", 1, OwnerId, CampaignId);
+
+		Assert.True(result.IsSuccess);
+		Assert.Equal(0, result.Value.DeathSavingThrows.Successes);
+		Assert.Equal(0, result.Value.DeathSavingThrows.Failures);
+	}
+
+	[Fact]
+	public void Heal_WhenCurrentHpBecomesPositive_ResetsDeathSavingThrows()
+	{
+		var character = Character.Create("Aragorn", 1, OwnerId, CampaignId).Value;
+		character.SetHitPointFields(10, 0, null, null);
+		character.RecordDeathSavingThrowSuccess();
+		character.RecordDeathSavingThrowFailure();
+
+		character.Heal(5);
+
+		Assert.Equal(0, character.DeathSavingThrows.Successes);
+		Assert.Equal(0, character.DeathSavingThrows.Failures);
+	}
+
+	[Fact]
+	public void TakeDamage_WhenCurrentHpRemainsPositive_ResetsDeathSavingThrows()
+	{
+		var character = Character.Create("Legolas", 1, OwnerId, CampaignId).Value;
+		character.SetHitPointFields(10, 5, null, null);
+		character.RecordDeathSavingThrowSuccess();
+		character.RecordDeathSavingThrowFailure();
+
+		character.TakeDamage(3);
+
+		Assert.Equal(0, character.DeathSavingThrows.Successes);
+		Assert.Equal(0, character.DeathSavingThrows.Failures);
+	}
+
+	[Fact]
+	public void TakeDamage_WhenCurrentHpDropsToZero_DoesNotResetDeathSavingThrows()
+	{
+		var character = Character.Create("Frodo", 1, OwnerId, CampaignId).Value;
+		character.SetHitPointFields(10, 5, null, null);
+		character.RecordDeathSavingThrowSuccess();
+		character.RecordDeathSavingThrowFailure();
+
+		character.TakeDamage(5);
+
+		Assert.Equal(1, character.DeathSavingThrows.Successes);
+		Assert.Equal(1, character.DeathSavingThrows.Failures);
+	}
+
+	[Fact]
+	public void SetHitPointFields_WhenCurrentHpBecomesPositive_ResetsDeathSavingThrows()
+	{
+		var character = Character.Create("Gimli", 1, OwnerId, CampaignId).Value;
+		character.SetHitPointFields(10, 0, null, null);
+		character.RecordDeathSavingThrowSuccess();
+		character.RecordDeathSavingThrowFailure();
+
+		character.SetHitPointFields(null, 8, null, null);
+
+		Assert.Equal(0, character.DeathSavingThrows.Successes);
+		Assert.Equal(0, character.DeathSavingThrows.Failures);
+	}
+
+	[Fact]
+	public void ResetDeathSavingThrows_ManualReset_ClearsBothCounters()
+	{
+		var character = Character.Create("Boromir", 1, OwnerId, CampaignId).Value;
+		character.RecordDeathSavingThrowSuccess();
+		character.RecordDeathSavingThrowSuccess();
+		character.RecordDeathSavingThrowFailure();
+
+		character.ResetDeathSavingThrows();
+
+		Assert.Equal(0, character.DeathSavingThrows.Successes);
+		Assert.Equal(0, character.DeathSavingThrows.Failures);
+	}
 }

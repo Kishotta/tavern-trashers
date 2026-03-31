@@ -21,5 +21,6 @@ public class CharactersDbContext(DbContextOptions<CharactersDbContext> options)
 	internal DbSet<ResourceDefinition> ResourceDefinitions => Set<ResourceDefinition>();
 	internal DbSet<GenericResource> GenericResources => Set<GenericResource>();
 	internal DbSet<HitPoints> HitPoints => Set<HitPoints>();
+	internal DbSet<DeathSavingThrows> DeathSavingThrows => Set<DeathSavingThrows>();
 	internal DbSet<CampaignReadModel> CampaignReadModels => Set<CampaignReadModel>();
 }
