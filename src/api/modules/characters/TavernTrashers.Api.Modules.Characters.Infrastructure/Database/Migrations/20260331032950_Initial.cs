@@ -4,8 +4,6 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migrations
 {
     /// <inheritdoc />
@@ -38,6 +36,19 @@ namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migratio
                 });
 
             migrationBuilder.CreateTable(
+                name: "campaign_read_models",
+                schema: "characters",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_campaign_read_models", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "character_classes",
                 schema: "characters",
                 columns: table => new
@@ -57,7 +68,10 @@ namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migratio
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    level = table.Column<int>(type: "integer", nullable: false),
+                    owner_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    campaign_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -175,6 +189,32 @@ namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migratio
                 });
 
             migrationBuilder.CreateTable(
+                name: "generic_resources",
+                schema: "characters",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    character_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    current_uses = table.Column<int>(type: "integer", nullable: false),
+                    max_uses = table.Column<int>(type: "integer", nullable: false),
+                    direction = table.Column<string>(type: "text", nullable: false),
+                    source_category = table.Column<string>(type: "text", nullable: false),
+                    reset_triggers = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_generic_resources", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_generic_resources_characters_character_id",
+                        column: x => x.character_id,
+                        principalSchema: "characters",
+                        principalTable: "characters",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "character_resources",
                 schema: "characters",
                 columns: table => new
@@ -225,7 +265,7 @@ namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migratio
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
-            
+
             migrationBuilder.CreateIndex(
                 name: "ix_character_classes_name",
                 schema: "characters",
@@ -247,6 +287,12 @@ namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migratio
                 column: "resource_definition_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_characters_campaign_id",
+                schema: "characters",
+                table: "characters",
+                column: "campaign_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_class_levels_character_class_id",
                 schema: "characters",
                 table: "class_levels",
@@ -258,6 +304,12 @@ namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migratio
                 table: "class_levels",
                 columns: new[] { "character_id", "character_class_id" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_generic_resources_character_id",
+                schema: "characters",
+                table: "generic_resources",
+                column: "character_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_resource_definitions_character_class_id",
@@ -274,11 +326,19 @@ namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migratio
                 schema: "characters");
 
             migrationBuilder.DropTable(
+                name: "campaign_read_models",
+                schema: "characters");
+
+            migrationBuilder.DropTable(
                 name: "character_resources",
                 schema: "characters");
 
             migrationBuilder.DropTable(
                 name: "class_levels",
+                schema: "characters");
+
+            migrationBuilder.DropTable(
+                name: "generic_resources",
                 schema: "characters");
 
             migrationBuilder.DropTable(

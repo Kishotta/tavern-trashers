@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -42,7 +42,7 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    dm_user_id = table.Column<Guid>(type: "uuid", nullable: false)
+                    dungeon_master_user_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -113,12 +113,29 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(name: "audit_logs", schema: "campaigns");
-            migrationBuilder.DropTable(name: "campaigns", schema: "campaigns");
-            migrationBuilder.DropTable(name: "inbox_message_consumers", schema: "campaigns");
-            migrationBuilder.DropTable(name: "inbox_messages", schema: "campaigns");
-            migrationBuilder.DropTable(name: "outbox_message_consumers", schema: "campaigns");
-            migrationBuilder.DropTable(name: "outbox_messages", schema: "campaigns");
+            migrationBuilder.DropTable(
+                name: "audit_logs",
+                schema: "campaigns");
+
+            migrationBuilder.DropTable(
+                name: "campaigns",
+                schema: "campaigns");
+
+            migrationBuilder.DropTable(
+                name: "inbox_message_consumers",
+                schema: "campaigns");
+
+            migrationBuilder.DropTable(
+                name: "inbox_messages",
+                schema: "campaigns");
+
+            migrationBuilder.DropTable(
+                name: "outbox_message_consumers",
+                schema: "campaigns");
+
+            migrationBuilder.DropTable(
+                name: "outbox_messages",
+                schema: "campaigns");
         }
     }
 }

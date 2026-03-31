@@ -5,11 +5,4 @@
         <ProjectReference Include="..\TavernTrashers.Api.Modules.Characters.Application\TavernTrashers.Api.Modules.Characters.Application.csproj"/>
         <ProjectReference Include="..\TavernTrashers.Api.Modules.Characters.Presentation\TavernTrashers.Api.Modules.Characters.Presentation.csproj"/>
     </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
 </Project>

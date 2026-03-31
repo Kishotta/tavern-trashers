@@ -93,6 +93,41 @@ namespace TavernTrashers.Api.Modules.Dice.Infrastructure.Database.Migrations
                 {
                     table.PrimaryKey("pk_outbox_messages", x => x.id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "rolls",
+                schema: "dice",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    parent_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    expression = table.Column<string>(type: "text", nullable: false),
+                    total = table.Column<int>(type: "integer", nullable: false),
+                    minimum = table.Column<int>(type: "integer", nullable: false),
+                    maximum = table.Column<int>(type: "integer", nullable: false),
+                    average = table.Column<double>(type: "double precision", nullable: false),
+                    rolled_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    context_json = table.Column<string>(type: "jsonb", nullable: false),
+                    raw_rolls = table.Column<string>(type: "jsonb", nullable: false),
+                    kept_rolls = table.Column<string>(type: "jsonb", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_rolls", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_rolls_rolls_parent_id",
+                        column: x => x.parent_id,
+                        principalSchema: "dice",
+                        principalTable: "rolls",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_rolls_parent_id",
+                schema: "dice",
+                table: "rolls",
+                column: "parent_id");
         }
 
         /// <inheritdoc />
@@ -116,6 +151,10 @@ namespace TavernTrashers.Api.Modules.Dice.Infrastructure.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "outbox_messages",
+                schema: "dice");
+
+            migrationBuilder.DropTable(
+                name: "rolls",
                 schema: "dice");
         }
     }
