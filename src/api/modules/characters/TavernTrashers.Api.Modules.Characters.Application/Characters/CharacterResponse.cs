@@ -10,6 +10,7 @@ public sealed record CharacterResponse(
 	int Level,
 	Guid OwnerId,
 	Guid CampaignId,
+	HitPointsResponse HitPoints,
 	IReadOnlyCollection<ClassLevelResponse> ClassLevels,
 	IReadOnlyCollection<CharacterResourceResponse> Resources,
 	IReadOnlyCollection<GenericResourceResponse> GenericResources)
@@ -21,6 +22,7 @@ public sealed record CharacterResponse(
 			character.Level,
 			character.OwnerId,
 			character.CampaignId,
+			(HitPointsResponse)character.HitPoints,
 			character.ClassLevels.Select(cl => (ClassLevelResponse)cl).ToList().AsReadOnly(),
 			character.Resources.Select(r => (CharacterResourceResponse)r).ToList().AsReadOnly(),
 			character.GenericResources
@@ -78,4 +80,22 @@ public sealed record GenericResourceResponse(
 			resource.Direction,
 			resource.SourceCategory,
 			resource.GetResetTriggers());
+}
+
+public sealed record HitPointsResponse(
+	Guid Id,
+	int BaseMaxHitPoints,
+	int CurrentHitPoints,
+	int TemporaryHitPoints,
+	int MaxHitPointReduction,
+	int EffectiveMaxHitPoints)
+{
+	public static implicit operator HitPointsResponse(HitPoints hitPoints) =>
+		new(
+			hitPoints.Id,
+			hitPoints.BaseMaxHitPoints,
+			hitPoints.CurrentHitPoints,
+			hitPoints.TemporaryHitPoints,
+			hitPoints.MaxHitPointReduction,
+			hitPoints.EffectiveMaxHitPoints);
 }

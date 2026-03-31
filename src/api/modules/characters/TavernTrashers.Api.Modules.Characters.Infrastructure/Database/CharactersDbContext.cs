@@ -20,6 +20,6 @@ public class CharactersDbContext(DbContextOptions<CharactersDbContext> options)
 	internal DbSet<CharacterResource> CharacterResources => Set<CharacterResource>();
 	internal DbSet<ResourceDefinition> ResourceDefinitions => Set<ResourceDefinition>();
 	internal DbSet<GenericResource> GenericResources => Set<GenericResource>();
+	internal DbSet<HitPoints> HitPoints => Set<HitPoints>();
 	internal DbSet<CampaignReadModel> CampaignReadModels => Set<CampaignReadModel>();
 }
-

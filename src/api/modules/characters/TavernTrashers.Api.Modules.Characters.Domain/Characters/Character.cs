@@ -19,6 +19,7 @@ public sealed class Character : Entity
 	public int Level { get; private set; } = 1;
 	public Guid OwnerId { get; private set; }
 	public Guid CampaignId { get; private set; }
+	public HitPoints HitPoints { get; private set; } = null!;
 	public IReadOnlyCollection<ClassLevel> ClassLevels => _classLevels.AsReadOnly();
 	public IReadOnlyCollection<CharacterResource> Resources => _resources.AsReadOnly();
 	public IReadOnlyCollection<GenericResource> GenericResources => _genericResources.AsReadOnly();
@@ -41,6 +42,7 @@ public sealed class Character : Entity
 		};
 
 		character._genericResources.AddRange(DefaultResourceFactory.CreateDefaultResources(character.Id));
+		character.HitPoints = HitPoints.CreateDefault(character.Id);
 
 		return character;
 	}
@@ -136,6 +138,60 @@ public sealed class Character : Entity
 	{
 		foreach (var resource in _genericResources.Where(r => r.HasResetTrigger(trigger)))
 			resource.Restore();
+	}
+
+	public Result SetBaseMaxHitPoints(int baseMaxHitPoints) =>
+		HitPoints.SetBaseMaxHitPoints(baseMaxHitPoints);
+
+	public Result TakeDamage(int amount) =>
+		HitPoints.TakeDamage(amount);
+
+	public Result Heal(int amount) =>
+		HitPoints.Heal(amount);
+
+	public Result SetTemporaryHitPoints(int amount) =>
+		HitPoints.SetTemporaryHitPoints(amount);
+
+	public Result ApplyMaxHitPointReduction(int reduction) =>
+		HitPoints.ApplyMaxHitPointReduction(reduction);
+
+	public Result RemoveMaxHitPointReduction()
+	{
+		HitPoints.RemoveMaxHitPointReduction();
+		return Result.Success();
+	}
+
+	public Result SetHitPointFields(
+		int? baseMaxHitPoints,
+		int? currentHitPoints,
+		int? temporaryHitPoints,
+		int? maxHitPointReduction)
+	{
+		if (baseMaxHitPoints.HasValue)
+		{
+			var result = HitPoints.DirectSetBaseMaxHitPoints(baseMaxHitPoints.Value);
+			if (result.IsFailure) return result;
+		}
+
+		if (maxHitPointReduction.HasValue)
+		{
+			var result = HitPoints.DirectSetMaxHitPointReduction(maxHitPointReduction.Value);
+			if (result.IsFailure) return result;
+		}
+
+		if (currentHitPoints.HasValue)
+		{
+			var result = HitPoints.DirectSetCurrentHitPoints(currentHitPoints.Value);
+			if (result.IsFailure) return result;
+		}
+
+		if (temporaryHitPoints.HasValue)
+		{
+			var result = HitPoints.DirectSetTemporaryHitPoints(temporaryHitPoints.Value);
+			if (result.IsFailure) return result;
+		}
+
+		return Result.Success();
 	}
 
 	private void RecalculateResources()
