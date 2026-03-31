@@ -12,8 +12,8 @@ using TavernTrashers.Api.Modules.Dice.Infrastructure.Database;
 namespace TavernTrashers.Api.Modules.Dice.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(DiceDbContext))]
-    [Migration("20250503184048_AddRerolls")]
-    partial class AddRerolls
+    [Migration("20260331033055_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace TavernTrashers.Api.Modules.Dice.Infrastructure.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("dice")
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -205,9 +205,9 @@ namespace TavernTrashers.Api.Modules.Dice.Infrastructure.Database.Migrations
                         .HasColumnType("text")
                         .HasColumnName("expression");
 
-                    b.PrimitiveCollection<int[]>("KeptRolls")
+                    b.Property<string>("KeptRolls")
                         .IsRequired()
-                        .HasColumnType("integer[]")
+                        .HasColumnType("jsonb")
                         .HasColumnName("kept_rolls");
 
                     b.Property<int>("Maximum")
@@ -222,9 +222,9 @@ namespace TavernTrashers.Api.Modules.Dice.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("parent_id");
 
-                    b.PrimitiveCollection<int[]>("RawRolls")
+                    b.Property<string>("RawRolls")
                         .IsRequired()
-                        .HasColumnType("integer[]")
+                        .HasColumnType("jsonb")
                         .HasColumnName("raw_rolls");
 
                     b.Property<DateTime>("RolledAtUtc")

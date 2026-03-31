@@ -12,8 +12,8 @@ using TavernTrashers.Api.Modules.Characters.Infrastructure.Database;
 namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(CharactersDbContext))]
-    [Migration("20260330235219_AddGenericResources")]
-    partial class AddGenericResources
+    [Migration("20260331032950_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace TavernTrashers.Api.Modules.Characters.Infrastructure.Database.Migratio
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("characters")
-                .HasAnnotation("ProductVersion", "10.0.3")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
