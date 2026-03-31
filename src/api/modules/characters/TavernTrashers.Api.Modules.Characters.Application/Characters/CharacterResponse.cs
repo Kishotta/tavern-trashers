@@ -10,7 +10,7 @@ public sealed record CharacterResponse(
 	int Level,
 	Guid OwnerId,
 	Guid CampaignId,
-	HitPointsResponse? HitPoints,
+	HitPointsResponse HitPoints,
 	IReadOnlyCollection<ClassLevelResponse> ClassLevels,
 	IReadOnlyCollection<CharacterResourceResponse> Resources,
 	IReadOnlyCollection<GenericResourceResponse> GenericResources)
@@ -22,7 +22,7 @@ public sealed record CharacterResponse(
 			character.Level,
 			character.OwnerId,
 			character.CampaignId,
-			character.HitPoints is not null ? (HitPointsResponse)character.HitPoints : null,
+			(HitPointsResponse)character.HitPoints,
 			character.ClassLevels.Select(cl => (ClassLevelResponse)cl).ToList().AsReadOnly(),
 			character.Resources.Select(r => (CharacterResourceResponse)r).ToList().AsReadOnly(),
 			character.GenericResources

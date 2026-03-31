@@ -27,6 +27,6 @@ internal sealed class RemoveMaxHitPointReductionCommandHandler(ICharacterReposit
 		var result = characterResult.Value.RemoveMaxHitPointReduction();
 		if (result.IsFailure) return result.Error;
 
-		return (HitPointsResponse)characterResult.Value.HitPoints!;
+		return (HitPointsResponse)characterResult.Value.HitPoints;
 	}
 }

@@ -33,9 +33,4 @@ public static class HitPointsErrors
 		Error.Validation(
 			"HitPoints.InvalidMaxHitPointReductionValue",
 			$"Max hit point reduction '{value}' is invalid. Must be 0 or greater.");
-
-	public static Error NotFound(Guid characterId) =>
-		Error.NotFound(
-			"HitPoints.NotFound",
-			$"Hit points for character '{characterId}' have not been initialized.");
 }

@@ -15,6 +15,17 @@ public sealed class HitPoints : Entity
 
 	public int EffectiveMaxHitPoints => BaseMaxHitPoints - MaxHitPointReduction;
 
+	public static HitPoints CreateDefault(Guid characterId) =>
+		new()
+		{
+			Id                   = Guid.NewGuid(),
+			CharacterId          = characterId,
+			BaseMaxHitPoints     = 0,
+			CurrentHitPoints     = 0,
+			TemporaryHitPoints   = 0,
+			MaxHitPointReduction = 0,
+		};
+
 	public static Result<HitPoints> Create(Guid characterId, int baseMaxHitPoints)
 	{
 		if (baseMaxHitPoints < 0)

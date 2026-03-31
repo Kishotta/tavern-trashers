@@ -19,6 +19,7 @@ internal sealed class CharacterConfiguration : IEntityTypeConfiguration<Characte
 		builder.HasOne(c => c.HitPoints)
 		   .WithOne()
 		   .HasForeignKey<Domain.Resources.HitPoints>(h => h.CharacterId)
+		   .IsRequired()
 		   .OnDelete(DeleteBehavior.Cascade);
 
 		builder.HasMany(c => c.ClassLevels)

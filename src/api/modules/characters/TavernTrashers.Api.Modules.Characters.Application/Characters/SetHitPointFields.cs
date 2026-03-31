@@ -41,6 +41,6 @@ internal sealed class SetHitPointFieldsCommandHandler(ICharacterRepository chara
 
 		if (result.IsFailure) return result.Error;
 
-		return (HitPointsResponse)characterResult.Value.HitPoints!;
+		return (HitPointsResponse)characterResult.Value.HitPoints;
 	}
 }

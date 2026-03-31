@@ -19,7 +19,7 @@ public sealed class Character : Entity
 	public int Level { get; private set; } = 1;
 	public Guid OwnerId { get; private set; }
 	public Guid CampaignId { get; private set; }
-	public HitPoints? HitPoints { get; private set; }
+	public HitPoints HitPoints { get; private set; } = null!;
 	public IReadOnlyCollection<ClassLevel> ClassLevels => _classLevels.AsReadOnly();
 	public IReadOnlyCollection<CharacterResource> Resources => _resources.AsReadOnly();
 	public IReadOnlyCollection<GenericResource> GenericResources => _genericResources.AsReadOnly();
@@ -42,6 +42,7 @@ public sealed class Character : Entity
 		};
 
 		character._genericResources.AddRange(DefaultResourceFactory.CreateDefaultResources(character.Id));
+		character.HitPoints = HitPoints.CreateDefault(character.Id);
 
 		return character;
 	}
@@ -139,61 +140,23 @@ public sealed class Character : Entity
 			resource.Restore();
 	}
 
-	public Result InitializeHitPoints(int baseMaxHitPoints)
-	{
-		var result = HitPoints.Create(Id, baseMaxHitPoints);
+	public Result SetBaseMaxHitPoints(int baseMaxHitPoints) =>
+		HitPoints.SetBaseMaxHitPoints(baseMaxHitPoints);
 
-		if (result.IsSuccess)
-			HitPoints = result.Value;
+	public Result TakeDamage(int amount) =>
+		HitPoints.TakeDamage(amount);
 
-		return result;
-	}
+	public Result Heal(int amount) =>
+		HitPoints.Heal(amount);
 
-	public Result SetBaseMaxHitPoints(int baseMaxHitPoints)
-	{
-		if (HitPoints is null)
-			return InitializeHitPoints(baseMaxHitPoints);
+	public Result SetTemporaryHitPoints(int amount) =>
+		HitPoints.SetTemporaryHitPoints(amount);
 
-		return HitPoints.SetBaseMaxHitPoints(baseMaxHitPoints);
-	}
-
-	public Result TakeDamage(int amount)
-	{
-		if (HitPoints is null)
-			return HitPointsErrors.NotFound(Id);
-
-		return HitPoints.TakeDamage(amount);
-	}
-
-	public Result Heal(int amount)
-	{
-		if (HitPoints is null)
-			return HitPointsErrors.NotFound(Id);
-
-		return HitPoints.Heal(amount);
-	}
-
-	public Result SetTemporaryHitPoints(int amount)
-	{
-		if (HitPoints is null)
-			return HitPointsErrors.NotFound(Id);
-
-		return HitPoints.SetTemporaryHitPoints(amount);
-	}
-
-	public Result ApplyMaxHitPointReduction(int reduction)
-	{
-		if (HitPoints is null)
-			return HitPointsErrors.NotFound(Id);
-
-		return HitPoints.ApplyMaxHitPointReduction(reduction);
-	}
+	public Result ApplyMaxHitPointReduction(int reduction) =>
+		HitPoints.ApplyMaxHitPointReduction(reduction);
 
 	public Result RemoveMaxHitPointReduction()
 	{
-		if (HitPoints is null)
-			return HitPointsErrors.NotFound(Id);
-
 		HitPoints.RemoveMaxHitPointReduction();
 		return Result.Success();
 	}
@@ -204,9 +167,6 @@ public sealed class Character : Entity
 		int? temporaryHitPoints,
 		int? maxHitPointReduction)
 	{
-		if (HitPoints is null)
-			return HitPointsErrors.NotFound(Id);
-
 		if (baseMaxHitPoints.HasValue)
 		{
 			var result = HitPoints.DirectSetBaseMaxHitPoints(baseMaxHitPoints.Value);

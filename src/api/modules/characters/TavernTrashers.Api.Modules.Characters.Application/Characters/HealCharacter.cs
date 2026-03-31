@@ -28,6 +28,6 @@ internal sealed class HealCharacterCommandHandler(ICharacterRepository character
 		var result = characterResult.Value.Heal(command.Amount);
 		if (result.IsFailure) return result.Error;
 
-		return (HitPointsResponse)characterResult.Value.HitPoints!;
+		return (HitPointsResponse)characterResult.Value.HitPoints;
 	}
 }

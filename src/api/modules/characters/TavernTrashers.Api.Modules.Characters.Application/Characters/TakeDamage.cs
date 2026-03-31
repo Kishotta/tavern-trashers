@@ -28,6 +28,6 @@ internal sealed class TakeDamageCommandHandler(ICharacterRepository characterRep
 		var result = characterResult.Value.TakeDamage(command.Amount);
 		if (result.IsFailure) return result.Error;
 
-		return (HitPointsResponse)characterResult.Value.HitPoints!;
+		return (HitPointsResponse)characterResult.Value.HitPoints;
 	}
 }

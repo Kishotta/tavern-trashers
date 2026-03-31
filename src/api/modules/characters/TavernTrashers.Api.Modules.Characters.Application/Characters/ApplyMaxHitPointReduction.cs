@@ -28,6 +28,6 @@ internal sealed class ApplyMaxHitPointReductionCommandHandler(ICharacterReposito
 		var result = characterResult.Value.ApplyMaxHitPointReduction(command.Reduction);
 		if (result.IsFailure) return result.Error;
 
-		return (HitPointsResponse)characterResult.Value.HitPoints!;
+		return (HitPointsResponse)characterResult.Value.HitPoints;
 	}
 }

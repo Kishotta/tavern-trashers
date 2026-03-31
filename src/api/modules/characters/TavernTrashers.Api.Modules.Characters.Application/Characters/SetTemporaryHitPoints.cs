@@ -28,6 +28,6 @@ internal sealed class SetTemporaryHitPointsCommandHandler(ICharacterRepository c
 		var result = characterResult.Value.SetTemporaryHitPoints(command.Amount);
 		if (result.IsFailure) return result.Error;
 
-		return (HitPointsResponse)characterResult.Value.HitPoints!;
+		return (HitPointsResponse)characterResult.Value.HitPoints;
 	}
 }
