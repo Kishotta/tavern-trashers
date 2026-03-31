@@ -147,9 +147,22 @@ public sealed class Character : Entity
 
 	public Result TakeDamage(int amount)
 	{
-		var result = HitPoints.TakeDamage(amount);
-		if (result.IsSuccess && HitPoints.CurrentHitPoints > 0)
+		// At 0 HP: nonzero damage auto-records 1 death saving throw failure (unless already at max)
+		if (HitPoints.CurrentHitPoints == 0 && amount > 0)
+		{
+			if (DeathSavingThrows.Failures < 3)
+				DeathSavingThrows.RecordFailure();
+			return Result.Success();
+		}
+
+		var previousHp = HitPoints.CurrentHitPoints;
+		var result     = HitPoints.TakeDamage(amount);
+		if (result.IsFailure) return result;
+
+		// Knocked from positive HP to 0: reset death saving throws
+		if (previousHp > 0 && HitPoints.CurrentHitPoints == 0)
 			DeathSavingThrows.Reset();
+
 		return result;
 	}
 

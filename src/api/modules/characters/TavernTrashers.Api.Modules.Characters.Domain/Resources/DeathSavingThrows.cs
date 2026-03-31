@@ -1,5 +1,6 @@
 using TavernTrashers.Api.Common.Domain.Entities;
 using TavernTrashers.Api.Common.Domain.Results;
+using TavernTrashers.Api.Modules.Characters.Domain.Characters.Events;
 
 namespace TavernTrashers.Api.Modules.Characters.Domain.Resources;
 
@@ -28,6 +29,10 @@ public sealed class DeathSavingThrows : Entity
 			return DeathSavingThrowsErrors.AlreadyAtMaxSuccesses();
 
 		Successes++;
+
+		if (Successes == MaxCount)
+			RaiseDomainEvent(new CharacterStabilizedDomainEvent(CharacterId));
+
 		return Result.Success();
 	}
 
@@ -37,6 +42,10 @@ public sealed class DeathSavingThrows : Entity
 			return DeathSavingThrowsErrors.AlreadyAtMaxFailures();
 
 		Failures++;
+
+		if (Failures == MaxCount)
+			RaiseDomainEvent(new CharacterDiedDomainEvent(CharacterId));
+
 		return Result.Success();
 	}
 

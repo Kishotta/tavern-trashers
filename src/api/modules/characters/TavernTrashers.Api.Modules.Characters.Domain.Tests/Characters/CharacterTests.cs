@@ -117,12 +117,10 @@ public class CharacterTests
 	}
 
 	[Fact]
-	public void TakeDamage_WhenCurrentHpRemainsPositive_ResetsDeathSavingThrows()
+	public void TakeDamage_WhenCurrentHpRemainsPositive_DoesNotChangeDST()
 	{
 		var character = Character.Create("Legolas", 1, OwnerId, CampaignId).Value;
 		character.SetHitPointFields(10, 5, null, null);
-		character.RecordDeathSavingThrowSuccess();
-		character.RecordDeathSavingThrowFailure();
 
 		character.TakeDamage(3);
 
@@ -131,7 +129,7 @@ public class CharacterTests
 	}
 
 	[Fact]
-	public void TakeDamage_WhenCurrentHpDropsToZero_DoesNotResetDeathSavingThrows()
+	public void TakeDamage_WhenCurrentHpDropsToZero_ResetsDeathSavingThrows()
 	{
 		var character = Character.Create("Frodo", 1, OwnerId, CampaignId).Value;
 		character.SetHitPointFields(10, 5, null, null);
@@ -140,8 +138,31 @@ public class CharacterTests
 
 		character.TakeDamage(5);
 
-		Assert.Equal(1, character.DeathSavingThrows.Successes);
+		Assert.Equal(0, character.DeathSavingThrows.Successes);
+		Assert.Equal(0, character.DeathSavingThrows.Failures);
+	}
+
+	[Fact]
+	public void TakeDamage_WhenAlreadyAtZeroHp_AutoRecordsOneFailure()
+	{
+		var character = Character.Create("Sam", 1, OwnerId, CampaignId).Value;
+		character.SetHitPointFields(10, 0, null, null);
+
+		character.TakeDamage(5);
+
 		Assert.Equal(1, character.DeathSavingThrows.Failures);
+		Assert.Equal(0, character.DeathSavingThrows.Successes);
+	}
+
+	[Fact]
+	public void TakeDamage_WhenAlreadyAtZeroHpWithZeroDamage_DoesNotAutoRecordFailure()
+	{
+		var character = Character.Create("Pippin", 1, OwnerId, CampaignId).Value;
+		character.SetHitPointFields(10, 0, null, null);
+
+		character.TakeDamage(0);
+
+		Assert.Equal(0, character.DeathSavingThrows.Failures);
 	}
 
 	[Fact]

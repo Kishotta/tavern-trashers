@@ -1,3 +1,4 @@
+using TavernTrashers.Api.Modules.Characters.Domain.Characters.Events;
 using TavernTrashers.Api.Modules.Characters.Domain.Resources;
 
 namespace TavernTrashers.Api.Modules.Characters.Domain.Tests.Resources;
@@ -120,5 +121,55 @@ public class DeathSavingThrowsTests
 
 		Assert.Equal(2, dst.Successes);
 		Assert.Equal(1, dst.Failures);
+	}
+
+	[Fact]
+	public void RecordSuccess_OnThirdSuccess_RaisesCharacterStabilizedDomainEvent()
+	{
+		var dst = CreateDefault();
+		dst.RecordSuccess();
+		dst.RecordSuccess();
+
+		dst.RecordSuccess();
+
+		var events = dst.GetDomainEvents();
+		var stabilized = Assert.Single(events.OfType<CharacterStabilizedDomainEvent>());
+		Assert.Equal(CharacterId, stabilized.CharacterId);
+	}
+
+	[Fact]
+	public void RecordSuccess_BeforeThirdSuccess_DoesNotRaiseCharacterStabilizedDomainEvent()
+	{
+		var dst = CreateDefault();
+
+		dst.RecordSuccess();
+		dst.RecordSuccess();
+
+		Assert.Empty(dst.GetDomainEvents().OfType<CharacterStabilizedDomainEvent>());
+	}
+
+	[Fact]
+	public void RecordFailure_OnThirdFailure_RaisesCharacterDiedDomainEvent()
+	{
+		var dst = CreateDefault();
+		dst.RecordFailure();
+		dst.RecordFailure();
+
+		dst.RecordFailure();
+
+		var events = dst.GetDomainEvents();
+		var died = Assert.Single(events.OfType<CharacterDiedDomainEvent>());
+		Assert.Equal(CharacterId, died.CharacterId);
+	}
+
+	[Fact]
+	public void RecordFailure_BeforeThirdFailure_DoesNotRaiseCharacterDiedDomainEvent()
+	{
+		var dst = CreateDefault();
+
+		dst.RecordFailure();
+		dst.RecordFailure();
+
+		Assert.Empty(dst.GetDomainEvents().OfType<CharacterDiedDomainEvent>());
 	}
 }
