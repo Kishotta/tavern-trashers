@@ -19,6 +19,7 @@ public sealed class Character : Entity
 	public int Level { get; private set; } = 1;
 	public Guid OwnerId { get; private set; }
 	public Guid CampaignId { get; private set; }
+	public HpTracker? HpTracker { get; private set; }
 	public IReadOnlyCollection<ClassLevel> ClassLevels => _classLevels.AsReadOnly();
 	public IReadOnlyCollection<CharacterResource> Resources => _resources.AsReadOnly();
 	public IReadOnlyCollection<GenericResource> GenericResources => _genericResources.AsReadOnly();
@@ -136,6 +137,97 @@ public sealed class Character : Entity
 	{
 		foreach (var resource in _genericResources.Where(r => r.HasResetTrigger(trigger)))
 			resource.Restore();
+	}
+
+	public Result InitializeHpTracker(int baseMaxHp)
+	{
+		var result = HpTracker.Create(Id, baseMaxHp);
+
+		if (result.IsSuccess)
+			HpTracker = result.Value;
+
+		return result;
+	}
+
+	public Result SetBaseMaxHp(int baseMaxHp)
+	{
+		if (HpTracker is null)
+			return InitializeHpTracker(baseMaxHp);
+
+		return HpTracker.SetBaseMaxHp(baseMaxHp);
+	}
+
+	public Result TakeDamage(int amount)
+	{
+		if (HpTracker is null)
+			return HpTrackerErrors.NotFound(Id);
+
+		return HpTracker.TakeDamage(amount);
+	}
+
+	public Result Heal(int amount)
+	{
+		if (HpTracker is null)
+			return HpTrackerErrors.NotFound(Id);
+
+		return HpTracker.Heal(amount);
+	}
+
+	public Result SetTemporaryHp(int amount)
+	{
+		if (HpTracker is null)
+			return HpTrackerErrors.NotFound(Id);
+
+		return HpTracker.SetTemporaryHp(amount);
+	}
+
+	public Result ApplyMaxHpReduction(int reduction)
+	{
+		if (HpTracker is null)
+			return HpTrackerErrors.NotFound(Id);
+
+		return HpTracker.ApplyMaxHpReduction(reduction);
+	}
+
+	public Result RemoveMaxHpReduction()
+	{
+		if (HpTracker is null)
+			return HpTrackerErrors.NotFound(Id);
+
+		HpTracker.RemoveMaxHpReduction();
+		return Result.Success();
+	}
+
+	public Result SetHpFields(int? baseMaxHp, int? currentHp, int? temporaryHp, int? maxHpReduction)
+	{
+		if (HpTracker is null)
+			return HpTrackerErrors.NotFound(Id);
+
+		if (baseMaxHp.HasValue)
+		{
+			var result = HpTracker.DirectSetBaseMaxHp(baseMaxHp.Value);
+			if (result.IsFailure) return result;
+		}
+
+		if (maxHpReduction.HasValue)
+		{
+			var result = HpTracker.DirectSetMaxHpReduction(maxHpReduction.Value);
+			if (result.IsFailure) return result;
+		}
+
+		if (currentHp.HasValue)
+		{
+			var result = HpTracker.DirectSetCurrentHp(currentHp.Value);
+			if (result.IsFailure) return result;
+		}
+
+		if (temporaryHp.HasValue)
+		{
+			var result = HpTracker.DirectSetTemporaryHp(temporaryHp.Value);
+			if (result.IsFailure) return result;
+		}
+
+		return Result.Success();
 	}
 
 	private void RecalculateResources()

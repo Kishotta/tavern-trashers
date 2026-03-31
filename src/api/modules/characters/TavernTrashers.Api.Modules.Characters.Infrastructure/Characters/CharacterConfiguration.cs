@@ -16,6 +16,11 @@ internal sealed class CharacterConfiguration : IEntityTypeConfiguration<Characte
 
 		builder.HasIndex(c => c.CampaignId);
 
+		builder.HasOne(c => c.HpTracker)
+		   .WithOne()
+		   .HasForeignKey<Domain.Resources.HpTracker>(h => h.CharacterId)
+		   .OnDelete(DeleteBehavior.Cascade);
+
 		builder.HasMany(c => c.ClassLevels)
 		   .WithOne()
 		   .HasForeignKey(cl => cl.CharacterId)

@@ -10,6 +10,7 @@ public sealed record CharacterResponse(
 	int Level,
 	Guid OwnerId,
 	Guid CampaignId,
+	HpTrackerResponse? HpTracker,
 	IReadOnlyCollection<ClassLevelResponse> ClassLevels,
 	IReadOnlyCollection<CharacterResourceResponse> Resources,
 	IReadOnlyCollection<GenericResourceResponse> GenericResources)
@@ -21,6 +22,7 @@ public sealed record CharacterResponse(
 			character.Level,
 			character.OwnerId,
 			character.CampaignId,
+			character.HpTracker is not null ? (HpTrackerResponse)character.HpTracker : null,
 			character.ClassLevels.Select(cl => (ClassLevelResponse)cl).ToList().AsReadOnly(),
 			character.Resources.Select(r => (CharacterResourceResponse)r).ToList().AsReadOnly(),
 			character.GenericResources
@@ -78,4 +80,22 @@ public sealed record GenericResourceResponse(
 			resource.Direction,
 			resource.SourceCategory,
 			resource.GetResetTriggers());
+}
+
+public sealed record HpTrackerResponse(
+	Guid Id,
+	int BaseMaxHp,
+	int CurrentHp,
+	int TemporaryHp,
+	int MaxHpReduction,
+	int EffectiveMaxHp)
+{
+	public static implicit operator HpTrackerResponse(HpTracker tracker) =>
+		new(
+			tracker.Id,
+			tracker.BaseMaxHp,
+			tracker.CurrentHp,
+			tracker.TemporaryHp,
+			tracker.MaxHpReduction,
+			tracker.EffectiveMaxHp);
 }
