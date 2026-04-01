@@ -10,6 +10,14 @@ namespace TavernTrashers.Api.Modules.Characters.Domain.Characters;
 [Auditable]
 public sealed class Character : Entity
 {
+	private static readonly Dictionary<Condition, Condition[]> _implications = new()
+	{
+		{ Condition.Paralyzed,  [Condition.Incapacitated] },
+		{ Condition.Petrified,  [Condition.Incapacitated] },
+		{ Condition.Stunned,    [Condition.Incapacitated] },
+		{ Condition.Unconscious, [Condition.Incapacitated, Condition.Prone] },
+	};
+
 	private readonly List<GenericResource> _genericResources = [];
 	private Character() { }
 
@@ -17,6 +25,7 @@ public sealed class Character : Entity
 	public int Level { get; private set; } = 1;
 	public Guid OwnerId { get; private set; }
 	public Guid CampaignId { get; private set; }
+	public Condition Conditions { get; private set; } = Condition.None;
 	public HitPoints HitPoints { get; private set; } = null!;
 	public DeathSavingThrows DeathSavingThrows { get; private set; } = null!;
 	public IReadOnlyCollection<GenericResource> GenericResources => _genericResources.AsReadOnly();
@@ -46,7 +55,35 @@ public sealed class Character : Entity
 	}
 
 	public void ChangeName(string name) => Name = name.Trim();
-	
+
+	public void ApplyCondition(Condition condition)
+	{
+		Conditions |= condition;
+
+		if (_implications.TryGetValue(condition, out var implied))
+			foreach (var impliedCondition in implied)
+				Conditions |= impliedCondition;
+	}
+
+	public void RemoveCondition(Condition condition)
+	{
+		Conditions &= ~condition;
+
+		if (!_implications.TryGetValue(condition, out var implied))
+			return;
+
+		foreach (var impliedCondition in implied)
+		{
+			var stillImplied = _implications.Any(kvp =>
+				kvp.Key != condition &&
+				Conditions.HasFlag(kvp.Key) &&
+				kvp.Value.Contains(impliedCondition));
+
+			if (!stillImplied)
+				Conditions &= ~impliedCondition;
+		}
+	}
+
 	public Result<GenericResource> AddGenericResource(
 		string name,
 		int maxUses,
