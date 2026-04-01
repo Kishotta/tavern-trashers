@@ -16,6 +16,8 @@ internal sealed class CharacterConfiguration : IEntityTypeConfiguration<Characte
 
 		builder.HasIndex(c => c.CampaignId);
 
+		builder.Property(c => c.Conditions).IsRequired().HasDefaultValue(Conditions.None);
+
 		builder.HasOne(c => c.HitPoints)
 		   .WithOne()
 		   .HasForeignKey<Domain.Resources.HitPoints>(h => h.CharacterId)

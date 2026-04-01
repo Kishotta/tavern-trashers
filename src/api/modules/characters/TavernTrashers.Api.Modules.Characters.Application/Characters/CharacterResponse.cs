@@ -10,6 +10,7 @@ public sealed record CharacterResponse(
 	int Level,
 	Guid OwnerId,
 	Guid CampaignId,
+	Conditions Conditions,
 	HitPointsResponse HitPoints,
 	DeathSavingThrowsResponse DeathSavingThrows,
 	IReadOnlyCollection<GenericResourceResponse> GenericResources)
@@ -21,6 +22,7 @@ public sealed record CharacterResponse(
 			character.Level,
 			character.OwnerId,
 			character.CampaignId,
+			character.Conditions,
 			character.HitPoints,
 			character.DeathSavingThrows,
 			character.GenericResources
