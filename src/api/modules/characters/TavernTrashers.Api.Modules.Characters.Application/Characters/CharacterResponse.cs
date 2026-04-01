@@ -12,8 +12,6 @@ public sealed record CharacterResponse(
 	Guid CampaignId,
 	HitPointsResponse HitPoints,
 	DeathSavingThrowsResponse DeathSavingThrows,
-	IReadOnlyCollection<ClassLevelResponse> ClassLevels,
-	IReadOnlyCollection<CharacterResourceResponse> Resources,
 	IReadOnlyCollection<GenericResourceResponse> GenericResources)
 {
 	public static implicit operator CharacterResponse(Character character) =>
@@ -23,10 +21,8 @@ public sealed record CharacterResponse(
 			character.Level,
 			character.OwnerId,
 			character.CampaignId,
-			(HitPointsResponse)character.HitPoints,
-			(DeathSavingThrowsResponse)character.DeathSavingThrows,
-			character.ClassLevels.Select(cl => (ClassLevelResponse)cl).ToList().AsReadOnly(),
-			character.Resources.Select(r => (CharacterResourceResponse)r).ToList().AsReadOnly(),
+			character.HitPoints,
+			character.DeathSavingThrows,
 			character.GenericResources
 			   .Where(r => r.MaxUses > 0)
 			   .Select(r => (GenericResourceResponse)r)

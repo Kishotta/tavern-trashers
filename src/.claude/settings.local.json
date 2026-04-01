@@ -6,7 +6,9 @@
       "Read(C:\\Users\\Kisho\\Projects\\tavern-trashers/**)",
       "Bash(dotnet package search:*)",
       "WebSearch",
-      "Bash(find /c/Users/Kisho/Projects/tavern-trashers/src/api/modules/dice/TavernTrashers.Api.Modules.Dice.Infrastructure/obj -name *.g.cs)"
+      "Bash(find /c/Users/Kisho/Projects/tavern-trashers/src/api/modules/dice/TavernTrashers.Api.Modules.Dice.Infrastructure/obj -name *.g.cs)",
+      "Bash(ls:*)",
+      "Bash(dotnet ef:*)"
     ],
     "deny": [],
     "ask": []

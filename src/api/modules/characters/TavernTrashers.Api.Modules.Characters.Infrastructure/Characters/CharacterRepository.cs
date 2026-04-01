@@ -16,12 +16,6 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 		await dbContext
 		   .Characters
 		   .Include(c => c.HitPoints)
-		   .Include(c => c.ClassLevels)
-		   .ThenInclude(cl => cl.CharacterClass)
-		   .ThenInclude(cc => cc.ResourceDefinitions)
-		   .ThenInclude(rd => rd.Allowances)
-		   .Include(c => c.Resources)
-		   .ThenInclude(r => r.ResourceDefinition)
 		   .Include(c => c.GenericResources)
 		   .SingleOrDefaultAsync(c => c.Id == characterId, cancellationToken)
 		   .ToResultAsync(CharacterErrors.NotFound(characterId));
@@ -31,10 +25,6 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 		   .Characters
 		   .AsNoTracking()
 		   .Include(c => c.HitPoints)
-		   .Include(c => c.ClassLevels)
-		   .ThenInclude(cl => cl.CharacterClass)
-		   .Include(c => c.Resources)
-		   .ThenInclude(r => r.ResourceDefinition)
 		   .Include(c => c.GenericResources)
 		   .ToListAsync(cancellationToken);
 
@@ -43,10 +33,6 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 		   .Characters
 		   .Where(c => c.CampaignId == campaignId)
 		   .Include(c => c.HitPoints)
-		   .Include(c => c.ClassLevels)
-		   .ThenInclude(cl => cl.CharacterClass)
-		   .Include(c => c.Resources)
-		   .ThenInclude(r => r.ResourceDefinition)
 		   .Include(c => c.GenericResources)
 		   .ToListAsync(cancellationToken);
 }

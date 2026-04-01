@@ -1,10 +1,10 @@
 {
   "Users": {
     "KeyCloak": {
-      "AdminUrl": "http://identity/admin/realms/tavern-trashers/",
-      "TokenUrl": "http://identity/realms/tavern-trashers/protocol/openid-connect/token",
+      "AdminUrl": "http://localhost:3000/admin/realms/tavern-trashers/",
+      "TokenUrl": "http://localhost:3000/realms/tavern-trashers/protocol/openid-connect/token",
       "ConfidentialClientId": "tavern-trashers-confidential-client",
-      "ConfidentialClientSecret": "a7R3nw7zxf260i0fd8MUk8N6ba5Jm4lm",
+      "ConfidentialClientSecret": "do4sZqFTGHVOwY3Lg3fYWOrfwuzyEbia",
       "PublicClientId": "tavern-trashers-public-client"
     },
     "Inbox": {
