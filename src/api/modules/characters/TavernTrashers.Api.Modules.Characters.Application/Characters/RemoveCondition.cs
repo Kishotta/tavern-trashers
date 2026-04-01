@@ -6,7 +6,7 @@ using TavernTrashers.Api.Modules.Characters.Domain.Characters;
 
 namespace TavernTrashers.Api.Modules.Characters.Application.Characters;
 
-public sealed record RemoveConditionCommand(Guid CharacterId, Condition Condition) : ICommand<CharacterResponse>;
+public sealed record RemoveConditionCommand(Guid CharacterId, Conditions Condition) : ICommand<CharacterResponse>;
 
 internal sealed class RemoveConditionCommandValidator : AbstractValidator<RemoveConditionCommand>
 {

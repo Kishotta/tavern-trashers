@@ -30,5 +30,5 @@ public class RemoveCondition : IEndpoint
 		   .Produces<ProblemDetails>(StatusCodes.Status401Unauthorized)
 		   .Produces<ProblemDetails>(StatusCodes.Status404NotFound);
 
-	internal sealed record RemoveConditionRequest(Condition Condition);
+	internal sealed record RemoveConditionRequest(Conditions Condition);
 }

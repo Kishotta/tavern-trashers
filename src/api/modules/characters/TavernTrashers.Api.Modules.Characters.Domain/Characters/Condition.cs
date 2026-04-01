@@ -1,7 +1,7 @@
 namespace TavernTrashers.Api.Modules.Characters.Domain.Characters;
 
 [Flags]
-public enum Condition
+public enum Conditions
 {
 	None          = 0,
 	Blinded       = 1 << 0,

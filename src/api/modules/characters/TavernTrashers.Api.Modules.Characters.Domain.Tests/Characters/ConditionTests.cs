@@ -15,20 +15,20 @@ public class ConditionTests
 	{
 		var character = CreateCharacter();
 
-		Assert.Equal(Condition.None, character.Conditions);
+		Assert.Equal(Conditions.None, character.Conditions);
 	}
 
 	[Theory]
-	[InlineData(Condition.Blinded)]
-	[InlineData(Condition.Charmed)]
-	[InlineData(Condition.Deafened)]
-	[InlineData(Condition.Frightened)]
-	[InlineData(Condition.Grappled)]
-	[InlineData(Condition.Invisible)]
-	[InlineData(Condition.Poisoned)]
-	[InlineData(Condition.Prone)]
-	[InlineData(Condition.Restrained)]
-	public void ApplyCondition_SetsCondition(Condition condition)
+	[InlineData(Conditions.Blinded)]
+	[InlineData(Conditions.Charmed)]
+	[InlineData(Conditions.Deafened)]
+	[InlineData(Conditions.Frightened)]
+	[InlineData(Conditions.Grappled)]
+	[InlineData(Conditions.Invisible)]
+	[InlineData(Conditions.Poisoned)]
+	[InlineData(Conditions.Prone)]
+	[InlineData(Conditions.Restrained)]
+	public void ApplyCondition_SetsCondition(Conditions condition)
 	{
 		var character = CreateCharacter();
 
@@ -38,16 +38,16 @@ public class ConditionTests
 	}
 
 	[Theory]
-	[InlineData(Condition.Blinded)]
-	[InlineData(Condition.Charmed)]
-	[InlineData(Condition.Deafened)]
-	[InlineData(Condition.Frightened)]
-	[InlineData(Condition.Grappled)]
-	[InlineData(Condition.Invisible)]
-	[InlineData(Condition.Poisoned)]
-	[InlineData(Condition.Prone)]
-	[InlineData(Condition.Restrained)]
-	public void RemoveCondition_ClearsCondition(Condition condition)
+	[InlineData(Conditions.Blinded)]
+	[InlineData(Conditions.Charmed)]
+	[InlineData(Conditions.Deafened)]
+	[InlineData(Conditions.Frightened)]
+	[InlineData(Conditions.Grappled)]
+	[InlineData(Conditions.Invisible)]
+	[InlineData(Conditions.Poisoned)]
+	[InlineData(Conditions.Prone)]
+	[InlineData(Conditions.Restrained)]
+	public void RemoveCondition_ClearsCondition(Conditions condition)
 	{
 		var character = CreateCharacter();
 		character.ApplyCondition(condition);
@@ -58,17 +58,17 @@ public class ConditionTests
 	}
 
 	[Theory]
-	[InlineData(Condition.Paralyzed)]
-	[InlineData(Condition.Petrified)]
-	[InlineData(Condition.Stunned)]
-	public void ApplyCondition_ImpliesIncapacitated(Condition condition)
+	[InlineData(Conditions.Paralyzed)]
+	[InlineData(Conditions.Petrified)]
+	[InlineData(Conditions.Stunned)]
+	public void ApplyCondition_ImpliesIncapacitated(Conditions condition)
 	{
 		var character = CreateCharacter();
 
 		character.ApplyCondition(condition);
 
 		Assert.True(character.Conditions.HasFlag(condition));
-		Assert.True(character.Conditions.HasFlag(Condition.Incapacitated));
+		Assert.True(character.Conditions.HasFlag(Conditions.Incapacitated));
 	}
 
 	[Fact]
@@ -76,18 +76,18 @@ public class ConditionTests
 	{
 		var character = CreateCharacter();
 
-		character.ApplyCondition(Condition.Unconscious);
+		character.ApplyCondition(Conditions.Unconscious);
 
-		Assert.True(character.Conditions.HasFlag(Condition.Unconscious));
-		Assert.True(character.Conditions.HasFlag(Condition.Incapacitated));
-		Assert.True(character.Conditions.HasFlag(Condition.Prone));
+		Assert.True(character.Conditions.HasFlag(Conditions.Unconscious));
+		Assert.True(character.Conditions.HasFlag(Conditions.Incapacitated));
+		Assert.True(character.Conditions.HasFlag(Conditions.Prone));
 	}
 
 	[Theory]
-	[InlineData(Condition.Paralyzed)]
-	[InlineData(Condition.Petrified)]
-	[InlineData(Condition.Stunned)]
-	public void RemoveCondition_ClearsImpliedIncapacitated_WhenNoOtherConditionImpliesIt(Condition condition)
+	[InlineData(Conditions.Paralyzed)]
+	[InlineData(Conditions.Petrified)]
+	[InlineData(Conditions.Stunned)]
+	public void RemoveCondition_ClearsImpliedIncapacitated_WhenNoOtherConditionImpliesIt(Conditions condition)
 	{
 		var character = CreateCharacter();
 		character.ApplyCondition(condition);
@@ -95,32 +95,32 @@ public class ConditionTests
 		character.RemoveCondition(condition);
 
 		Assert.False(character.Conditions.HasFlag(condition));
-		Assert.False(character.Conditions.HasFlag(Condition.Incapacitated));
+		Assert.False(character.Conditions.HasFlag(Conditions.Incapacitated));
 	}
 
 	[Fact]
 	public void RemoveCondition_Unconscious_ClearsImpliedIncapacitatedAndProne()
 	{
 		var character = CreateCharacter();
-		character.ApplyCondition(Condition.Unconscious);
+		character.ApplyCondition(Conditions.Unconscious);
 
-		character.RemoveCondition(Condition.Unconscious);
+		character.RemoveCondition(Conditions.Unconscious);
 
-		Assert.False(character.Conditions.HasFlag(Condition.Unconscious));
-		Assert.False(character.Conditions.HasFlag(Condition.Incapacitated));
-		Assert.False(character.Conditions.HasFlag(Condition.Prone));
+		Assert.False(character.Conditions.HasFlag(Conditions.Unconscious));
+		Assert.False(character.Conditions.HasFlag(Conditions.Incapacitated));
+		Assert.False(character.Conditions.HasFlag(Conditions.Prone));
 	}
 
 	[Theory]
-	[InlineData(Condition.Paralyzed, Condition.Stunned)]
-	[InlineData(Condition.Paralyzed, Condition.Petrified)]
-	[InlineData(Condition.Stunned, Condition.Petrified)]
-	[InlineData(Condition.Paralyzed, Condition.Unconscious)]
-	[InlineData(Condition.Stunned, Condition.Unconscious)]
-	[InlineData(Condition.Petrified, Condition.Unconscious)]
+	[InlineData(Conditions.Paralyzed, Conditions.Stunned)]
+	[InlineData(Conditions.Paralyzed, Conditions.Petrified)]
+	[InlineData(Conditions.Stunned, Conditions.Petrified)]
+	[InlineData(Conditions.Paralyzed, Conditions.Unconscious)]
+	[InlineData(Conditions.Stunned, Conditions.Unconscious)]
+	[InlineData(Conditions.Petrified, Conditions.Unconscious)]
 	public void RemoveCondition_KeepsIncapacitated_WhenAnotherConditionStillImpliesIt(
-		Condition firstCondition,
-		Condition secondCondition)
+		Conditions firstCondition,
+		Conditions secondCondition)
 	{
 		var character = CreateCharacter();
 		character.ApplyCondition(firstCondition);
@@ -129,33 +129,33 @@ public class ConditionTests
 		character.RemoveCondition(firstCondition);
 
 		Assert.False(character.Conditions.HasFlag(firstCondition));
-		Assert.True(character.Conditions.HasFlag(Condition.Incapacitated));
+		Assert.True(character.Conditions.HasFlag(Conditions.Incapacitated));
 	}
 
 	[Fact]
 	public void RemoveCondition_Unconscious_ClearsProneEvenIfDirectlyApplied()
 	{
 		var character = CreateCharacter();
-		character.ApplyCondition(Condition.Prone);
-		character.ApplyCondition(Condition.Unconscious);
+		character.ApplyCondition(Conditions.Prone);
+		character.ApplyCondition(Conditions.Unconscious);
 
-		character.RemoveCondition(Condition.Unconscious);
+		character.RemoveCondition(Conditions.Unconscious);
 
-		Assert.False(character.Conditions.HasFlag(Condition.Unconscious));
-		Assert.False(character.Conditions.HasFlag(Condition.Prone));
+		Assert.False(character.Conditions.HasFlag(Conditions.Unconscious));
+		Assert.False(character.Conditions.HasFlag(Conditions.Prone));
 	}
 
 	[Fact]
 	public void RemoveCondition_WhenBothParalyzedAndStunnedActive_RemovingOneKeepsIncapacitated()
 	{
 		var character = CreateCharacter();
-		character.ApplyCondition(Condition.Paralyzed);
-		character.ApplyCondition(Condition.Stunned);
+		character.ApplyCondition(Conditions.Paralyzed);
+		character.ApplyCondition(Conditions.Stunned);
 
-		character.RemoveCondition(Condition.Paralyzed);
-		character.RemoveCondition(Condition.Stunned);
+		character.RemoveCondition(Conditions.Paralyzed);
+		character.RemoveCondition(Conditions.Stunned);
 
-		Assert.False(character.Conditions.HasFlag(Condition.Incapacitated));
+		Assert.False(character.Conditions.HasFlag(Conditions.Incapacitated));
 	}
 
 	[Fact]
@@ -163,37 +163,37 @@ public class ConditionTests
 	{
 		var character = CreateCharacter();
 
-		character.ApplyCondition(Condition.Incapacitated);
+		character.ApplyCondition(Conditions.Incapacitated);
 
-		Assert.True(character.Conditions.HasFlag(Condition.Incapacitated));
+		Assert.True(character.Conditions.HasFlag(Conditions.Incapacitated));
 	}
 
 	[Fact]
 	public void RemoveCondition_Incapacitated_Directly_ClearsIncapacitated()
 	{
 		var character = CreateCharacter();
-		character.ApplyCondition(Condition.Incapacitated);
+		character.ApplyCondition(Conditions.Incapacitated);
 
-		character.RemoveCondition(Condition.Incapacitated);
+		character.RemoveCondition(Conditions.Incapacitated);
 
-		Assert.False(character.Conditions.HasFlag(Condition.Incapacitated));
+		Assert.False(character.Conditions.HasFlag(Conditions.Incapacitated));
 	}
 
 	[Fact]
 	public void AllThreeParentConditions_ThenRemoveAll_ClearsIncapacitated()
 	{
 		var character = CreateCharacter();
-		character.ApplyCondition(Condition.Paralyzed);
-		character.ApplyCondition(Condition.Petrified);
-		character.ApplyCondition(Condition.Stunned);
+		character.ApplyCondition(Conditions.Paralyzed);
+		character.ApplyCondition(Conditions.Petrified);
+		character.ApplyCondition(Conditions.Stunned);
 
-		character.RemoveCondition(Condition.Paralyzed);
-		Assert.True(character.Conditions.HasFlag(Condition.Incapacitated));
+		character.RemoveCondition(Conditions.Paralyzed);
+		Assert.True(character.Conditions.HasFlag(Conditions.Incapacitated));
 
-		character.RemoveCondition(Condition.Petrified);
-		Assert.True(character.Conditions.HasFlag(Condition.Incapacitated));
+		character.RemoveCondition(Conditions.Petrified);
+		Assert.True(character.Conditions.HasFlag(Conditions.Incapacitated));
 
-		character.RemoveCondition(Condition.Stunned);
-		Assert.False(character.Conditions.HasFlag(Condition.Incapacitated));
+		character.RemoveCondition(Conditions.Stunned);
+		Assert.False(character.Conditions.HasFlag(Conditions.Incapacitated));
 	}
 }

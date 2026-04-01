@@ -30,5 +30,5 @@ public class ApplyCondition : IEndpoint
 		   .Produces<ProblemDetails>(StatusCodes.Status401Unauthorized)
 		   .Produces<ProblemDetails>(StatusCodes.Status404NotFound);
 
-	internal sealed record ApplyConditionRequest(Condition Condition);
+	internal sealed record ApplyConditionRequest(Conditions Condition);
 }

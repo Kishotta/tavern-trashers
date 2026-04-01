@@ -10,12 +10,12 @@ namespace TavernTrashers.Api.Modules.Characters.Domain.Characters;
 [Auditable]
 public sealed class Character : Entity
 {
-	private static readonly Dictionary<Condition, Condition[]> _implications = new()
+	private static readonly Dictionary<Conditions, Conditions[]> _implications = new()
 	{
-		{ Condition.Paralyzed,  [Condition.Incapacitated] },
-		{ Condition.Petrified,  [Condition.Incapacitated] },
-		{ Condition.Stunned,    [Condition.Incapacitated] },
-		{ Condition.Unconscious, [Condition.Incapacitated, Condition.Prone] },
+		{ Conditions.Paralyzed,  [Conditions.Incapacitated] },
+		{ Conditions.Petrified,  [Conditions.Incapacitated] },
+		{ Conditions.Stunned,    [Conditions.Incapacitated] },
+		{ Conditions.Unconscious, [Conditions.Incapacitated, Conditions.Prone] },
 	};
 
 	private readonly List<GenericResource> _genericResources = [];
@@ -25,7 +25,7 @@ public sealed class Character : Entity
 	public int Level { get; private set; } = 1;
 	public Guid OwnerId { get; private set; }
 	public Guid CampaignId { get; private set; }
-	public Condition Conditions { get; private set; } = Condition.None;
+	public Conditions Conditions { get; private set; } = Conditions.None;
 	public HitPoints HitPoints { get; private set; } = null!;
 	public DeathSavingThrows DeathSavingThrows { get; private set; } = null!;
 	public IReadOnlyCollection<GenericResource> GenericResources => _genericResources.AsReadOnly();
@@ -56,7 +56,7 @@ public sealed class Character : Entity
 
 	public void ChangeName(string name) => Name = name.Trim();
 
-	public void ApplyCondition(Condition condition)
+	public void ApplyCondition(Conditions condition)
 	{
 		Conditions |= condition;
 
@@ -65,7 +65,7 @@ public sealed class Character : Entity
 				Conditions |= impliedCondition;
 	}
 
-	public void RemoveCondition(Condition condition)
+	public void RemoveCondition(Conditions condition)
 	{
 		Conditions &= ~condition;
 
