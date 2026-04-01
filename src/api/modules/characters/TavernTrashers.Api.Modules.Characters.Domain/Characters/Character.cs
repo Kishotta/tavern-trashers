@@ -10,8 +10,6 @@ namespace TavernTrashers.Api.Modules.Characters.Domain.Characters;
 [Auditable]
 public sealed class Character : Entity
 {
-	private readonly List<ClassLevel> _classLevels = [];
-	private readonly List<CharacterResource> _resources = [];
 	private readonly List<GenericResource> _genericResources = [];
 	private Character() { }
 
@@ -21,8 +19,6 @@ public sealed class Character : Entity
 	public Guid CampaignId { get; private set; }
 	public HitPoints HitPoints { get; private set; } = null!;
 	public DeathSavingThrows DeathSavingThrows { get; private set; } = null!;
-	public IReadOnlyCollection<ClassLevel> ClassLevels => _classLevels.AsReadOnly();
-	public IReadOnlyCollection<CharacterResource> Resources => _resources.AsReadOnly();
 	public IReadOnlyCollection<GenericResource> GenericResources => _genericResources.AsReadOnly();
 
 	public static Result<Character> Create(string name, int level, Guid ownerId, Guid campaignId)
@@ -50,35 +46,7 @@ public sealed class Character : Entity
 	}
 
 	public void ChangeName(string name) => Name = name.Trim();
-
-	public Result SetClassLevel(CharacterClass characterClass, int level)
-	{
-		if (level is < 1 or > 20)
-			return CharacterErrors.InvalidLevel(level);
-
-		var existing = _classLevels.SingleOrDefault(cl => cl.CharacterClassId == characterClass.Id);
-
-		if (existing is not null)
-			existing.SetLevel(level);
-		else
-			_classLevels.Add(ClassLevel.Create(Id, characterClass.Id, level));
-
-		RecalculateResources();
-		return Result.Success();
-	}
-
-	public Result RemoveClassLevel(Guid characterClassId)
-	{
-		var existing = _classLevels.SingleOrDefault(cl => cl.CharacterClassId == characterClassId);
-
-		if (existing is null)
-			return CharacterErrors.ClassLevelNotFound(characterClassId);
-
-		_classLevels.Remove(existing);
-		RecalculateResources();
-		return Result.Success();
-	}
-
+	
 	public Result<GenericResource> AddGenericResource(
 		string name,
 		int maxUses,
@@ -230,36 +198,4 @@ public sealed class Character : Entity
 
 	public void ResetDeathSavingThrows() =>
 		DeathSavingThrows.Reset();
-
-	private void RecalculateResources()
-	{
-		var expectedResources = new Dictionary<Guid, int>();
-
-		foreach (var classLevel in _classLevels)
-		{
-			if (classLevel.CharacterClass?.ResourceDefinitions is null)
-				continue;
-
-			foreach (var resourceDef in classLevel.CharacterClass.ResourceDefinitions)
-			{
-				var amount = resourceDef.GetAmountAtLevel(classLevel.Level);
-				if (amount > 0)
-					expectedResources[resourceDef.Id] = amount;
-			}
-		}
-
-		// Remove resources that no longer apply
-		_resources.RemoveAll(r => !expectedResources.ContainsKey(r.ResourceDefinitionId));
-
-		// Add or update resources
-		foreach (var (resourceDefId, maxAmount) in expectedResources)
-		{
-			var existing = _resources.SingleOrDefault(r => r.ResourceDefinitionId == resourceDefId);
-
-			if (existing is not null)
-				existing.SetMax(maxAmount);
-			else
-				_resources.Add(CharacterResource.Create(Id, resourceDefId, maxAmount));
-		}
-	}
 }
