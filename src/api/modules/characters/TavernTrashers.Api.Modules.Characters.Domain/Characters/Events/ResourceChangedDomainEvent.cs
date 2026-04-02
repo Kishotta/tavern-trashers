@@ -8,8 +8,7 @@ public sealed class ResourceChangedDomainEvent(
 	Guid campaignId,
 	string resourceName,
 	string oldValue,
-	string newValue,
-	string actor) : DomainEvent
+	string newValue) : DomainEvent
 {
 	public Guid CharacterId { get; } = characterId;
 	public string CharacterName { get; } = characterName;
@@ -17,5 +16,4 @@ public sealed class ResourceChangedDomainEvent(
 	public string ResourceName { get; } = resourceName;
 	public string OldValue { get; } = oldValue;
 	public string NewValue { get; } = newValue;
-	public string Actor { get; } = actor;
 }

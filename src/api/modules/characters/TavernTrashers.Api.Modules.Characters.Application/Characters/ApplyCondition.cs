@@ -1,5 +1,4 @@
 using FluentValidation;
-using TavernTrashers.Api.Common.Application.Authentication;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
@@ -19,8 +18,7 @@ internal sealed class ApplyConditionCommandValidator : AbstractValidator<ApplyCo
 }
 
 internal sealed class ApplyConditionCommandHandler(
-	ICharacterRepository characterRepository,
-	IClaimsProvider claimsProvider)
+	ICharacterRepository characterRepository)
 	: ICommandHandler<ApplyConditionCommand, CharacterResponse>
 {
 	public async Task<Result<CharacterResponse>> Handle(ApplyConditionCommand command, CancellationToken cancellationToken)
@@ -28,7 +26,7 @@ internal sealed class ApplyConditionCommandHandler(
 		var characterResult = await characterRepository.GetAsync(command.CharacterId, cancellationToken);
 		if (characterResult.IsFailure) return characterResult.Error;
 
-		characterResult.Value.ApplyCondition(command.Condition, claimsProvider.GetEmail());
+		characterResult.Value.ApplyCondition(command.Condition);
 
 		return (CharacterResponse)characterResult.Value;
 	}

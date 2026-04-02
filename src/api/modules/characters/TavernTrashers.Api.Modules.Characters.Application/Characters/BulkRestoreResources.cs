@@ -1,5 +1,4 @@
 using FluentValidation;
-using TavernTrashers.Api.Common.Application.Authentication;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Modules.Characters.Domain.Characters;
@@ -18,17 +17,15 @@ internal sealed class BulkRestoreResourcesCommandValidator : AbstractValidator<B
 }
 
 internal sealed class BulkRestoreResourcesCommandHandler(
-	ICharacterRepository characterRepository,
-	IClaimsProvider claimsProvider)
+	ICharacterRepository characterRepository)
 	: ICommandHandler<BulkRestoreResourcesCommand>
 {
 	public async Task<Result> Handle(BulkRestoreResourcesCommand command, CancellationToken cancellationToken)
 	{
 		var characters = await characterRepository.GetForCampaignAsync(command.CampaignId, cancellationToken);
-		var actor = claimsProvider.GetEmail();
 
 		foreach (var character in characters)
-			character.BulkRestoreByTrigger(command.Trigger, actor);
+			character.BulkRestoreByTrigger(command.Trigger);
 
 		return Result.Success();
 	}

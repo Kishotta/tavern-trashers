@@ -1,5 +1,4 @@
 using FluentValidation;
-using TavernTrashers.Api.Common.Application.Authentication;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Modules.Characters.Domain.Characters;
@@ -18,8 +17,7 @@ internal sealed class RestoreSlotPoolCommandValidator : AbstractValidator<Restor
 }
 
 internal sealed class RestoreSlotPoolCommandHandler(
-	ICharacterRepository characterRepository,
-	IClaimsProvider claimsProvider)
+	ICharacterRepository characterRepository)
 	: ICommandHandler<RestoreSlotPoolCommand>
 {
 	public async Task<Result> Handle(RestoreSlotPoolCommand command, CancellationToken cancellationToken)
@@ -27,6 +25,6 @@ internal sealed class RestoreSlotPoolCommandHandler(
 		var characterResult = await characterRepository.GetAsync(command.CharacterId, cancellationToken);
 		if (characterResult.IsFailure) return characterResult.Error;
 
-		return characterResult.Value.RestoreSlotPool(command.PoolId, claimsProvider.GetEmail());
+		return characterResult.Value.RestoreSlotPool(command.PoolId);
 	}
 }

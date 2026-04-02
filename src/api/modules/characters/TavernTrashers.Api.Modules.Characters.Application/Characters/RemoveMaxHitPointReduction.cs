@@ -1,5 +1,4 @@
 using FluentValidation;
-using TavernTrashers.Api.Common.Application.Authentication;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
@@ -18,8 +17,7 @@ internal sealed class RemoveMaxHitPointReductionCommandValidator : AbstractValid
 }
 
 internal sealed class RemoveMaxHitPointReductionCommandHandler(
-	ICharacterRepository characterRepository,
-	IClaimsProvider claimsProvider)
+	ICharacterRepository characterRepository)
 	: ICommandHandler<RemoveMaxHitPointReductionCommand, HitPointsResponse>
 {
 	public async Task<Result<HitPointsResponse>> Handle(RemoveMaxHitPointReductionCommand command, CancellationToken cancellationToken)
@@ -27,7 +25,7 @@ internal sealed class RemoveMaxHitPointReductionCommandHandler(
 		var characterResult = await characterRepository.GetAsync(command.CharacterId, cancellationToken);
 		if (characterResult.IsFailure) return characterResult.Error;
 
-		var result = characterResult.Value.RemoveMaxHitPointReduction(claimsProvider.GetEmail());
+		var result = characterResult.Value.RemoveMaxHitPointReduction();
 		if (result.IsFailure) return result.Error;
 
 		return (HitPointsResponse)characterResult.Value.HitPoints;

@@ -2,22 +2,25 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using TavernTrashers.Api.Modules.Dice.Infrastructure.Database;
+using TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database;
 
 #nullable disable
 
-namespace TavernTrashers.Api.Modules.Dice.Infrastructure.Database.Migrations
+namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migrations
 {
-    [DbContext(typeof(DiceDbContext))]
-    partial class DiceDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(CampaignsDbContext))]
+    [Migration("20260402164404_AddOutboxMessageCreatedBy")]
+    partial class AddOutboxMessageCreatedBy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("dice")
+                .HasDefaultSchema("campaigns")
                 .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -72,7 +75,7 @@ namespace TavernTrashers.Api.Modules.Dice.Infrastructure.Database.Migrations
                     b.HasKey("Id")
                         .HasName("pk_audit_logs");
 
-                    b.ToTable("audit_logs", "dice");
+                    b.ToTable("audit_logs", "campaigns");
                 });
 
             modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Inbox.InboxMessage", b =>
@@ -108,7 +111,7 @@ namespace TavernTrashers.Api.Modules.Dice.Infrastructure.Database.Migrations
                     b.HasKey("Id")
                         .HasName("pk_inbox_messages");
 
-                    b.ToTable("inbox_messages", "dice");
+                    b.ToTable("inbox_messages", "campaigns");
                 });
 
             modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Inbox.InboxMessageConsumer", b =>
@@ -125,7 +128,7 @@ namespace TavernTrashers.Api.Modules.Dice.Infrastructure.Database.Migrations
                     b.HasKey("InboxMessageId", "Name")
                         .HasName("pk_inbox_message_consumers");
 
-                    b.ToTable("inbox_message_consumers", "dice");
+                    b.ToTable("inbox_message_consumers", "campaigns");
                 });
 
             modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Outbox.OutboxMessage", b =>
@@ -166,7 +169,7 @@ namespace TavernTrashers.Api.Modules.Dice.Infrastructure.Database.Migrations
                     b.HasKey("Id")
                         .HasName("pk_outbox_messages");
 
-                    b.ToTable("outbox_messages", "dice");
+                    b.ToTable("outbox_messages", "campaigns");
                 });
 
             modelBuilder.Entity("TavernTrashers.Api.Common.Infrastructure.Outbox.OutboxMessageConsumer", b =>
@@ -183,83 +186,36 @@ namespace TavernTrashers.Api.Modules.Dice.Infrastructure.Database.Migrations
                     b.HasKey("OutboxMessageId", "Name")
                         .HasName("pk_outbox_message_consumers");
 
-                    b.ToTable("outbox_message_consumers", "dice");
+                    b.ToTable("outbox_message_consumers", "campaigns");
                 });
 
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Dice.Domain.Rolls.Roll", b =>
+            modelBuilder.Entity("TavernTrashers.Api.Modules.Campaigns.Domain.Campaigns.Campaign", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<double>("Average")
-                        .HasColumnType("double precision")
-                        .HasColumnName("average");
-
-                    b.Property<string>("ContextJson")
+                    b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("context_json");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("description");
 
-                    b.Property<string>("Expression")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("expression");
-
-                    b.Property<string>("KeptRolls")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("kept_rolls");
-
-                    b.Property<int>("Maximum")
-                        .HasColumnType("integer")
-                        .HasColumnName("maximum");
-
-                    b.Property<int>("Minimum")
-                        .HasColumnType("integer")
-                        .HasColumnName("minimum");
-
-                    b.Property<Guid?>("ParentId")
+                    b.Property<Guid>("DungeonMasterUserId")
                         .HasColumnType("uuid")
-                        .HasColumnName("parent_id");
+                        .HasColumnName("dungeon_master_user_id");
 
-                    b.Property<string>("RawRolls")
+                    b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("raw_rolls");
-
-                    b.Property<DateTime>("RolledAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("rolled_at_utc");
-
-                    b.Property<int>("Total")
-                        .HasColumnType("integer")
-                        .HasColumnName("total");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("title");
 
                     b.HasKey("Id")
-                        .HasName("pk_rolls");
+                        .HasName("pk_campaigns");
 
-                    b.HasIndex("ParentId")
-                        .HasDatabaseName("ix_rolls_parent_id");
-
-                    b.ToTable("rolls", "dice");
-                });
-
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Dice.Domain.Rolls.Roll", b =>
-                {
-                    b.HasOne("TavernTrashers.Api.Modules.Dice.Domain.Rolls.Roll", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_rolls_rolls_parent_id");
-
-                    b.Navigation("Parent");
-                });
-
-            modelBuilder.Entity("TavernTrashers.Api.Modules.Dice.Domain.Rolls.Roll", b =>
-                {
-                    b.Navigation("Children");
+                    b.ToTable("campaigns", "campaigns");
                 });
 #pragma warning restore 612, 618
         }

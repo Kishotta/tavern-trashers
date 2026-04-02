@@ -1,5 +1,4 @@
 using FluentValidation;
-using TavernTrashers.Api.Common.Application.Authentication;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
@@ -19,8 +18,7 @@ internal sealed class TakeDamageCommandValidator : AbstractValidator<TakeDamageC
 }
 
 internal sealed class TakeDamageCommandHandler(
-	ICharacterRepository characterRepository,
-	IClaimsProvider claimsProvider)
+	ICharacterRepository characterRepository)
 	: ICommandHandler<TakeDamageCommand, HitPointsResponse>
 {
 	public async Task<Result<HitPointsResponse>> Handle(TakeDamageCommand command, CancellationToken cancellationToken)
@@ -28,7 +26,7 @@ internal sealed class TakeDamageCommandHandler(
 		var characterResult = await characterRepository.GetAsync(command.CharacterId, cancellationToken);
 		if (characterResult.IsFailure) return characterResult.Error;
 
-		var result = characterResult.Value.TakeDamage(command.Amount, claimsProvider.GetEmail());
+		var result = characterResult.Value.TakeDamage(command.Amount);
 		if (result.IsFailure) return result.Error;
 
 		return (HitPointsResponse)characterResult.Value.HitPoints;

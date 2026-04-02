@@ -1,5 +1,4 @@
 using FluentValidation;
-using TavernTrashers.Api.Common.Application.Authentication;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
@@ -19,8 +18,7 @@ internal sealed class RemoveConditionCommandValidator : AbstractValidator<Remove
 }
 
 internal sealed class RemoveConditionCommandHandler(
-	ICharacterRepository characterRepository,
-	IClaimsProvider claimsProvider)
+	ICharacterRepository characterRepository)
 	: ICommandHandler<RemoveConditionCommand, CharacterResponse>
 {
 	public async Task<Result<CharacterResponse>> Handle(RemoveConditionCommand command, CancellationToken cancellationToken)
@@ -28,7 +26,7 @@ internal sealed class RemoveConditionCommandHandler(
 		var characterResult = await characterRepository.GetAsync(command.CharacterId, cancellationToken);
 		if (characterResult.IsFailure) return characterResult.Error;
 
-		characterResult.Value.RemoveCondition(command.Condition, claimsProvider.GetEmail());
+		characterResult.Value.RemoveCondition(command.Condition);
 
 		return (CharacterResponse)characterResult.Value;
 	}

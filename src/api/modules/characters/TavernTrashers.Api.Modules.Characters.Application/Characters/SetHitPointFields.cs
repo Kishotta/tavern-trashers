@@ -1,5 +1,4 @@
 using FluentValidation;
-using TavernTrashers.Api.Common.Application.Authentication;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
@@ -27,8 +26,7 @@ internal sealed class SetHitPointFieldsCommandValidator : AbstractValidator<SetH
 }
 
 internal sealed class SetHitPointFieldsCommandHandler(
-	ICharacterRepository characterRepository,
-	IClaimsProvider claimsProvider)
+	ICharacterRepository characterRepository)
 	: ICommandHandler<SetHitPointFieldsCommand, HitPointsResponse>
 {
 	public async Task<Result<HitPointsResponse>> Handle(SetHitPointFieldsCommand command, CancellationToken cancellationToken)
@@ -40,8 +38,7 @@ internal sealed class SetHitPointFieldsCommandHandler(
 			command.BaseMaxHitPoints,
 			command.CurrentHitPoints,
 			command.TemporaryHitPoints,
-			command.MaxHitPointReduction,
-			claimsProvider.GetEmail());
+			command.MaxHitPointReduction);
 
 		if (result.IsFailure) return result.Error;
 

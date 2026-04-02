@@ -1,5 +1,4 @@
 using FluentValidation;
-using TavernTrashers.Api.Common.Application.Authentication;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Modules.Characters.Domain.Characters;
@@ -19,8 +18,7 @@ internal sealed class UseSpellSlotCommandValidator : AbstractValidator<UseSpellS
 }
 
 internal sealed class UseSpellSlotCommandHandler(
-	ICharacterRepository characterRepository,
-	IClaimsProvider claimsProvider)
+	ICharacterRepository characterRepository)
 	: ICommandHandler<UseSpellSlotCommand>
 {
 	public async Task<Result> Handle(UseSpellSlotCommand command, CancellationToken cancellationToken)
@@ -28,6 +26,6 @@ internal sealed class UseSpellSlotCommandHandler(
 		var characterResult = await characterRepository.GetAsync(command.CharacterId, cancellationToken);
 		if (characterResult.IsFailure) return characterResult.Error;
 
-		return characterResult.Value.UseSpellSlot(command.PoolId, command.Level, claimsProvider.GetEmail());
+		return characterResult.Value.UseSpellSlot(command.PoolId, command.Level);
 	}
 }

@@ -1,5 +1,4 @@
 using FluentValidation;
-using TavernTrashers.Api.Common.Application.Authentication;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
@@ -20,8 +19,7 @@ internal sealed class RestoreGenericResourceCommandValidator : AbstractValidator
 }
 
 internal sealed class RestoreGenericResourceCommandHandler(
-	ICharacterRepository characterRepository,
-	IClaimsProvider claimsProvider)
+	ICharacterRepository characterRepository)
 	: ICommandHandler<RestoreGenericResourceCommand>
 {
 	public async Task<Result> Handle(RestoreGenericResourceCommand command, CancellationToken cancellationToken)
@@ -29,6 +27,6 @@ internal sealed class RestoreGenericResourceCommandHandler(
 		var characterResult = await characterRepository.GetAsync(command.CharacterId, cancellationToken);
 		if (characterResult.IsFailure) return characterResult.Error;
 
-		return characterResult.Value.RestoreGenericResource(command.ResourceId, claimsProvider.GetEmail());
+		return characterResult.Value.RestoreGenericResource(command.ResourceId);
 	}
 }

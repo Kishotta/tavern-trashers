@@ -1,5 +1,4 @@
 using FluentValidation;
-using TavernTrashers.Api.Common.Application.Authentication;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
@@ -18,8 +17,7 @@ internal sealed class ResetDeathSavingThrowsCommandValidator : AbstractValidator
 }
 
 internal sealed class ResetDeathSavingThrowsCommandHandler(
-	ICharacterRepository characterRepository,
-	IClaimsProvider claimsProvider)
+	ICharacterRepository characterRepository)
 	: ICommandHandler<ResetDeathSavingThrowsCommand, DeathSavingThrowsResponse>
 {
 	public async Task<Result<DeathSavingThrowsResponse>> Handle(
@@ -29,7 +27,7 @@ internal sealed class ResetDeathSavingThrowsCommandHandler(
 		var characterResult = await characterRepository.GetAsync(command.CharacterId, cancellationToken);
 		if (characterResult.IsFailure) return characterResult.Error;
 
-		characterResult.Value.ResetDeathSavingThrows(claimsProvider.GetEmail());
+		characterResult.Value.ResetDeathSavingThrows();
 
 		return (DeathSavingThrowsResponse)characterResult.Value.DeathSavingThrows;
 	}
