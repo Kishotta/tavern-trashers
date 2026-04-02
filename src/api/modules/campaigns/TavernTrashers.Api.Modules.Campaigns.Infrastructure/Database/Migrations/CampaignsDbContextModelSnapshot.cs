@@ -141,6 +141,11 @@ namespace TavernTrashers.Api.Modules.Campaigns.Infrastructure.Database.Migration
                         .HasColumnType("jsonb")
                         .HasColumnName("content");
 
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("created_by");
+
                     b.Property<string>("Error")
                         .HasColumnType("text")
                         .HasColumnName("error");

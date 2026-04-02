@@ -17,7 +17,8 @@ internal sealed class ApplyMaxHitPointReductionCommandValidator : AbstractValida
 	}
 }
 
-internal sealed class ApplyMaxHitPointReductionCommandHandler(ICharacterRepository characterRepository)
+internal sealed class ApplyMaxHitPointReductionCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<ApplyMaxHitPointReductionCommand, HitPointsResponse>
 {
 	public async Task<Result<HitPointsResponse>> Handle(ApplyMaxHitPointReductionCommand command, CancellationToken cancellationToken)

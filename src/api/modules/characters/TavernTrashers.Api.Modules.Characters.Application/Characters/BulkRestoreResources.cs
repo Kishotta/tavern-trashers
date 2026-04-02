@@ -16,7 +16,8 @@ internal sealed class BulkRestoreResourcesCommandValidator : AbstractValidator<B
 	}
 }
 
-internal sealed class BulkRestoreResourcesCommandHandler(ICharacterRepository characterRepository)
+internal sealed class BulkRestoreResourcesCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<BulkRestoreResourcesCommand>
 {
 	public async Task<Result> Handle(BulkRestoreResourcesCommand command, CancellationToken cancellationToken)

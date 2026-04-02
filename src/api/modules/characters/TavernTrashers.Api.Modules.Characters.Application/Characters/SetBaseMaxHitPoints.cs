@@ -17,7 +17,8 @@ internal sealed class SetBaseMaxHitPointsCommandValidator : AbstractValidator<Se
 	}
 }
 
-internal sealed class SetBaseMaxHitPointsCommandHandler(ICharacterRepository characterRepository)
+internal sealed class SetBaseMaxHitPointsCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<SetBaseMaxHitPointsCommand, HitPointsResponse>
 {
 	public async Task<Result<HitPointsResponse>> Handle(SetBaseMaxHitPointsCommand command, CancellationToken cancellationToken)

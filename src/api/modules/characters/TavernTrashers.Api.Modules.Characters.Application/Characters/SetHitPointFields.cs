@@ -25,7 +25,8 @@ internal sealed class SetHitPointFieldsCommandValidator : AbstractValidator<SetH
 	}
 }
 
-internal sealed class SetHitPointFieldsCommandHandler(ICharacterRepository characterRepository)
+internal sealed class SetHitPointFieldsCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<SetHitPointFieldsCommand, HitPointsResponse>
 {
 	public async Task<Result<HitPointsResponse>> Handle(SetHitPointFieldsCommand command, CancellationToken cancellationToken)

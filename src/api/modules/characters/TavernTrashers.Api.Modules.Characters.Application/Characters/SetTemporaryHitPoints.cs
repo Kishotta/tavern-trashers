@@ -17,7 +17,8 @@ internal sealed class SetTemporaryHitPointsCommandValidator : AbstractValidator<
 	}
 }
 
-internal sealed class SetTemporaryHitPointsCommandHandler(ICharacterRepository characterRepository)
+internal sealed class SetTemporaryHitPointsCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<SetTemporaryHitPointsCommand, HitPointsResponse>
 {
 	public async Task<Result<HitPointsResponse>> Handle(SetTemporaryHitPointsCommand command, CancellationToken cancellationToken)

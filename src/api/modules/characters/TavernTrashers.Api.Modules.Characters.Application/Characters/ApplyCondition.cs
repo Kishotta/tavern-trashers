@@ -17,7 +17,8 @@ internal sealed class ApplyConditionCommandValidator : AbstractValidator<ApplyCo
 	}
 }
 
-internal sealed class ApplyConditionCommandHandler(ICharacterRepository characterRepository)
+internal sealed class ApplyConditionCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<ApplyConditionCommand, CharacterResponse>
 {
 	public async Task<Result<CharacterResponse>> Handle(ApplyConditionCommand command, CancellationToken cancellationToken)

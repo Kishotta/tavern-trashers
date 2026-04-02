@@ -17,7 +17,8 @@ internal sealed class RemoveConditionCommandValidator : AbstractValidator<Remove
 	}
 }
 
-internal sealed class RemoveConditionCommandHandler(ICharacterRepository characterRepository)
+internal sealed class RemoveConditionCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<RemoveConditionCommand, CharacterResponse>
 {
 	public async Task<Result<CharacterResponse>> Handle(RemoveConditionCommand command, CancellationToken cancellationToken)

@@ -16,7 +16,8 @@ internal sealed class RecordDeathSavingThrowSuccessCommandValidator : AbstractVa
 	}
 }
 
-internal sealed class RecordDeathSavingThrowSuccessCommandHandler(ICharacterRepository characterRepository)
+internal sealed class RecordDeathSavingThrowSuccessCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<RecordDeathSavingThrowSuccessCommand, DeathSavingThrowsResponse>
 {
 	public async Task<Result<DeathSavingThrowsResponse>> Handle(

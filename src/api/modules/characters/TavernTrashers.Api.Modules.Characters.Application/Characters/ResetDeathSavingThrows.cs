@@ -16,7 +16,8 @@ internal sealed class ResetDeathSavingThrowsCommandValidator : AbstractValidator
 	}
 }
 
-internal sealed class ResetDeathSavingThrowsCommandHandler(ICharacterRepository characterRepository)
+internal sealed class ResetDeathSavingThrowsCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<ResetDeathSavingThrowsCommand, DeathSavingThrowsResponse>
 {
 	public async Task<Result<DeathSavingThrowsResponse>> Handle(

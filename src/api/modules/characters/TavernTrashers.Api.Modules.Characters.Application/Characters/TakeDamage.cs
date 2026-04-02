@@ -17,7 +17,8 @@ internal sealed class TakeDamageCommandValidator : AbstractValidator<TakeDamageC
 	}
 }
 
-internal sealed class TakeDamageCommandHandler(ICharacterRepository characterRepository)
+internal sealed class TakeDamageCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<TakeDamageCommand, HitPointsResponse>
 {
 	public async Task<Result<HitPointsResponse>> Handle(TakeDamageCommand command, CancellationToken cancellationToken)

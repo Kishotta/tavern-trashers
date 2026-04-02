@@ -16,7 +16,8 @@ internal sealed class RestoreSlotPoolCommandValidator : AbstractValidator<Restor
 	}
 }
 
-internal sealed class RestoreSlotPoolCommandHandler(ICharacterRepository characterRepository)
+internal sealed class RestoreSlotPoolCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<RestoreSlotPoolCommand>
 {
 	public async Task<Result> Handle(RestoreSlotPoolCommand command, CancellationToken cancellationToken)

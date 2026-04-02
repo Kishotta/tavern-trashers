@@ -12,6 +12,7 @@ using TavernTrashers.Api.Common.Infrastructure.Caching;
 using TavernTrashers.Api.Common.Infrastructure.Clock;
 using TavernTrashers.Api.Common.Infrastructure.Database;
 using TavernTrashers.Api.Common.Infrastructure.EventBus;
+using TavernTrashers.Api.Common.Infrastructure.Hubs;
 using TavernTrashers.Api.Common.Infrastructure.Inbox;
 using TavernTrashers.Api.Common.Infrastructure.Modules;
 using TavernTrashers.Api.Common.Infrastructure.Outbox;
@@ -31,6 +32,7 @@ public static class InfrastructureLayerExtensions
 		   .AddAuthenticationInternal()
 		   .AddAuditing()
 		   .AddCache()
+		   .AddHubs()
 		   .AddDateTimeProvider()
 		   .AddDbConnectionFactory(configuration.GetConnectionString("database")!)
 		   .AddEventBus(configuration.GetConnectionString("queue")!, modules)

@@ -2,11 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Newtonsoft.Json;
 using TavernTrashers.Api.Common.Domain.Entities;
+using TavernTrashers.Api.Common.Infrastructure.Auditing;
 using TavernTrashers.Api.Common.Infrastructure.Serialization;
 
 namespace TavernTrashers.Api.Common.Infrastructure.Outbox;
 
-public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
+public sealed class InsertOutboxMessagesInterceptor(IAuditingUserProvider auditingUserProvider) : SaveChangesInterceptor
 {
 	public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
 		DbContextEventData eventData,
@@ -19,8 +20,10 @@ public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
 		return await base.SavingChangesAsync(eventData, result, cancellationToken);
 	}
 
-	private static void InsertOutboxMessages(DbContext context)
+	private void InsertOutboxMessages(DbContext context)
 	{
+		var createdBy = auditingUserProvider.GetUserId();
+
 		var outboxMessages = context
 		   .ChangeTracker
 		   .Entries<EntityBase>()
@@ -37,6 +40,7 @@ public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
 				Type          = domainEvent.GetType().Name,
 				Content       = JsonConvert.SerializeObject(domainEvent, SerializerSettings.Instance),
 				OccurredAtUtc = domainEvent.OccurredAtUtc,
+				CreatedBy     = createdBy,
 			})
 		   .ToList();
 		

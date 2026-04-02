@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
+    "@microsoft/signalr": "^10.0.0",
     "@ngrx/component-store": "^19.1.0",
     "@ngrx/effects": "^19.1.0",
     "@ngrx/operators": "^19.1.0",

@@ -17,7 +17,8 @@ internal sealed class UseSpellSlotCommandValidator : AbstractValidator<UseSpellS
 	}
 }
 
-internal sealed class UseSpellSlotCommandHandler(ICharacterRepository characterRepository)
+internal sealed class UseSpellSlotCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<UseSpellSlotCommand>
 {
 	public async Task<Result> Handle(UseSpellSlotCommand command, CancellationToken cancellationToken)

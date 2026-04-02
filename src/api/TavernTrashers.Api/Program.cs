@@ -1,5 +1,6 @@
 using Scalar.AspNetCore;
 using Serilog;
+using TavernTrashers.Api.Common.Infrastructure.Hubs;
 using TavernTrashers.Api.Common.Presentation.Endpoints;
 using TavernTrashers.Api.Extensions;
 using TavernTrashers.ServiceDefaults;
@@ -34,6 +35,8 @@ builder.Services
 var app = builder.Build();
 
 app.MapMcp();
+
+app.MapTavernTrashersHub();
 
 app.UseCors();
 

@@ -17,7 +17,8 @@ internal sealed class HealCharacterCommandValidator : AbstractValidator<HealChar
 	}
 }
 
-internal sealed class HealCharacterCommandHandler(ICharacterRepository characterRepository)
+internal sealed class HealCharacterCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<HealCharacterCommand, HitPointsResponse>
 {
 	public async Task<Result<HitPointsResponse>> Handle(HealCharacterCommand command, CancellationToken cancellationToken)

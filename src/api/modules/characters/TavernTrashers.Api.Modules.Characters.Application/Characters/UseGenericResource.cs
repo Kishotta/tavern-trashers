@@ -3,7 +3,6 @@ using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
 using TavernTrashers.Api.Modules.Characters.Domain.Characters;
-using TavernTrashers.Api.Modules.Characters.Domain.Resources;
 
 namespace TavernTrashers.Api.Modules.Characters.Application.Characters;
 
@@ -18,7 +17,8 @@ internal sealed class UseGenericResourceCommandValidator : AbstractValidator<Use
 	}
 }
 
-internal sealed class UseGenericResourceCommandHandler(ICharacterRepository characterRepository)
+internal sealed class UseGenericResourceCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<UseGenericResourceCommand>
 {
 	public async Task<Result> Handle(UseGenericResourceCommand command, CancellationToken cancellationToken)

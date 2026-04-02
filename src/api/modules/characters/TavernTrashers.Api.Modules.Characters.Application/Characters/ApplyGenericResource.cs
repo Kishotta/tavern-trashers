@@ -18,7 +18,8 @@ internal sealed class ApplyGenericResourceCommandValidator : AbstractValidator<A
 	}
 }
 
-internal sealed class ApplyGenericResourceCommandHandler(ICharacterRepository characterRepository)
+internal sealed class ApplyGenericResourceCommandHandler(
+	ICharacterRepository characterRepository)
 	: ICommandHandler<ApplyGenericResourceCommand>
 {
 	public async Task<Result> Handle(ApplyGenericResourceCommand command, CancellationToken cancellationToken)

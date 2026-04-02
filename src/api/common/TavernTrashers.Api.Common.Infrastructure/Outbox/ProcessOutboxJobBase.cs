@@ -48,7 +48,7 @@ public abstract class ProcessOutboxJobBase(
 				var domainEvent =
 					JsonConvert.DeserializeObject<IDomainEvent>(outboxMessage.Content, SerializerSettings.Instance)!;
 
-				await PublishDomainEvent(domainEvent);
+				await PublishDomainEvent(domainEvent, outboxMessage.CreatedBy);
 			}
 			catch (Exception caughtException)
 			{
@@ -66,9 +66,12 @@ public abstract class ProcessOutboxJobBase(
 		logger.LogDebug("{Module} - Completed processing outbox messages", Module.Name);
 	}
 
-	private async Task PublishDomainEvent(IDomainEvent domainEvent)
+	private async Task PublishDomainEvent(IDomainEvent domainEvent, string? createdBy)
 	{
 		using var scope = serviceScopeFactory.CreateScope();
+
+		var outboxMessageContext = scope.ServiceProvider.GetRequiredService<OutboxMessageContext>();
+		outboxMessageContext.CreatedBy = createdBy;
 
 		var domainEventHandlers = DomainEventHandlersFactory.GetHandlers(
 			domainEvent.GetType(),
@@ -86,7 +89,8 @@ public abstract class ProcessOutboxJobBase(
 			$"""
 			 SELECT
 			    id AS {nameof(OutboxMessageResponse.Id)},
-			    content AS {nameof(OutboxMessageResponse.Content)}
+			    content AS {nameof(OutboxMessageResponse.Content)},
+			    created_by AS {nameof(OutboxMessageResponse.CreatedBy)}
 			 FROM {Module.Schema}.outbox_messages
 			 WHERE processed_at_utc IS NULL
 			 ORDER BY occurred_at_utc
@@ -122,5 +126,5 @@ public abstract class ProcessOutboxJobBase(
 			}, transaction);
 	}
 
-	private sealed record OutboxMessageResponse(Guid Id, string Content);
+	private sealed record OutboxMessageResponse(Guid Id, string Content, string? CreatedBy);
 }

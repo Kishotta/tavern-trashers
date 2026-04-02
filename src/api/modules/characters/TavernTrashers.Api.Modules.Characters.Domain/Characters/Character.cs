@@ -1,6 +1,7 @@
 using TavernTrashers.Api.Common.Domain.Auditing;
 using TavernTrashers.Api.Common.Domain.Entities;
 using TavernTrashers.Api.Common.Domain.Results;
+using TavernTrashers.Api.Modules.Characters.Domain.Characters.Events;
 using TavernTrashers.Api.Modules.Characters.Domain.Classes;
 using TavernTrashers.Api.Modules.Characters.Domain.ClassLevels;
 using TavernTrashers.Api.Modules.Characters.Domain.Resources;
@@ -59,32 +60,41 @@ public sealed class Character : Entity
 
 	public void ChangeName(string name) => Name = name.Trim();
 
+	private void RaiseResourceChanged(string resourceName, string oldValue, string newValue) =>
+		RaiseDomainEvent(new ResourceChangedDomainEvent(Id, Name, CampaignId, resourceName, oldValue, newValue));
+
 	public void ApplyCondition(Conditions condition)
 	{
+		var oldConditions = Conditions;
 		Conditions |= condition;
 
 		if (_implications.TryGetValue(condition, out var implied))
 			foreach (var impliedCondition in implied)
 				Conditions |= impliedCondition;
+
+		RaiseResourceChanged("Conditions", oldConditions.ToString(), Conditions.ToString());
 	}
 
 	public void RemoveCondition(Conditions condition)
 	{
+		var oldConditions = Conditions;
 		Conditions &= ~condition;
 
-		if (!_implications.TryGetValue(condition, out var implied))
-			return;
-
-		foreach (var impliedCondition in implied)
+		if (_implications.TryGetValue(condition, out var implied))
 		{
-			var stillImplied = _implications.Any(kvp =>
-				kvp.Key != condition &&
-				Conditions.HasFlag(kvp.Key) &&
-				kvp.Value.Contains(impliedCondition));
+			foreach (var impliedCondition in implied)
+			{
+				var stillImplied = _implications.Any(kvp =>
+					kvp.Key != condition &&
+					Conditions.HasFlag(kvp.Key) &&
+					kvp.Value.Contains(impliedCondition));
 
-			if (!stillImplied)
-				Conditions &= ~impliedCondition;
+				if (!stillImplied)
+					Conditions &= ~impliedCondition;
+			}
 		}
+
+		RaiseResourceChanged("Conditions", oldConditions.ToString(), Conditions.ToString());
 	}
 
 	public Result<GenericResource> AddGenericResource(
@@ -120,7 +130,13 @@ public sealed class Character : Entity
 		if (resource is null)
 			return GenericResourceErrors.NotFound(resourceId);
 
-		return resource.Use();
+		var oldUses = resource.CurrentUses;
+		var result = resource.Use();
+
+		if (result.IsSuccess)
+			RaiseResourceChanged(resource.Name, $"{oldUses}/{resource.MaxUses}", $"{resource.CurrentUses}/{resource.MaxUses}");
+
+		return result;
 	}
 
 	public Result ApplyGenericResource(Guid resourceId)
@@ -130,7 +146,13 @@ public sealed class Character : Entity
 		if (resource is null)
 			return GenericResourceErrors.NotFound(resourceId);
 
-		return resource.Apply();
+		var oldUses = resource.CurrentUses;
+		var result = resource.Apply();
+
+		if (result.IsSuccess)
+			RaiseResourceChanged(resource.Name, $"{oldUses}/{resource.MaxUses}", $"{resource.CurrentUses}/{resource.MaxUses}");
+
+		return result;
 	}
 
 	public Result RestoreGenericResource(Guid resourceId)
@@ -140,7 +162,9 @@ public sealed class Character : Entity
 		if (resource is null)
 			return GenericResourceErrors.NotFound(resourceId);
 
+		var oldUses = resource.CurrentUses;
 		resource.Restore();
+		RaiseResourceChanged(resource.Name, $"{oldUses}/{resource.MaxUses}", $"{resource.CurrentUses}/{resource.MaxUses}");
 		return Result.Success();
 	}
 
@@ -151,6 +175,8 @@ public sealed class Character : Entity
 
 		foreach (var pool in _spellSlotPools.Where(p => p.GetResetTrigger() == trigger))
 			pool.Restore();
+
+		RaiseResourceChanged($"{trigger} Restore", "used", "restored");
 	}
 
 	public Result AddPactMagicSlotPool()
@@ -168,7 +194,16 @@ public sealed class Character : Entity
 		if (pool is null)
 			return SpellSlotPoolErrors.NotFound(poolId);
 
-		return pool.UseSlot(level);
+		var slot = pool.Levels.SingleOrDefault(l => l.Level == level);
+		var oldUses = slot?.CurrentUses ?? 0;
+		var maxUses = slot?.MaxUses ?? 0;
+
+		var result = pool.UseSlot(level);
+
+		if (result.IsSuccess && slot is not null)
+			RaiseResourceChanged($"Level {level} Spell Slots", $"{oldUses}/{maxUses}", $"{slot.CurrentUses}/{maxUses}");
+
+		return result;
 	}
 
 	public Result RestoreSlotPool(Guid poolId)
@@ -178,6 +213,7 @@ public sealed class Character : Entity
 			return SpellSlotPoolErrors.NotFound(poolId);
 
 		pool.Restore();
+		RaiseResourceChanged($"{pool.Kind} Spell Slots", "used", "restored");
 		return Result.Success();
 	}
 
@@ -190,8 +226,16 @@ public sealed class Character : Entity
 		return pool.SetMaxSlots(level, max);
 	}
 
-	public Result SetBaseMaxHitPoints(int baseMaxHitPoints) =>
-		HitPoints.SetBaseMaxHitPoints(baseMaxHitPoints);
+	public Result SetBaseMaxHitPoints(int baseMaxHitPoints)
+	{
+		var oldMax = HitPoints.BaseMaxHitPoints;
+		var result = HitPoints.SetBaseMaxHitPoints(baseMaxHitPoints);
+
+		if (result.IsSuccess)
+			RaiseResourceChanged("Max Hit Points", oldMax.ToString(), HitPoints.BaseMaxHitPoints.ToString());
+
+		return result;
+	}
 
 	public Result TakeDamage(int amount)
 	{
@@ -207,6 +251,8 @@ public sealed class Character : Entity
 		var result     = HitPoints.TakeDamage(amount);
 		if (result.IsFailure) return result;
 
+		RaiseResourceChanged("Hit Points", $"{previousHp}/{HitPoints.EffectiveMaxHitPoints}", $"{HitPoints.CurrentHitPoints}/{HitPoints.EffectiveMaxHitPoints}");
+
 		// Knocked from positive HP to 0: reset death saving throws
 		if (previousHp > 0 && HitPoints.CurrentHitPoints == 0)
 			DeathSavingThrows.Reset();
@@ -216,21 +262,46 @@ public sealed class Character : Entity
 
 	public Result Heal(int amount)
 	{
+		var previousHp = HitPoints.CurrentHitPoints;
 		var result = HitPoints.Heal(amount);
-		if (result.IsSuccess && HitPoints.CurrentHitPoints > 0)
-			DeathSavingThrows.Reset();
+
+		if (result.IsSuccess)
+		{
+			RaiseResourceChanged("Hit Points", $"{previousHp}/{HitPoints.EffectiveMaxHitPoints}", $"{HitPoints.CurrentHitPoints}/{HitPoints.EffectiveMaxHitPoints}");
+			if (HitPoints.CurrentHitPoints > 0)
+				DeathSavingThrows.Reset();
+		}
+
 		return result;
 	}
 
-	public Result SetTemporaryHitPoints(int amount) =>
-		HitPoints.SetTemporaryHitPoints(amount);
+	public Result SetTemporaryHitPoints(int amount)
+	{
+		var oldTemp = HitPoints.TemporaryHitPoints;
+		var result = HitPoints.SetTemporaryHitPoints(amount);
 
-	public Result ApplyMaxHitPointReduction(int reduction) =>
-		HitPoints.ApplyMaxHitPointReduction(reduction);
+		if (result.IsSuccess)
+			RaiseResourceChanged("Temporary Hit Points", oldTemp.ToString(), HitPoints.TemporaryHitPoints.ToString());
+
+		return result;
+	}
+
+	public Result ApplyMaxHitPointReduction(int reduction)
+	{
+		var oldReduction = HitPoints.MaxHitPointReduction;
+		var result = HitPoints.ApplyMaxHitPointReduction(reduction);
+
+		if (result.IsSuccess)
+			RaiseResourceChanged("Max HP Reduction", oldReduction.ToString(), HitPoints.MaxHitPointReduction.ToString());
+
+		return result;
+	}
 
 	public Result RemoveMaxHitPointReduction()
 	{
+		var oldReduction = HitPoints.MaxHitPointReduction;
 		HitPoints.RemoveMaxHitPointReduction();
+		RaiseResourceChanged("Max HP Reduction", oldReduction.ToString(), HitPoints.MaxHitPointReduction.ToString());
 		return Result.Success();
 	}
 
@@ -240,6 +311,9 @@ public sealed class Character : Entity
 		int? temporaryHitPoints,
 		int? maxHitPointReduction)
 	{
+		var oldHp  = HitPoints.CurrentHitPoints;
+		var oldMax = HitPoints.EffectiveMaxHitPoints;
+
 		if (baseMaxHitPoints.HasValue)
 		{
 			var result = HitPoints.DirectSetBaseMaxHitPoints(baseMaxHitPoints.Value);
@@ -267,15 +341,38 @@ public sealed class Character : Entity
 		if (HitPoints.CurrentHitPoints > 0)
 			DeathSavingThrows.Reset();
 
+		RaiseResourceChanged("Hit Points", $"{oldHp}/{oldMax}", $"{HitPoints.CurrentHitPoints}/{HitPoints.EffectiveMaxHitPoints}");
+
 		return Result.Success();
 	}
 
-	public Result RecordDeathSavingThrowSuccess() =>
-		DeathSavingThrows.RecordSuccess();
+	public Result RecordDeathSavingThrowSuccess()
+	{
+		var oldSuccesses = DeathSavingThrows.Successes;
+		var result = DeathSavingThrows.RecordSuccess();
 
-	public Result RecordDeathSavingThrowFailure() =>
-		DeathSavingThrows.RecordFailure();
+		if (result.IsSuccess)
+			RaiseResourceChanged("Death Saving Throws", $"S:{oldSuccesses}/F:{DeathSavingThrows.Failures}", $"S:{DeathSavingThrows.Successes}/F:{DeathSavingThrows.Failures}");
 
-	public void ResetDeathSavingThrows() =>
+		return result;
+	}
+
+	public Result RecordDeathSavingThrowFailure()
+	{
+		var oldFailures = DeathSavingThrows.Failures;
+		var result = DeathSavingThrows.RecordFailure();
+
+		if (result.IsSuccess)
+			RaiseResourceChanged("Death Saving Throws", $"S:{DeathSavingThrows.Successes}/F:{oldFailures}", $"S:{DeathSavingThrows.Successes}/F:{DeathSavingThrows.Failures}");
+
+		return result;
+	}
+
+	public void ResetDeathSavingThrows()
+	{
+		var oldSuccesses = DeathSavingThrows.Successes;
+		var oldFailures  = DeathSavingThrows.Failures;
 		DeathSavingThrows.Reset();
+		RaiseResourceChanged("Death Saving Throws", $"S:{oldSuccesses}/F:{oldFailures}", $"S:{DeathSavingThrows.Successes}/F:{DeathSavingThrows.Failures}");
+	}
 }
