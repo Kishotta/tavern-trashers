@@ -13,7 +13,8 @@ public sealed record CharacterResponse(
 	Conditions Conditions,
 	HitPointsResponse HitPoints,
 	DeathSavingThrowsResponse DeathSavingThrows,
-	IReadOnlyCollection<GenericResourceResponse> GenericResources)
+	IReadOnlyCollection<GenericResourceResponse> GenericResources,
+	IReadOnlyCollection<SpellSlotPoolResponse> SpellSlotPools)
 {
 	public static implicit operator CharacterResponse(Character character) =>
 		new(
@@ -28,6 +29,10 @@ public sealed record CharacterResponse(
 			character.GenericResources
 			   .Where(r => r.MaxUses > 0)
 			   .Select(r => (GenericResourceResponse)r)
+			   .ToList()
+			   .AsReadOnly(),
+			character.SpellSlotPools
+			   .Select(p => (SpellSlotPoolResponse)p)
 			   .ToList()
 			   .AsReadOnly());
 }
@@ -110,4 +115,27 @@ public sealed record DeathSavingThrowsResponse(
 			deathSavingThrows.Id,
 			deathSavingThrows.Successes,
 			deathSavingThrows.Failures);
+}
+
+public sealed record SpellSlotLevelResponse(int Level, int CurrentUses, int MaxUses)
+{
+	public static implicit operator SpellSlotLevelResponse(SpellSlotLevel level) =>
+		new(level.Level, level.CurrentUses, level.MaxUses);
+}
+
+public sealed record SpellSlotPoolResponse(
+	Guid Id,
+	SpellSlotPoolKind Kind,
+	IReadOnlyCollection<SpellSlotLevelResponse> Levels)
+{
+	public static implicit operator SpellSlotPoolResponse(SpellSlotPool pool) =>
+		new(
+			pool.Id,
+			pool.Kind,
+			pool.Levels
+			   .Where(l => l.MaxUses > 0)
+			   .OrderBy(l => l.Level)
+			   .Select(l => (SpellSlotLevelResponse)l)
+			   .ToList()
+			   .AsReadOnly());
 }
