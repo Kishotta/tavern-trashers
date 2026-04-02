@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Character, CreateCharacterRequest } from '../models/character.model';
+import { Character, CreateCharacterRequest, ResetTrigger } from '../models/character.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,5 +15,21 @@ export class CharactersService {
 
   createCharacter(request: CreateCharacterRequest): Observable<Character> {
     return this.http.post<Character>('/api/characters', request);
+  }
+
+  bulkRestoreResources(campaignId: string, trigger: ResetTrigger): Observable<void> {
+    return this.http.post<void>(`/api/campaigns/${campaignId}/resources/restore`, { trigger });
+  }
+
+  useResource(characterId: string, resourceId: string): Observable<void> {
+    return this.http.put<void>(`/api/characters/${characterId}/resources/${resourceId}/use`, {});
+  }
+
+  applyResource(characterId: string, resourceId: string): Observable<void> {
+    return this.http.put<void>(`/api/characters/${characterId}/resources/${resourceId}/apply`, {});
+  }
+
+  restoreResource(characterId: string, resourceId: string): Observable<void> {
+    return this.http.put<void>(`/api/characters/${characterId}/resources/${resourceId}/restore`, {});
   }
 }

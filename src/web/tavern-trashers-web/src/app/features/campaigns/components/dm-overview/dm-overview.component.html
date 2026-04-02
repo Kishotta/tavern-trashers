@@ -1,0 +1,128 @@
+<tt-page-heading title="DM Overview" backButton />
+
+<div class="p-4 space-y-6">
+  <!-- Bulk Restore Controls -->
+  <section>
+    <h2 class="text-lg font-semibold text-gray-900 mb-3">Bulk Restore</h2>
+    <div class="flex flex-wrap gap-2">
+      @for (trigger of resetTriggers; track trigger.value) {
+        <button
+          type="button"
+          (click)="onBulkRestore(trigger.value)"
+          class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          {{ trigger.label }}
+        </button>
+      }
+    </div>
+  </section>
+
+  <!-- Characters -->
+  @if (loading$ | async) {
+    <p class="text-sm text-gray-500 py-4 text-center">Loading characters...</p>
+  } @else {
+    @if (characters$ | async; as characters) {
+      @if (characters.length === 0) {
+        <p class="text-sm text-gray-500 py-4 text-center">No characters in this campaign.</p>
+      } @else {
+        <section class="space-y-4">
+          <h2 class="text-lg font-semibold text-gray-900">Party Overview</h2>
+          @for (character of characters; track character.id) {
+            <div class="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
+              <!-- Character Header -->
+              <div class="bg-gray-50 px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-semibold text-gray-900">{{ character.name }}</p>
+                  <p class="text-xs text-gray-500">Level {{ character.level }}</p>
+                </div>
+                <!-- HP Display -->
+                <div class="text-right">
+                  <p class="text-xs text-gray-500">Hit Points</p>
+                  <p class="text-sm font-semibold"
+                    [class.text-red-600]="character.hitPoints.currentHitPoints === 0"
+                    [class.text-yellow-600]="character.hitPoints.currentHitPoints > 0 && character.hitPoints.currentHitPoints < character.hitPoints.effectiveMaxHitPoints / 2"
+                    [class.text-green-700]="character.hitPoints.currentHitPoints >= character.hitPoints.effectiveMaxHitPoints / 2">
+                    {{ character.hitPoints.currentHitPoints }} / {{ character.hitPoints.effectiveMaxHitPoints }}
+                    @if (character.hitPoints.temporaryHitPoints > 0) {
+                      <span class="text-blue-600">&nbsp;(+{{ character.hitPoints.temporaryHitPoints }} temp)</span>
+                    }
+                  </p>
+                </div>
+              </div>
+
+              <!-- Resources -->
+              @if (character.genericResources.length > 0) {
+                <div class="px-4 py-3 space-y-2">
+                  <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Resources</p>
+                  @for (resource of character.genericResources; track resource.id) {
+                    <div class="flex items-center justify-between py-1">
+                      <div class="flex items-center gap-2 min-w-0">
+                        <span class="text-sm text-gray-900 truncate">{{ resource.name }}</span>
+                        <span class="text-xs text-gray-500">
+                          {{ resource.currentUses }} / {{ resource.maxUses }}
+                        </span>
+                      </div>
+                      <div class="flex items-center gap-1 shrink-0">
+                        <button
+                          type="button"
+                          (click)="onUseResource(character.id, resource.id)"
+                          [disabled]="resource.currentUses <= 0"
+                          class="rounded px-2 py-1 text-xs font-medium bg-red-50 text-red-700 hover:bg-red-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                          title="Use"
+                        >
+                          Use
+                        </button>
+                        <button
+                          type="button"
+                          (click)="onApplyResource(character.id, resource.id)"
+                          [disabled]="resource.currentUses >= resource.maxUses"
+                          class="rounded px-2 py-1 text-xs font-medium bg-green-50 text-green-700 hover:bg-green-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                          title="Apply"
+                        >
+                          Apply
+                        </button>
+                        <button
+                          type="button"
+                          (click)="onRestoreResource(character.id, resource.id)"
+                          class="rounded px-2 py-1 text-xs font-medium bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+                          title="Restore"
+                        >
+                          Restore
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Spell Slots -->
+              @if (character.spellSlotPools.length > 0) {
+                @for (pool of character.spellSlotPools; track pool.id) {
+                  @if (pool.levels.length > 0) {
+                    <div class="px-4 py-3 border-t border-gray-100 space-y-2">
+                      <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                        {{ pool.kind }} Spell Slots
+                      </p>
+                      <div class="flex flex-wrap gap-2">
+                        @for (slotLevel of pool.levels; track slotLevel.level) {
+                          <div class="text-center">
+                            <p class="text-xs text-gray-500">Lvl {{ slotLevel.level }}</p>
+                            <p class="text-sm font-medium"
+                              [class.text-gray-400]="slotLevel.currentUses === 0"
+                              [class.text-gray-900]="slotLevel.currentUses > 0">
+                              {{ slotLevel.currentUses }}/{{ slotLevel.maxUses }}
+                            </p>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                }
+              }
+            </div>
+          }
+        </section>
+      }
+    }
+  }
+</div>

@@ -5,5 +5,6 @@ public enum ResetTrigger
 	PerRound,
 	ShortRest,
 	LongRest,
+	Dawn,
 	Manual,
 }

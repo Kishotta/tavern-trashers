@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Character } from '../models/character.model';
+import { Character, ResetTrigger } from '../models/character.model';
 
 export const loadCharacters = createAction(
   '[Characters] Load Characters',
@@ -29,4 +29,33 @@ export const createCharacterSuccess = createAction(
 export const createCharacterFailure = createAction(
   '[Characters] Create Character Failure',
   props<{ error: any }>()
+);
+
+export const bulkRestoreResources = createAction(
+  '[Characters] Bulk Restore Resources',
+  props<{ campaignId: string; trigger: ResetTrigger }>()
+);
+
+export const bulkRestoreResourcesSuccess = createAction(
+  '[Characters] Bulk Restore Resources Success'
+);
+
+export const bulkRestoreResourcesFailure = createAction(
+  '[Characters] Bulk Restore Resources Failure',
+  props<{ error: any }>()
+);
+
+export const useResource = createAction(
+  '[Characters] Use Resource',
+  props<{ characterId: string; resourceId: string }>()
+);
+
+export const applyResource = createAction(
+  '[Characters] Apply Resource',
+  props<{ characterId: string; resourceId: string }>()
+);
+
+export const restoreResource = createAction(
+  '[Characters] Restore Resource',
+  props<{ characterId: string; resourceId: string }>()
 );
