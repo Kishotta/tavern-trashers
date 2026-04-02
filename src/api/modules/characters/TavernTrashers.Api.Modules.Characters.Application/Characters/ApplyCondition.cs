@@ -1,10 +1,8 @@
 using FluentValidation;
 using TavernTrashers.Api.Common.Application.Authentication;
-using TavernTrashers.Api.Common.Application.Hubs;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
-using TavernTrashers.Api.Modules.Characters.Application.Hubs;
 using TavernTrashers.Api.Modules.Characters.Domain.Characters;
 
 namespace TavernTrashers.Api.Modules.Characters.Application.Characters;
@@ -22,7 +20,6 @@ internal sealed class ApplyConditionCommandValidator : AbstractValidator<ApplyCo
 
 internal sealed class ApplyConditionCommandHandler(
 	ICharacterRepository characterRepository,
-	IHubService hubService,
 	IClaimsProvider claimsProvider)
 	: ICommandHandler<ApplyConditionCommand, CharacterResponse>
 {
@@ -31,24 +28,8 @@ internal sealed class ApplyConditionCommandHandler(
 		var characterResult = await characterRepository.GetAsync(command.CharacterId, cancellationToken);
 		if (characterResult.IsFailure) return characterResult.Error;
 
-		var character = characterResult.Value;
-		var oldConditions = character.Conditions;
+		characterResult.Value.ApplyCondition(command.Condition, claimsProvider.GetEmail());
 
-		character.ApplyCondition(command.Condition);
-
-		await hubService.PublishAsync(
-			$"campaign:{character.CampaignId}",
-			"ResourceChanged",
-			new ResourceChangedNotification(
-				character.Id,
-				character.Name,
-				character.CampaignId,
-				"Conditions",
-				oldConditions.ToString(),
-				character.Conditions.ToString(),
-				claimsProvider.GetEmail()),
-			cancellationToken);
-
-		return (CharacterResponse)character;
+		return (CharacterResponse)characterResult.Value;
 	}
 }

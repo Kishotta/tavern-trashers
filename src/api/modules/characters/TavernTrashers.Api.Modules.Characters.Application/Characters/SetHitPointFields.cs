@@ -1,10 +1,8 @@
 using FluentValidation;
 using TavernTrashers.Api.Common.Application.Authentication;
-using TavernTrashers.Api.Common.Application.Hubs;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
-using TavernTrashers.Api.Modules.Characters.Application.Hubs;
 using TavernTrashers.Api.Modules.Characters.Domain.Characters;
 
 namespace TavernTrashers.Api.Modules.Characters.Application.Characters;
@@ -30,7 +28,6 @@ internal sealed class SetHitPointFieldsCommandValidator : AbstractValidator<SetH
 
 internal sealed class SetHitPointFieldsCommandHandler(
 	ICharacterRepository characterRepository,
-	IHubService hubService,
 	IClaimsProvider claimsProvider)
 	: ICommandHandler<SetHitPointFieldsCommand, HitPointsResponse>
 {
@@ -39,31 +36,15 @@ internal sealed class SetHitPointFieldsCommandHandler(
 		var characterResult = await characterRepository.GetAsync(command.CharacterId, cancellationToken);
 		if (characterResult.IsFailure) return characterResult.Error;
 
-		var character = characterResult.Value;
-		var oldHp = character.HitPoints.CurrentHitPoints;
-		var oldMax = character.HitPoints.EffectiveMaxHitPoints;
-
-		var result = character.SetHitPointFields(
+		var result = characterResult.Value.SetHitPointFields(
 			command.BaseMaxHitPoints,
 			command.CurrentHitPoints,
 			command.TemporaryHitPoints,
-			command.MaxHitPointReduction);
+			command.MaxHitPointReduction,
+			claimsProvider.GetEmail());
 
 		if (result.IsFailure) return result.Error;
 
-		await hubService.PublishAsync(
-			$"campaign:{character.CampaignId}",
-			"ResourceChanged",
-			new ResourceChangedNotification(
-				character.Id,
-				character.Name,
-				character.CampaignId,
-				"Hit Points",
-				$"{oldHp}/{oldMax}",
-				$"{character.HitPoints.CurrentHitPoints}/{character.HitPoints.EffectiveMaxHitPoints}",
-				claimsProvider.GetEmail()),
-			cancellationToken);
-
-		return (HitPointsResponse)character.HitPoints;
+		return (HitPointsResponse)characterResult.Value.HitPoints;
 	}
 }

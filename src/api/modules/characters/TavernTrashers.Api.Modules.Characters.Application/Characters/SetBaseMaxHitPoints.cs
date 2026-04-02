@@ -1,10 +1,8 @@
 using FluentValidation;
 using TavernTrashers.Api.Common.Application.Authentication;
-using TavernTrashers.Api.Common.Application.Hubs;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
-using TavernTrashers.Api.Modules.Characters.Application.Hubs;
 using TavernTrashers.Api.Modules.Characters.Domain.Characters;
 
 namespace TavernTrashers.Api.Modules.Characters.Application.Characters;
@@ -22,7 +20,6 @@ internal sealed class SetBaseMaxHitPointsCommandValidator : AbstractValidator<Se
 
 internal sealed class SetBaseMaxHitPointsCommandHandler(
 	ICharacterRepository characterRepository,
-	IHubService hubService,
 	IClaimsProvider claimsProvider)
 	: ICommandHandler<SetBaseMaxHitPointsCommand, HitPointsResponse>
 {
@@ -31,25 +28,9 @@ internal sealed class SetBaseMaxHitPointsCommandHandler(
 		var characterResult = await characterRepository.GetAsync(command.CharacterId, cancellationToken);
 		if (characterResult.IsFailure) return characterResult.Error;
 
-		var character = characterResult.Value;
-		var oldMax = character.HitPoints.BaseMaxHitPoints;
-
-		var result = character.SetBaseMaxHitPoints(command.BaseMaxHitPoints);
+		var result = characterResult.Value.SetBaseMaxHitPoints(command.BaseMaxHitPoints, claimsProvider.GetEmail());
 		if (result.IsFailure) return result.Error;
 
-		await hubService.PublishAsync(
-			$"campaign:{character.CampaignId}",
-			"ResourceChanged",
-			new ResourceChangedNotification(
-				character.Id,
-				character.Name,
-				character.CampaignId,
-				"Max Hit Points",
-				oldMax.ToString(),
-				character.HitPoints.BaseMaxHitPoints.ToString(),
-				claimsProvider.GetEmail()),
-			cancellationToken);
-
-		return (HitPointsResponse)character.HitPoints;
+		return (HitPointsResponse)characterResult.Value.HitPoints;
 	}
 }

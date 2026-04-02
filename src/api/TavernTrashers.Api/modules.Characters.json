@@ -5,7 +5,7 @@
       "BatchSize": 10
     },
     "Outbox": {
-      "IntervalInMilliseconds": 60000,
+      "IntervalInMilliseconds": 3000,
       "BatchSize": 10
     }
   }
