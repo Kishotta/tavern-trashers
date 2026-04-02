@@ -17,6 +17,8 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 		   .Characters
 		   .Include(c => c.HitPoints)
 		   .Include(c => c.GenericResources)
+		   .Include(c => c.SpellSlotPools)
+		      .ThenInclude(p => p.Levels)
 		   .SingleOrDefaultAsync(c => c.Id == characterId, cancellationToken)
 		   .ToResultAsync(CharacterErrors.NotFound(characterId));
 
@@ -26,6 +28,8 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 		   .AsNoTracking()
 		   .Include(c => c.HitPoints)
 		   .Include(c => c.GenericResources)
+		   .Include(c => c.SpellSlotPools)
+		      .ThenInclude(p => p.Levels)
 		   .ToListAsync(cancellationToken);
 
 	public async Task<IReadOnlyCollection<Character>> GetForCampaignAsync(Guid campaignId, CancellationToken cancellationToken = default) =>
@@ -34,5 +38,7 @@ internal sealed class CharacterRepository(CharactersDbContext dbContext) : IChar
 		   .Where(c => c.CampaignId == campaignId)
 		   .Include(c => c.HitPoints)
 		   .Include(c => c.GenericResources)
+		   .Include(c => c.SpellSlotPools)
+		      .ThenInclude(p => p.Levels)
 		   .ToListAsync(cancellationToken);
 }

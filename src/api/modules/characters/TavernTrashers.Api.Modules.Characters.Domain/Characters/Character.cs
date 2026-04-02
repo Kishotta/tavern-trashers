@@ -19,6 +19,7 @@ public sealed class Character : Entity
 	};
 
 	private readonly List<GenericResource> _genericResources = [];
+	private readonly List<SpellSlotPool> _spellSlotPools = [];
 	private Character() { }
 
 	public string Name { get; private set; } = string.Empty;
@@ -29,6 +30,7 @@ public sealed class Character : Entity
 	public HitPoints HitPoints { get; private set; } = null!;
 	public DeathSavingThrows DeathSavingThrows { get; private set; } = null!;
 	public IReadOnlyCollection<GenericResource> GenericResources => _genericResources.AsReadOnly();
+	public IReadOnlyCollection<SpellSlotPool> SpellSlotPools => _spellSlotPools.AsReadOnly();
 
 	public static Result<Character> Create(string name, int level, Guid ownerId, Guid campaignId)
 	{
@@ -50,6 +52,7 @@ public sealed class Character : Entity
 		character._genericResources.AddRange(DefaultResourceFactory.CreateDefaultResources(character.Id));
 		character.HitPoints           = HitPoints.CreateDefault(character.Id);
 		character.DeathSavingThrows   = DeathSavingThrows.CreateDefault(character.Id);
+		character._spellSlotPools.Add(SpellSlotPool.CreateDefault(character.Id));
 
 		return character;
 	}
@@ -145,6 +148,46 @@ public sealed class Character : Entity
 	{
 		foreach (var resource in _genericResources.Where(r => r.HasResetTrigger(trigger)))
 			resource.Restore();
+
+		foreach (var pool in _spellSlotPools.Where(p => p.GetResetTrigger() == trigger))
+			pool.Restore();
+	}
+
+	public Result AddPactMagicSlotPool()
+	{
+		if (_spellSlotPools.Any(p => p.Kind == SpellSlotPoolKind.PactMagic))
+			return SpellSlotPoolErrors.PactMagicAlreadyExists();
+
+		_spellSlotPools.Add(SpellSlotPool.CreatePactMagic(Id));
+		return Result.Success();
+	}
+
+	public Result UseSpellSlot(Guid poolId, int level)
+	{
+		var pool = _spellSlotPools.SingleOrDefault(p => p.Id == poolId);
+		if (pool is null)
+			return SpellSlotPoolErrors.NotFound(poolId);
+
+		return pool.UseSlot(level);
+	}
+
+	public Result RestoreSlotPool(Guid poolId)
+	{
+		var pool = _spellSlotPools.SingleOrDefault(p => p.Id == poolId);
+		if (pool is null)
+			return SpellSlotPoolErrors.NotFound(poolId);
+
+		pool.Restore();
+		return Result.Success();
+	}
+
+	public Result SetMaxSpellSlots(Guid poolId, int level, int max)
+	{
+		var pool = _spellSlotPools.SingleOrDefault(p => p.Id == poolId);
+		if (pool is null)
+			return SpellSlotPoolErrors.NotFound(poolId);
+
+		return pool.SetMaxSlots(level, max);
 	}
 
 	public Result SetBaseMaxHitPoints(int baseMaxHitPoints) =>
