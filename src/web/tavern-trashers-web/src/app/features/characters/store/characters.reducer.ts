@@ -1,6 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
 import { Character } from '../models/character.model';
 import {
+  bulkRestoreResources,
+  bulkRestoreResourcesFailure,
+  bulkRestoreResourcesSuccess,
   createCharacter,
   createCharacterFailure,
   createCharacterSuccess,
@@ -13,6 +16,7 @@ export interface CharactersState {
   characters: Character[];
   loading: boolean;
   creating: boolean;
+  restoring: boolean;
   error: any;
 }
 
@@ -20,6 +24,7 @@ export const initialState: CharactersState = {
   characters: [],
   loading: false,
   creating: false,
+  restoring: false,
   error: null,
 };
 
@@ -54,6 +59,20 @@ export const charactersReducer = createReducer(
   on(createCharacterFailure, (state, { error }) => ({
     ...state,
     creating: false,
+    error,
+  })),
+  on(bulkRestoreResources, (state) => ({
+    ...state,
+    restoring: true,
+    error: null,
+  })),
+  on(bulkRestoreResourcesSuccess, (state) => ({
+    ...state,
+    restoring: false,
+  })),
+  on(bulkRestoreResourcesFailure, (state, { error }) => ({
+    ...state,
+    restoring: false,
     error,
   }))
 );

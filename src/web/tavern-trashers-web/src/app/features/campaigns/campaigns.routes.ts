@@ -8,5 +8,12 @@ export const campaignRoutes: Routes = [
         (m) => m.CampaignDetailComponent
       ),
   },
+  {
+    path: ':id/dm',
+    loadComponent: () =>
+      import('./components/dm-overview/dm-overview.component').then(
+        (m) => m.DmOverviewComponent
+      ),
+  },
 ];
 
