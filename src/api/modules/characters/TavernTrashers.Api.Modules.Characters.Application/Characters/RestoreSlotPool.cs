@@ -36,18 +36,21 @@ internal sealed class RestoreSlotPoolCommandHandler(
 		var result = character.RestoreSlotPool(command.PoolId);
 		if (result.IsFailure) return result.Error;
 
-		await hubService.PublishAsync(
-			$"campaign:{character.CampaignId}",
-			"ResourceChanged",
-			new ResourceChangedNotification(
-				character.Id,
-				character.Name,
-				character.CampaignId,
-				$"{pool?.Kind} Spell Slots",
-				"used",
-				"restored",
-				claimsProvider.GetEmail()),
-			cancellationToken);
+		if (pool is not null)
+		{
+			await hubService.PublishAsync(
+				$"campaign:{character.CampaignId}",
+				"ResourceChanged",
+				new ResourceChangedNotification(
+					character.Id,
+					character.Name,
+					character.CampaignId,
+					$"{pool.Kind} Spell Slots",
+					"used",
+					"restored",
+					claimsProvider.GetEmail()),
+				cancellationToken);
+		}
 
 		return Result.Success();
 	}

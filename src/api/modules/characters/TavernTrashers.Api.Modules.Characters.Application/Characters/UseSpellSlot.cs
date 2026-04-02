@@ -40,22 +40,21 @@ internal sealed class UseSpellSlotCommandHandler(
 		var result = character.UseSpellSlot(command.PoolId, command.Level);
 		if (result.IsFailure) return result.Error;
 
-		var updatedSlot = character.SpellSlotPools
-			.SingleOrDefault(p => p.Id == command.PoolId)
-			?.Levels.SingleOrDefault(l => l.Level == command.Level);
-
-		await hubService.PublishAsync(
-			$"campaign:{character.CampaignId}",
-			"ResourceChanged",
-			new ResourceChangedNotification(
-				character.Id,
-				character.Name,
-				character.CampaignId,
-				$"Level {command.Level} Spell Slots",
-				$"{oldUses}/{maxUses}",
-				$"{updatedSlot?.CurrentUses ?? 0}/{maxUses}",
-				claimsProvider.GetEmail()),
-			cancellationToken);
+		if (slot is not null)
+		{
+			await hubService.PublishAsync(
+				$"campaign:{character.CampaignId}",
+				"ResourceChanged",
+				new ResourceChangedNotification(
+					character.Id,
+					character.Name,
+					character.CampaignId,
+					$"Level {command.Level} Spell Slots",
+					$"{oldUses}/{maxUses}",
+					$"{slot.CurrentUses}/{maxUses}",
+					claimsProvider.GetEmail()),
+				cancellationToken);
+		}
 
 		return Result.Success();
 	}

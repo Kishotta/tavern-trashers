@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { HubNotification } from '../../store/hub.reducer';

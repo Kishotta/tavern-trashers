@@ -39,18 +39,21 @@ internal sealed class UseGenericResourceCommandHandler(
 		var result = character.UseGenericResource(command.ResourceId);
 		if (result.IsFailure) return result.Error;
 
-		await hubService.PublishAsync(
-			$"campaign:{character.CampaignId}",
-			"ResourceChanged",
-			new ResourceChangedNotification(
-				character.Id,
-				character.Name,
-				character.CampaignId,
-				resource!.Name,
-				$"{oldUses}/{resource.MaxUses}",
-				$"{resource.CurrentUses}/{resource.MaxUses}",
-				claimsProvider.GetEmail()),
-			cancellationToken);
+		if (resource is not null)
+		{
+			await hubService.PublishAsync(
+				$"campaign:{character.CampaignId}",
+				"ResourceChanged",
+				new ResourceChangedNotification(
+					character.Id,
+					character.Name,
+					character.CampaignId,
+					resource.Name,
+					$"{oldUses}/{resource.MaxUses}",
+					$"{resource.CurrentUses}/{resource.MaxUses}",
+					claimsProvider.GetEmail()),
+				cancellationToken);
+		}
 
 		return Result.Success();
 	}

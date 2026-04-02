@@ -1,13 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HubService implements OnDestroy {
   private connection: signalR.HubConnection | null = null;
-  private readonly disconnected$ = new Subject<void>();
 
   connect(accessTokenFactory: () => string): Observable<void> {
     this.connection = new signalR.HubConnectionBuilder()
@@ -66,6 +65,5 @@ export class HubService implements OnDestroy {
 
   ngOnDestroy(): void {
     this.disconnect();
-    this.disconnected$.complete();
   }
 }
