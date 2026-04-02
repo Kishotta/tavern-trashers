@@ -1,7 +1,10 @@
 using FluentValidation;
+using TavernTrashers.Api.Common.Application.Authentication;
+using TavernTrashers.Api.Common.Application.Hubs;
 using TavernTrashers.Api.Common.Application.Messaging;
 using TavernTrashers.Api.Common.Domain.Results;
 using TavernTrashers.Api.Common.Domain.Results.Extensions;
+using TavernTrashers.Api.Modules.Characters.Application.Hubs;
 using TavernTrashers.Api.Modules.Characters.Domain.Characters;
 
 namespace TavernTrashers.Api.Modules.Characters.Application.Characters;
@@ -16,7 +19,10 @@ internal sealed class ResetDeathSavingThrowsCommandValidator : AbstractValidator
 	}
 }
 
-internal sealed class ResetDeathSavingThrowsCommandHandler(ICharacterRepository characterRepository)
+internal sealed class ResetDeathSavingThrowsCommandHandler(
+	ICharacterRepository characterRepository,
+	IHubService hubService,
+	IClaimsProvider claimsProvider)
 	: ICommandHandler<ResetDeathSavingThrowsCommand, DeathSavingThrowsResponse>
 {
 	public async Task<Result<DeathSavingThrowsResponse>> Handle(
@@ -26,8 +32,25 @@ internal sealed class ResetDeathSavingThrowsCommandHandler(ICharacterRepository 
 		var characterResult = await characterRepository.GetAsync(command.CharacterId, cancellationToken);
 		if (characterResult.IsFailure) return characterResult.Error;
 
-		characterResult.Value.ResetDeathSavingThrows();
+		var character = characterResult.Value;
+		var oldSuccesses = character.DeathSavingThrows.Successes;
+		var oldFailures = character.DeathSavingThrows.Failures;
 
-		return (DeathSavingThrowsResponse)characterResult.Value.DeathSavingThrows;
+		character.ResetDeathSavingThrows();
+
+		await hubService.PublishAsync(
+			$"campaign:{character.CampaignId}",
+			"ResourceChanged",
+			new ResourceChangedNotification(
+				character.Id,
+				character.Name,
+				character.CampaignId,
+				"Death Saving Throws",
+				$"S:{oldSuccesses}/F:{oldFailures}",
+				$"S:{character.DeathSavingThrows.Successes}/F:{character.DeathSavingThrows.Failures}",
+				claimsProvider.GetEmail()),
+			cancellationToken);
+
+		return (DeathSavingThrowsResponse)character.DeathSavingThrows;
 	}
 }
